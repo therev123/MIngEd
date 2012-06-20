@@ -12,7 +12,7 @@ function UpdateMaratis()
    end
 end
 
-function ApplyPremake()
+function ApplyPatches()
    local dircmd = "find maratis-premake -type f -print"
    if os.is("windows") then
       dircmd = "dir /b/s maratis-premake"
@@ -31,6 +31,16 @@ function ApplyPremake()
 end
 
 UpdateMaratis()
-ApplyPremake()
+ApplyPatches()
 
-include "maratis-read-only/trunk/dev"
+if os.is("windows") then
+	defines { "_WIN32" }
+	defines { "WIN32" }
+elseif os.is("macosx") then
+	defines { "__APPLE__" }
+elseif os.is("linux") then
+	defines { "LINUX" }
+end
+
+dofile "msdk.lua"
+dofile "3rdparty.lua"
