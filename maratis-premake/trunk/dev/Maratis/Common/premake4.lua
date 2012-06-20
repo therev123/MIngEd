@@ -17,7 +17,7 @@ solution "maratis-minged"
 		   "../../../../3rdparty/lua/",
 		   "../../../../3rdparty/libsndfile/include/",
 		   "../../../../3rdparty/npk/include/"}
-	libdirs { "../../build/" }
+	libdirs { "../../../../../build/" }
 	links { "MCore", "MEngine", "MGui", "glee", "tinyxml", "npk", "OpenAL32" }
 	defines { "M_PACKAGE_WRITABLE" }
 
@@ -35,7 +35,7 @@ solution "maratis-minged"
 	end
 
 
-	targetdir("../../../../build/")
+	targetdir("../../../../../build/")
 
 	configuration "Release"
 	defines { "NDEBUG" }

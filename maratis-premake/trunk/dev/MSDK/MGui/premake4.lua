@@ -22,10 +22,10 @@ solution "maratis-minged"
 		defines { "MGUI_DLL" }
 
 		includedirs { "../MCore/Includes/", "Includes" }
-		libdirs { "../../../../build/" }
+		libdirs { "../../../../../build/" }
 		links { "MCore" }
 
-		targetdir("../../../../build/")
+		targetdir("../../../../../build/")
 
 		configuration "Release"
 			defines { "NDEBUG" }

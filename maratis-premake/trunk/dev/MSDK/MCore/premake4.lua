@@ -6,7 +6,7 @@ solution "maratis-minged"
 
         files { "Includes/**.h", "Sources/**.cpp" }
 
-	targetdir("../../../../build/")
+	targetdir("../../../../../build/")
 		
 	if os.is("macosx") then
 	   links { "CoreServices.framework" }

@@ -7,12 +7,12 @@ solution "maratis-minged"
         files { "Includes/**.h", "Sources/**.cpp" }
 
 	includedirs { "../MCore/Includes/" }
-	libdirs { "../../../../build/" }
+	libdirs { "../../../../../build/" }
 	links { "MCore" }
 		
 	defines { "MENGINE_DLL" }
 
-	targetdir("../../../../build/")
+	targetdir("../../../../../build/")
 
 	configuration "Release"
 	defines { "NDEBUG" }

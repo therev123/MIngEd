@@ -1,0 +1,11 @@
+--- MX11Window.cpp.old	2012-06-20 13:43:27.000000000 +0100
++++ MX11Window.cpp	2012-06-20 13:50:03.085115008 +0100
+@@ -39,7 +39,7 @@
+ #include <X11/extensions/xf86vmode.h>
+ #include <GL/gl.h>
+ #include <GL/glx.h>
+-
++#include <unistd.h>
+ 
+ 
+ // start time
