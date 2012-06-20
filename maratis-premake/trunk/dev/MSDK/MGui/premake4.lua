@@ -1,3 +1,4 @@
+solution "maratis-minged"
     project "MGui"
 
         kind "SharedLib"
@@ -20,11 +21,11 @@
 		
 		defines { "MGUI_DLL" }
 
-		includedirs { "../MCore/Includes/" }
-		libdirs { "../../build/" }
+		includedirs { "../MCore/Includes/", "Includes" }
+		libdirs { "../../../../build/" }
 		links { "MCore" }
 
-		targetdir("../../build/")
+		targetdir("../../../../build/")
 
 		configuration "Release"
 			defines { "NDEBUG" }

@@ -1,3 +1,4 @@
+solution "maratis-minged"
     project "tinyxml"
 
         kind "StaticLib"
@@ -5,7 +6,7 @@
 
         files { "**.h", "**.cpp" }
 
-	targetdir("../../trunk/dev/build/")
+	targetdir("../../../build/")
 
 	configuration "Release"
 	defines { "NDEBUG" }

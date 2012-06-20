@@ -1,3 +1,4 @@
+solution "maratis-minged"
     project "glee"
 
         kind "StaticLib"
@@ -5,7 +6,7 @@
 
         files { "**.h", "**.c" }
 
-	targetdir("../../trunk/dev/build/")
+	targetdir("../../../build/")
 
 	if os.is("macosx") then
 	   links { "OpenGL.framework", "CoreServices.framework", "Foundation.framework" }

@@ -1,9 +1,11 @@
+solution "maratis-minged"
+    project "lua"
         kind "StaticLib"
         language "C++"
 
         files { "**.h", "**.c" }
 
-	targetdir("../../trunk/dev/build/")
+	targetdir("../../../build/")
 
 	configuration "Release"
 	defines { "NDEBUG" }

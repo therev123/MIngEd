@@ -1,3 +1,4 @@
+solution "maratis-minged"
     project "Common"
 
         kind "StaticLib"
@@ -34,7 +35,7 @@
 	end
 
 
-	targetdir("../../build/")
+	targetdir("../../../../build/")
 
 	configuration "Release"
 	defines { "NDEBUG" }

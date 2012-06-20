@@ -1,9 +1,11 @@
+solution "maratis-minged"
+project "bullet"
         kind "StaticLib"
         language "C++"
 
         files { "**.h", "**.cpp" }
 
-	targetdir("../../trunk/dev/build/")
+	targetdir("../../../build/")
 	includedirs {"."}
 
 	configuration "Release"

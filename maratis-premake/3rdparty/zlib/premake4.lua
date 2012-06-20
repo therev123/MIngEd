@@ -1,3 +1,4 @@
+solution "maratis-minged"
     project "zlib"
 
         kind "StaticLib"
@@ -5,7 +6,7 @@
 
         files { "**.h", "**.c" }
 
-	targetdir("../../trunk/dev/build/")
+	targetdir("../../../build/")
 
 	configuration "Release"
 	defines { "NDEBUG" }

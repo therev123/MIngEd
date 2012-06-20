@@ -1,3 +1,4 @@
+solution "maratis-minged"
 	if os.is("windows") then
 	   defines { "_WIN32" }
 	   defines { "WIN32" }

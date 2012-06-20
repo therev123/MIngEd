@@ -1,3 +1,4 @@
+solution "maratis-minged"
     project "MCore"
 
         kind "SharedLib"
@@ -5,7 +6,7 @@
 
         files { "Includes/**.h", "Sources/**.cpp" }
 
-	targetdir("../../build/")
+	targetdir("../../../../build/")
 		
 	if os.is("macosx") then
 	   links { "CoreServices.framework" }

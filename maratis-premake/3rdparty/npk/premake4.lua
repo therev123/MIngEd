@@ -1,3 +1,4 @@
+solution "maratis-minged"
     project "npk"
 
         kind "StaticLib"
@@ -7,7 +8,7 @@
 		
 	includedirs { "include/", "../zlib/" }
 
-	targetdir("../../trunk/dev/build/")
+	targetdir("../../../build/")
 	defines { "M_PACKAGE_WRITABLE" }
 	
 	links { "zlib" }

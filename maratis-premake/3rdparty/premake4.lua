@@ -1,3 +1,4 @@
+solution "maratis-minged"
     include "bullet"
     include "tinyxml"
     include "glee"
