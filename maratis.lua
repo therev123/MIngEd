@@ -6,7 +6,7 @@
 
 function UpdateMaratis()
    if os.isdir("maratis-read-only") then
-      os.execute("svn update maratis-read-only")
+      --os.execute("svn update maratis-read-only")
    else
       os.execute("svn checkout http://maratis.googlecode.com/svn/ maratis-read-only")
    end

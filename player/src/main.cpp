@@ -30,6 +30,8 @@
 #include <MGameWinEvents.h>
 #include "MaratisPlayer.h"
 
+#include <MPlugin/MPlugin.h>
+
 
 // window events
 void windowEvents(MWinEvent * windowEvents)
@@ -70,23 +72,109 @@ void draw(void)
 	MWindow::getInstance()->swapBuffer();
 }
 
+#ifndef PRELOAD_MAX
+#define PRELOAD_MAX 5
+#endif 
+
+typedef struct CommandParameters
+{
+  CommandParameters()
+    : width(1024), height(768), fullscreen(0), project(0)
+  {
+    preloads = new MPlugin*[PRELOAD_MAX];
+    for(int i=0; i<PRELOAD_MAX; ++i)
+      preloads[i] = 0;
+  }
+  ~CommandParameters()
+  {
+    for(int i=0; i<PRELOAD_MAX; ++i)
+      if(preloads[i]) { delete preloads[i]; preloads[i] = 0; }
+    delete [] preloads;
+  }
+  unsigned int width;
+  unsigned int height;
+  unsigned int fullscreen;
+  MPlugin** preloads;
+  char* project;
+} CommandParameters;
+
+void AddPreload(CommandParameters &params, char* libname)
+{
+  // first check whether we have a slot available
+  int slot = 0;
+  while(params.preloads[slot] != 0 && slot < PRELOAD_MAX) slot++;
+  if(slot == PRELOAD_MAX && params.preloads[slot] != 0)
+  {
+    printf("Unable to load preload: %s: Not enough preload slots\n", libname);
+    return;
+  }
+
+  MPlugin* plugin = new MPlugin();
+  plugin->load(libname);
+  if(strlen(plugin->getFilename()) == 0)
+  {
+    printf("Unable to load preload: %s: File doesn't exist\n", libname);
+    delete plugin;
+    return;
+  }
+
+  params.preloads[slot] = plugin;
+}
+
+void ParseParams(CommandParameters &params, int argc, char** argv)
+{
+  if(argc < 2)
+    return;
+  for(int i = 1;i < argc; ++i)
+    {
+      if(strstr(argv[i], "--width=") == argv[i])
+      {
+	params.width = atoi(&argv[i][8]);
+      }
+      else if(strcmp(argv[i], "-w") == 0)
+      {
+	params.width = atoi(argv[i+1]);
+	i++;
+      }
+      else if(strstr(argv[i], "--height=") == argv[i])
+      {
+	params.height = atoi(&argv[i][9]);
+      }
+      else if(strcmp(argv[i], "-h") == 0)
+      {
+	params.height = atoi(argv[i+1]);
+	i++;
+      }
+      else if( strcmp(argv[i], "--fullscreen") == 0 ||
+	       strcmp(argv[i], "-f") == 0 )
+      {
+	params.fullscreen = 1;
+      }
+      else if( strstr(argv[i], "--preload=") == argv[i] )
+      {
+	AddPreload(params, &argv[i][10]);
+      }
+      else if( strcmp(argv[i], "-P") == 0)
+      {
+	AddPreload(params, argv[i+1]);
+	i++;
+      }
+      else if( strstr(argv[i], "--project=") == argv[i] )
+      {
+	params.project = &argv[i][10];
+      }
+    }
+}
+
 
 // main
 int main(int argc, char **argv)
 {
 	setlocale(LC_NUMERIC, "C");
-
-	unsigned int width = 1024;
-	unsigned int height = 768;
-	int fullscreen = false;
-
-	if(argc > 2)
-		sscanf(argv[2], "%d", &width);
-	if(argc > 3)
-		sscanf(argv[3], "%d", &height);
-	if(argc > 4)
-		sscanf(argv[4], "%d", &fullscreen);
-
+	
+	CommandParameters params;
+	ParseParams(params, argc, argv);
+	
 	// get engine (first time call onstructor)
 	MEngine * engine = MEngine::getInstance();
 
@@ -94,8 +182,8 @@ int main(int argc, char **argv)
 	MWindow * window = MWindow::getInstance();
 
 	// create window
-	window->create("Maratis", width, height, 32, fullscreen == 1);
-	if(fullscreen)
+	window->create("Maratis", params.width, params.height, 32, params.fullscreen > 0);
+	if(false)
 		window->hideCursor();
 
 	// set current directory
@@ -111,10 +199,10 @@ int main(int argc, char **argv)
 
 	// load project
 	bool projectFound = false;
-	if(argc > 1)
+	if(params.project != 0)
     {
 		char filename[256];
-		getGlobalFilename(filename, window->getCurrentDirectory(), argv[1]);
+		getGlobalFilename(filename, window->getCurrentDirectory(), params.project);
 		if(maratis->loadProject(filename))
 		{
 			engine->getGame()->begin();

@@ -129,6 +129,7 @@ solution "maratis-minged"
 -- END OF DEVIL BUILD
 
 -- BEGINNING OF PNG BUILD
+if os.is("windows") then
 	project "png"
 
 		kind "StaticLib"
@@ -144,6 +145,7 @@ solution "maratis-minged"
 		configuration "Debug"
 			defines { "DEBUG" }
 			flags { "Symbols" }
+end
 -- END OF PNG BUILD
 
 -- BEGINNING OF ZLIB BUILD
