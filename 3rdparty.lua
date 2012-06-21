@@ -61,6 +61,68 @@ solution "maratis-minged"
 			flags { "Symbols" }
 -- END OF GLEE BUILD
 
+-- BEGINNING OF FREETYPE BUILD
+	project "freetype"
+
+		kind "StaticLib"
+		language "C++"
+
+		includedirs { "maratis-read-only/3rdparty/freetype/include", 
+			"maratis-read-only/3rdparty/freetype/depend/", 
+			"maratis-read-only/3rdparty/freetype/" }
+		files { "maratis-read-only/3rdparty/freetype/**.h", 
+			"maratis-read-only/3rdparty/freetype/*.c" }
+		defines { "FT2_BUILD_LIBRARY" }
+
+		if os.is("windows") then
+		   defines { "WIN32" }
+		end
+
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+-- END OF FREETYPE BUILD
+
+-- BEGINNING OF LIBSNDFILE BUILD
+	if os.is("linux") then
+	   local libfiles = { "libsndfile.a", "libsndfile.la", "libsndfile.so" }
+	   for k,file in pairs(libfiles) do
+	      os.copyfile("maratis-read-only/3rdparty/libsndfile/linux/" .. file, "build/" .. file) 
+	   end
+	end
+-- END OF LIBSNDFILE BUILD
+
+-- BEGINNING OF DEVIL BUILD
+	project "il"
+
+		kind "StaticLib"
+		language "C++"
+
+		includedirs { "maratis-read-only/3rdparty/devil/src-IL/include",
+			      "maratis-read-only/3rdparty/devil/src-ILU/include" ,
+			      "maratis-read-only/3rdparty/devil/" }
+		files { "maratis-read-only/3rdparty/devil/**.h", 
+				"maratis-read-only/3rdparty/devil/**.c", 
+				"maratis-read-only/3rdparty/devil/**.cpp" }
+		if os.is("windows") then
+		   defines { "WIN32" }
+		end
+		
+		defines { "IL_STATIC_LIB" }
+
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+-- END OF DEVIL BUILD
+
 -- BEGINNING OF ZLIB BUILD
 	project "zlib"
 

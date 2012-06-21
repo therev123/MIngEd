@@ -21,8 +21,26 @@ solution "maratis-minged"
 		if os.is("windows") then
 		   defines { "WIN32" }
 			includedirs { "maratis-read-only/3rdparty/openal/include/" }
+			links { "OpenAL32" }
 			libdirs { "maratis-read-only/3rdparty/openal/win32/" }
+		     else
+			links { "openal", "dl", "X11", "Xxf86vm" }
 		end
-		links { "MCore", "MEngine", "MGui", "Common" }
+		links { "MCore", 
+			"MEngine", 
+			"MGui", 
+			"Common", 
+			"glee", 
+			"tinyxml", 
+			"npk", 
+			"GL", 
+			"lua", 
+			"bullet", 
+			"il", 
+			"png", 
+			"zlib", 
+			"jpeg", 
+			"freetype",
+		        "sndfile" }
 	-- load up Maratis into the build
 	dofile "maratis.lua"
