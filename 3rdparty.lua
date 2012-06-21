@@ -93,6 +93,11 @@ solution "maratis-minged"
 	   for k,file in pairs(libfiles) do
 	      os.copyfile("maratis-read-only/3rdparty/libsndfile/linux/" .. file, "build/" .. file) 
 	   end
+	elseif os.is("windows") then
+	   local libfiles = { "libsndfile-1.dll", "libsndfile-1.lib" }
+	   for k,file in pairs(libfiles) do
+	      os.copyfile("maratis-read-only/3rdparty/libsndfile/win32/" .. file, "build/" .. file) 
+	   end
 	end
 -- END OF LIBSNDFILE BUILD
 
@@ -122,6 +127,24 @@ solution "maratis-minged"
 			defines { "DEBUG" }
 			flags { "Symbols" }
 -- END OF DEVIL BUILD
+
+-- BEGINNING OF PNG BUILD
+	project "png"
+
+		kind "StaticLib"
+		language "C++"
+
+		files { "maratis-read-only/3rdparty/libpng/**.h", 
+				"maratis-read-only/3rdparty/libpng/**.c" }
+
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+-- END OF PNG BUILD
 
 -- BEGINNING OF ZLIB BUILD
 	project "zlib"

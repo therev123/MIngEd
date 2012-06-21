@@ -21,26 +21,32 @@ solution "maratis-minged"
 		if os.is("windows") then
 		   defines { "WIN32" }
 			includedirs { "maratis-read-only/3rdparty/openal/include/" }
-			links { "OpenAL32" }
+			links { "OpenAL32", "Opengl32", "libsndfile-1", "Winmm" }
 			libdirs { "maratis-read-only/3rdparty/openal/win32/" }
-		     else
-			links { "openal", "dl", "X11", "Xxf86vm" }
+		elseif os.is("linux") then
+			links { "GL", "openal", "dl", "X11", "Xxf86vm", "sndfile"}
 		end
 		links { "MCore", 
 			"MEngine", 
 			"MGui", 
+			"il",
 			"Common", 
 			"glee", 
 			"tinyxml", 
 			"npk", 
-			"GL", 
 			"lua", 
-			"bullet", 
-			"il", 
+			"bullet",  
 			"png", 
 			"zlib", 
 			"jpeg", 
-			"freetype",
-		        "sndfile" }
+			"freetype" }
+			
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
 	-- load up Maratis into the build
 	dofile "maratis.lua"

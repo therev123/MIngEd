@@ -13,6 +13,7 @@ solution "maratis-minged"
 			links { "CoreServices.framework" }
 		elseif os.is("windows") then
 		   defines { "WIN32" }
+		   includedirs { "maratis-read-only/3rdparty/dirent/include/" }
 		end
 		defines { "MCORE_DLL" }
 
@@ -67,6 +68,8 @@ solution "maratis-minged"
 		defines { "MGUI_DLL" }
 		
 		if os.is("windows") then
+			-- don't like this, but meh
+			includedirs { "maratis-read-only/trunk/dev/MSDK/MGui/Includes" }
 			files { "maratis-read-only/trunk/dev/MSDK/MGui/Includes/WIN32/*.h",
 					"maratis-read-only/trunk/dev/MSDK/MGui/Sources/WIN32/*.cpp" }
 			links { "opengl32", "winmm" }
