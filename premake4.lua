@@ -56,7 +56,10 @@ solution "maratis-minged"
 		language "C++"
 
 		files { "minged/**.cpp", "minged/**.h" }
-		includedirs { "minged/include" }
+		includedirs {   "maratis-read-only/trunk/dev/MSDK/MCore/Includes/",
+				"maratis-read-only/trunk/dev/MSDK/MEngine/Includes/",
+				"maratis-read-only/trunk/dev/MSDK/MGui/Includes/",
+				"minged/include" }
 		targetprefix ""
 
 		links { "MCore", "MEngine" } -- might need MGui evetually

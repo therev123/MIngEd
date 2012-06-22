@@ -15,7 +15,11 @@
 extern "C" {
 #endif
 
+  //#define MINGED_USE_PTHREAD
+
   MINGED_EXPORT void StartPlugin();
+  MINGED_EXPORT void UpdatePlugin();
+  MINGED_EXPORT void Render();
   MINGED_EXPORT void EndPlugin();
 
   typedef unsigned int uint32;

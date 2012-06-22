@@ -43,18 +43,38 @@ void* RunPlugin(void* data)
     uint32 ms = GetTimeMS();
     uint32 dt = ms - prevtick;
     editor->Update(dt);
-    if(dt < TICKTIME)
-      Sleep(TICKTIME - dt);
+    uint32 postms = GetTimeMS();
+    if(postms - ms < TICKTIME)
+      Sleep(TICKTIME - (postms - ms));
     prevtick = ms;    
   }
 }
 
+uint32 tick;
 void StartPlugin()
 {
+#ifdef MINGED_USE_PTHREAD
   pthread_create(&thread, NULL, RunPlugin, &instance);
+#endif/*MINGED_USE_PTHREAD*/
+  tick = GetTimeMS();
+}
+
+void UpdatePlugin()
+{
+  uint32 ms = GetTimeMS();
+  uint32 dt = ms - tick;
+  instance.Update(dt);
+  tick = ms;
+}
+
+void Render()
+{
+  instance.Render();
 }
 
 void EndPlugin()
 {
+#ifdef MINGED_USE_PTHREAD
   pthread_exit(&thread);
+#endif/*MINGED_USE_PTHREAD*/
 }

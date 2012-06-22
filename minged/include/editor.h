@@ -8,7 +8,11 @@ namespace minged
   class Editor
   {
   public:
+    Editor();
+
     void Update(uint32 dt);
+
+    void Render();
     
   protected:
     void CheckToToggle();

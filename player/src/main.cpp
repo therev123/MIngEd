@@ -30,8 +30,7 @@
 #include <MGameWinEvents.h>
 #include "MaratisPlayer.h"
 
-#include <MPlugin/MPlugin.h>
-
+#include "plugin.h"
 
 // window events
 void windowEvents(MWinEvent * windowEvents)
@@ -81,7 +80,7 @@ typedef struct CommandParameters
   CommandParameters()
     : width(1024), height(768), fullscreen(0), project(0)
   {
-    preloads = new MPlugin*[PRELOAD_MAX];
+    preloads = new Plugin*[PRELOAD_MAX];
     for(int i=0; i<PRELOAD_MAX; ++i)
       preloads[i] = 0;
   }
@@ -94,7 +93,7 @@ typedef struct CommandParameters
   unsigned int width;
   unsigned int height;
   unsigned int fullscreen;
-  MPlugin** preloads;
+  Plugin** preloads;
   char* project;
 } CommandParameters;
 
@@ -109,7 +108,7 @@ void AddPreload(CommandParameters &params, char* libname)
     return;
   }
 
-  MPlugin* plugin = new MPlugin();
+  Plugin* plugin = new Plugin();
   plugin->load(libname);
   if(strlen(plugin->getFilename()) == 0)
   {
@@ -162,6 +161,10 @@ void ParseParams(CommandParameters &params, int argc, char** argv)
       else if( strstr(argv[i], "--project=") == argv[i] )
       {
 	params.project = &argv[i][10];
+      }
+      else // just assume it's a project path
+      {
+	params.project = argv[i];
       }
     }
 }
@@ -286,6 +289,10 @@ int main(int argc, char **argv)
 					previousFrame += steps;
 					continue;
 				}
+
+				for(i=0; i<PRELOAD_MAX; ++i)
+				  if(params.preloads[i])
+				    params.preloads[i]->Update();
 				
 				// update
 				for(i=0; i<steps; i++)
@@ -298,6 +305,10 @@ int main(int argc, char **argv)
 				if(steps > 0){
 					draw();
 				}
+
+				for(i=0; i<PRELOAD_MAX; ++i)
+				  if(params.preloads[i])
+				    params.preloads[i]->Draw();
 			}
 			else
 			{
