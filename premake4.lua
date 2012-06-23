@@ -73,3 +73,5 @@ solution "maratis-minged"
 
 	-- load up Maratis into the build
 	dofile "maratis.lua"
+	-- also load libnui
+	dofile "nui.lua"
