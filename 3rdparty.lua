@@ -114,7 +114,11 @@ solution "maratis-minged"
 				"maratis-read-only/3rdparty/devil/**.c", 
 				"maratis-read-only/3rdparty/devil/**.cpp" }
 		if os.is("windows") then
-		   defines { "WIN32" }
+			defines { "WIN32", "_WIN32" }
+			-- these should probably be searched for anyway
+			includedirs { "maratis-read-only/3rdparty/libpng/",
+						  "maratis-read-only/3rdparty/libjpeg/" ,
+						  "maratis-read-only/3rdparty/zlib/" }
 		end
 		
 		defines { "IL_STATIC_LIB" }
@@ -135,8 +139,29 @@ if os.is("windows") then
 		kind "StaticLib"
 		language "C++"
 
+		includedirs { "maratis-read-only/3rdparty/zlib" }
 		files { "maratis-read-only/3rdparty/libpng/**.h", 
 				"maratis-read-only/3rdparty/libpng/**.c" }
+
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+end
+-- END OF PNG BUILD
+
+-- BEGINNING OF PNG BUILD
+if os.is("windows") then
+	project "jpeg"
+
+		kind "StaticLib"
+		language "C++"
+
+		files { "maratis-read-only/3rdparty/libjpeg/**.h", 
+				"maratis-read-only/3rdparty/libjpeg/**.c" }
 
 		configuration "Release"
 			defines { "NDEBUG" }

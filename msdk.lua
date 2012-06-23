@@ -116,7 +116,7 @@ solution "maratis-minged"
 		defines { "M_PACKAGE_WRITABLE" }
 		
 		if os.is("windows") then
-		   defines { "WIN32" }
+		   defines { "WIN32", "IL_STATIC_LIB" }
 			includedirs { "maratis-read-only/3rdparty/openal/include/" }
 			libdirs { "maratis-read-only/3rdparty/openal/win32/" }
 		end

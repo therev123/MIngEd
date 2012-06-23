@@ -5,23 +5,37 @@
 
 // system includes
 #include <stdio.h>
+#ifdef MINGED_USE_PTHREAD
 #include <pthread.h>
+#endif/*MINGED_USE_PTHREAD*/
 #include <time.h>
-#include <unistd.h>
+#ifdef WIN32
+# include <windows.h>
+# include <time.h>
+#else
+# include <unistd.h>
+#endif
 
 minged::Editor instance;
+#ifdef MINGED_USE_PTHREAD
 pthread_t thread;
+#endif/*MINGED_USE_PTHREAD*/
 
 #define MStoNS(_ms) (_ms * 1000000)
 #define NStoMS(_ns) (_ns / 1000000)
 
 uint32 GetTimeMS()
 {
+#ifdef WIN32
+	return (uint32)((( (float)clock() ) / CLOCKS_PER_SEC) * 1000);
+#else
   struct timespec t;
   clock_gettime(CLOCK_MONOTONIC, &t);
   return (t.tv_sec * 1000) + NStoMS(t.tv_nsec);
+#endif
 }
 
+#ifndef WIN32
 void Sleep(uint32 ms)
 {
   struct timespec t;
@@ -29,6 +43,7 @@ void Sleep(uint32 ms)
   t.tv_sec = 0;
   nanosleep(&t, NULL);
 }
+#endif
 
 #define FRAMERATE 60
 #define TICKTIME (1000/FRAMERATE)

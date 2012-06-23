@@ -1,5 +1,11 @@
 #include "plugin.h"
 
+Plugin::Plugin()
+	: m_DrawFunc(0)
+	, m_UpdateFunc(0)
+{
+}
+
 void Plugin::Draw()
 {
   if(m_library)
@@ -26,7 +32,7 @@ void Plugin::Update()
   pFunc Plugin::GetFunction(const char* name)
   {
 #ifdef WIN32
-    return reinterpret_cast<pFunc>(GetProcAddress(m_library, name);
+    return reinterpret_cast<pFunc>(GetProcAddress(m_library, name));
 #else
       return (pFunc)dlsym(m_library, name);
 #endif/*WIN32*/

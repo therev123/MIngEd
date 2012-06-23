@@ -3,12 +3,13 @@
 #include <stdio.h>
 
 #include <MEngine.h>
+#include <MKeyboard.h>
 
 namespace minged
 {
   Editor::Editor()
   {
-    m_IsOpen= true;
+    m_IsOpen= false;
   }
 
   void Editor::Update(uint32 dt)
@@ -25,7 +26,7 @@ namespace minged
     MEngine* engine = MEngine::getInstance();
     if(MInputContext* input = engine->getInputContext())
     {
-      if(input->onKeyDown("F1"))
+      if(input->isKeyPressed("F1"))
       {
 	m_IsOpen = !m_IsOpen;
       }
@@ -34,6 +35,7 @@ namespace minged
 
   void Editor::UpdateOpen(uint32 dt)
   {
+	  printf("Hello\n");
   }
 
   void Editor::Render()

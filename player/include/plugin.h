@@ -9,6 +9,7 @@ typedef void*(*pFunc)();
 class Plugin : public MPlugin
 {
  public:
+	 Plugin();
   void Update();
   void Draw();
 
