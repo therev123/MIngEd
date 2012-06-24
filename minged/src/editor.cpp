@@ -14,7 +14,8 @@ namespace minged
   {
     m_IsOpen= false;
 
-    nuiInit(NULL);
+    nglString test = _T("Test\n");
+    //nuiInit(NULL);
   }
 
   void Editor::Update(uint32 dt)

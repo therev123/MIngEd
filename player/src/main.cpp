@@ -112,7 +112,7 @@ void AddPreload(CommandParameters &params, char* libname)
   plugin->load(libname);
   if(strlen(plugin->getFilename()) == 0)
   {
-    printf("Unable to load preload: %s: File doesn't exist\n", libname);
+      printf("Unable to load preload: %s:\n%s\n", libname, dlerror());
     delete plugin;
     return;
   }
