@@ -50,6 +50,12 @@ solution "maratis-minged"
         files { "nui3/src/**.cpp",
 	        "nui3/include/**.h" }
 
+	if os.is("linux") then
+	   if os.is64bit() then
+	      buildoptions { "-fPIC" }
+	   end
+	end
+
         includedirs { "nui3/include/", 
 		      "nui3",
 		      "nui3/src/Text/HTML",
