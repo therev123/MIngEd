@@ -1,0 +1,78 @@
+--- ucgendat.c.orig	2012-06-23 19:20:03.000000000 +0100
++++ ucgendat.c	2012-06-24 18:51:13.679628147 +0100
+@@ -1660,7 +1660,7 @@
+   resetseparator();
+   fprintf(out, "const uint16_t ctype_props_offsets[] = {\n  ");
+   //fwrite((char *) propcnt, sizeof(uint16_t), nprops, out);
+-  for (uint32_t i = 0; i < nprops; i++)
++  for (i = 0; i < nprops; i++)
+   {
+     outseparator(out);
+     fprintf(out, "0x%04x", propcnt[i]);
+@@ -1677,7 +1677,8 @@
+   {
+     if (proptbl[i].used > 0)
+     {
+-      for (uint32_t j = 0; j < proptbl[i].used; j++)
++      uint32_t j;
++      for (j = 0; j < proptbl[i].used; j++)
+       {
+         outseparator(out);
+         //fwrite((char *) proptbl[i].ranges, sizeof(uint32_t), proptbl[i].used, out);
+@@ -1725,7 +1726,7 @@
+    * Write the upper case table.
+    */
+   //fwrite((char *) upper, sizeof(_case_t), upper_used, out);
+-  for (uint32_t i = 0; i < upper_used; i++)
++  for (i = 0; i < upper_used; i++)
+   {
+     outseparator(out);
+     fprintf(out, "0x%08x", upper[i].key);
+@@ -1739,7 +1740,7 @@
+    * Write the lower case table.
+    */
+   //fwrite((char *) lower, sizeof(_case_t), lower_used, out);
+-  for (uint32_t i = 0; i < lower_used; i++)
++  for (i = 0; i < lower_used; i++)
+   {
+     outseparator(out);
+     fprintf(out, "0x%08x", lower[i].key);
+@@ -1753,7 +1754,7 @@
+    * Write the title case table.
+    */
+   //fwrite((char *) title, sizeof(_case_t), title_used, out);
+-  for (uint32_t i = 0; i < title_used; i++)
++  for (i = 0; i < title_used; i++)
+   {
+     outseparator(out);
+     fprintf(out, "0x%08x", title[i].key);
+@@ -1805,7 +1806,8 @@
+     //fwrite((char *) comps, sizeof(_comp_t), comps_used, out);
+     resetseparator();
+     fprintf(out, "const uint32_t comp_list[] = {\n  ");
+-    for (uint32_t i = 0; i < comps_used; i++)
++    uint32_t i;
++    for (i = 0; i < comps_used; i++)
+     {
+       outseparator(out);
+       fprintf(out, "0x%08x", comps[i].comp);
+@@ -1867,7 +1869,8 @@
+     fprintf(out, "uint32_t decomps_size = %d;\n", decomps_used);
+     resetseparator();
+     fprintf(out, "const uint32_t decomps_list[] = {\n  ");
+-    for (uint32_t i = idx = 0; i < decomps_used; i++)
++    uint32_t i;
++    for (i = idx = 0; i < decomps_used; i++)
+     {
+       outseparator(out);
+       fprintf(out, "0x%08x", decomps[i].code);
+@@ -1893,7 +1896,8 @@
+     for (i = 0; i < decomps_used; i++)
+     {
+       //fwrite((char *) decomps[i].decomp, sizeof(uint32_t), decomps[i].used, out);
+-      for (uint32_t j = 0; j < decomps[i].used; j++)
++      uint32_t j;
++      for (j = 0; j < decomps[i].used; j++)
+       {
+         outseparator(out);
+         fprintf(out, "0x%08x", decomps[i].decomp[j]);

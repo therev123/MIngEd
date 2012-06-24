@@ -47,8 +47,96 @@ solution "maratis-minged"
 	    flags { "Symbols" }
 -- END OF LIBCSS BUILD
 
+-- BEGINNING OF LIBTIDY BUILD
+    project "tidy"
+        kind "StaticLib"
+	language "C"
+	
+	files { "nui3/deps/tidy/**.h", 
+		"nui3/deps/tidy/**.c" }
+	
+	includedirs {"nui3/deps/tidy"}
+
+	configuration "Release"
+	    defines { "NDEBUG" }
+	    flags { "Optimize" }
+
+	configuration "Debug"
+	    defines { "DEBUG" }
+	    flags { "Symbols" }
+-- END OF LIBTIDY BUILD
+
+-- BEGINNING OF UCDATA BUILD
+    project "ucdata"
+        kind "StaticLib"
+	language "C"
+
+	files { "nui3/deps/ucdata/**.h", 
+		"nui3/deps/ucdata/**.c", 
+		"nui3/deps/ucdata/**.cpp" }
+	
+	includedirs {"nui3/deps/ucdata"}
+
+	configuration "Release"
+	    defines { "NDEBUG" }
+	    flags { "Optimize" }
+
+	configuration "Debug"
+	    defines { "DEBUG" }
+	    flags { "Symbols" }
+-- END OF UCDATA BUILD
+
+-- BEGINNING OF UNGIF BUILD
+    project "ungif"
+        kind "StaticLib"
+	language "C"
+
+	files { "nui3/deps/ungif/**.h", 
+		"nui3/deps/ungif/**.c" }
+	
+	includedirs {"nui3/deps/ngif"}
+
+	configuration "Release"
+	    defines { "NDEBUG" }
+	    flags { "Optimize" }
+
+	configuration "Debug"
+	    defines { "DEBUG" }
+	    flags { "Symbols" }
+-- END OF UNGIF BUILD
+
+-- BEGINNING OF HARFBUZZ BUILD
+    project "harfbuzz"
+        kind "StaticLib"
+	language "C"
+	
+	files { "nui3/deps/harfbuzz/**.h", 
+		"nui3/deps/harfbuzz/**.c", 
+		"nui3/deps/harfbuzz/**.cc" }
+
+	excludes { "nui3/deps/harfbuzz/main.cc",
+		   "nui3/deps/harfbuzz/test.cc",
+		   "nui3/deps/harfbuzz/test.c",
+		   "nui3/deps/harfbuzz/hb-view.c",
+		   "nui3/deps/harfbuzz/hb-view.cc",
+		   "nui3/deps/harfbuzz/hb-uniscribe-shape.cc",
+		   "nui3/deps/harfbuzz/hb-tt-font.cc" }
+
+	defines { "HAVE_GLIB" }
+
+	includedirs { "nui3/deps/harfbuzz",
+		      "maratis-read-only/3rdparty/freetype/include" }
+
+	configuration "Release"
+	    defines { "NDEBUG" }
+	    flags { "Optimize" }
+
+	configuration "Debug"
+	    defines { "HB_DEBUG" }
+	    flags { "Symbols" }
+-- END OF HARFBUZZ BUILD
+
 -- BEGINNING OF EXPAT BUILD
-if os.is("windows") then
     project "expat"
         kind "StaticLib"
 	language "C"
@@ -58,6 +146,8 @@ if os.is("windows") then
 	
 	includedirs {"nui3/deps/expat/lib"}
 
+	defines { "HAVE_MEMMOVE" }
+
 	configuration "Release"
 	    defines { "NDEBUG" }
 	    flags { "Optimize" }
@@ -65,5 +155,4 @@ if os.is("windows") then
 	configuration "Debug"
 	    defines { "DEBUG" }
 	    flags { "Symbols" }
-end
 -- END OF EXPAT BUILD

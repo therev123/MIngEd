@@ -65,10 +65,26 @@ solution "maratis-minged"
 
 		if os.is("linux") then
 		   defines { "__LINUX__" }
+		   --libnui Linux dependencies
+		   links { "GL", "GLU", "dl", "pthread", "glib-2.0", "X11", "gcrypt", "curl" }
 		end
 
-		links { "MCore", "MEngine", -- might need MGui evetually
-		        "nui", "X11", "png", "jpeg", "GL", "dl", "pthread" } -- libnui + deps
+		links {  -- first the Maratis dependencies
+		        "MCore", "MEngine", -- might need MGui evetually
+		         -- then libnui
+		        "nui", 
+		        -- then all the dependencies for libnui
+		        "png", 
+		        "jpeg", 
+		        "css",  
+		        "tidy",  
+		        "ucdata",  
+		        "harfbuzz",  
+		        "freetype",
+		        "ungif",
+		        "expat",
+		        "zlib"
+		}
 	
 		configuration "Release"
 			defines { "NDEBUG" }

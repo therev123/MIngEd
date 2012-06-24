@@ -48,7 +48,9 @@ solution "maratis-minged"
         language "C++"
 
         files { "nui3/src/**.cpp",
-	        "nui3/include/**.h" }
+	        "nui3/include/**.h",
+	        "nui3/graphics/**.cpp",
+	        "nui3/graphics/**.h" }
 
 	if os.is("linux") then
 	   if os.is64bit() then
@@ -65,8 +67,9 @@ solution "maratis-minged"
 		      "nui3/deps/ucdata",
 		      "nui3/deps/tidy",
 		      "nui3/deps/harfbuzz",
-		      "nui3/deps/freetype2/include",
+		      "maratis-read-only/3rdparty/freetype/include",
 		      "maratis-read-only/3rdparty/libpng",
+		      "maratis-read-only/3rdparty/zlib",
 		      "maratis-read-only/3rdparty/libjpeg"}
 
 	excludes { "nui3/src/Time/Android/**.cpp",
@@ -75,7 +78,6 @@ solution "maratis-minged"
 		   "nui3/src/Audio/Android/**.cpp",
 		   "nui3/src/Window/Android/**.cpp",
 		   "nui3/src/Net/Android/**.cpp",
-		   "nui3/src/File/Unix/**.cpp",
 		   "nui3/src/Window/nglOffscreenContext.cpp",
 		   "nui3/src/Renderers/nuiGLDrawContext.cpp",
 		   "nui3/src/Renderers/nuiMemoryDrawContext.cpp",
