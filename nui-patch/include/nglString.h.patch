@@ -1,0 +1,10 @@
+--- nglString.h.orig	2012-06-23 22:08:13.000000000 +0100
++++ nglString.h	2012-06-23 22:29:45.576081550 +0100
+@@ -853,6 +853,7 @@
+ {
+ public:
+   static nglChar mUnknown;  ///< Default char used to mark in place a conversion error. Unused if set to '\\0'
++  nglStringConv() {}
+ 
+   nglStringConv(nglTextEncoding From, nglTextEncoding To, nglUChar Default = nglStringConv::mUnknown);
+   /*!< Create a conversion context

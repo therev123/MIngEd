@@ -59,10 +59,17 @@ solution "maratis-minged"
 		includedirs {   "maratis-read-only/trunk/dev/MSDK/MCore/Includes/",
 				"maratis-read-only/trunk/dev/MSDK/MEngine/Includes/",
 				"maratis-read-only/trunk/dev/MSDK/MGui/Includes/",
+				"nui3/include",
 				"minged/include" }
 		targetprefix ""
 
-		links { "MCore", "MEngine" } -- might need MGui evetually
+		if os.is("linux") then
+		   defines { "__LINUX__" }
+		end
+
+		links { "MCore", "MEngine", -- might need MGui evetually
+		        "nui", "X11", "png", "jpeg", "GL", "dl", "pthread" } -- libnui + deps
+	
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "Optimize" }

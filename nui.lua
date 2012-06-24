@@ -13,14 +13,38 @@ function UpdateNUI()
    os.chdir("..")
 end
 
+function PatchNUI()
+   local dircmd = "find nui-patch -type f -print"
+   if os.is("windows") then
+      dircmd = "dir /b/s nui-patch"
+   end
+   os.execute(dircmd .. " > .nui_tmpfile")
+   for f in io.lines(".nui_tmpfile") do
+      newf, r = string.gsub(f, "-patch", "3", 1)
+      if string.find(f, ".patch") then
+	 -- apply patch
+	 newf, r = string.gsub(newf, ".patch", "")
+	 os.execute("patch -N " .. newf .. " " .. f)
+      else
+	 os.copyfile(f, newf)
+      end
+   end
+end
+
+
 UpdateNUI()
+PatchNUI()
 
 dofile "nuideps.lua"
 
 solution "maratis-minged"
 
+    if os.is("linux") then
+       buildoptions { "`pkg-config --cflags glib-2.0`" }
+    end
+
     project "nui"
-        type "StaticLib"
+        kind "StaticLib"
         language "C++"
 
         files { "nui3/src/**.cpp",
@@ -33,21 +57,32 @@ solution "maratis-minged"
 		      "nui3/deps/libcss/include",
 		      "nui3/deps/tracemonkey",
 		      "nui3/deps/ucdata",
-		      "maratis-read-only/3rdparty/libpng"}
+		      "nui3/deps/tidy",
+		      "nui3/deps/harfbuzz",
+		      "nui3/deps/freetype2/include",
+		      "maratis-read-only/3rdparty/libpng",
+		      "maratis-read-only/3rdparty/libjpeg"}
 
 	excludes { "nui3/src/Time/Android/**.cpp",
 		   "nui3/src/Application/Android/**.cpp",
 		   "nui3/src/Audio/ASIO/**.cpp",
 		   "nui3/src/Audio/Android/**.cpp",
 		   "nui3/src/Window/Android/**.cpp",
+		   "nui3/src/Net/Android/**.cpp",
+		   "nui3/src/File/Unix/**.cpp",
 		   "nui3/src/Window/nglOffscreenContext.cpp",
 		   "nui3/src/Renderers/nuiGLDrawContext.cpp",
 		   "nui3/src/Renderers/nuiMemoryDrawContext.cpp",
-		   "nui3/src/Renderers/nuiMetaDrawContext.cpp" }
+		   "nui3/src/Renderers/nuiMetaDrawContext.cpp",
+		   "nui3/src/String/nglStringConv_Android.cpp",
+		   "nui3/src/String/nglStringConv_none.cpp",
+		   "nui3/src/Font/nuiFontLayout.cpp" }
 
 
 	if not os.is("macosx") then
 	   excludes { "nui3/src/Image/nglImageCGCodec.cpp",
+		      "nui3/src/String/nglStringConv_Carbon.cpp",
+		      "nui3/src/String/nglStringConv_CoreFoundation.cpp",
 		      "nui3/src/File/Cocoa/**.cpp",
 		      "nui3/src/File/Carbon/**.cpp",
 		      "nui3/src/Net/CoreFoundation/**.cpp",
@@ -72,11 +107,13 @@ solution "maratis-minged"
 		      "nui3/src/AudioSamples/Win/**.cpp",
 		      "nui3/src/Audio/DirectSound/**.cpp",
 		      "nui3/src/Threading/win32/**.cpp",
-		      "nui3/src/Application/Win/**.cpp" }
+		      "nui3/src/Application/Win/**.cpp",
+		      "nui3/src/String/nglStringConv_mlang.cpp",
+		      "nui3/src/Video/nuiVideoDecoder_WinXX.cpp" }
 	end
 
 	if os.is("linux") then
-	   defines { "__LINUX__" }
+	   defines { "__LINUX__", "HAVE_GLIB" }
 	   includedirs { "nui3/src/Application/Unix" }
 	end
 

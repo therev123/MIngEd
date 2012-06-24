@@ -1,0 +1,13 @@
+--- glext.h.orig	2012-06-24 10:14:41.760807827 +0100
++++ glext.h	2012-06-24 10:15:34.747473110 +0100
+@@ -31,7 +31,9 @@
+ /* Header file version number, required by OpenGL ABI for Linux */
+ /* glext.h last updated $Date: 2011-06-06 12:06:38 -0700 (Mon, 06 Jun 2011) $ */
+ /* Current version at http://www.opengl.org/registry/ */
+-#define GL_GLEXT_VERSION 70
++#ifndef GL_GLEXT_VERSION // this is probably already defined in the system glext.h <PG>
++# define GL_GLEXT_VERSION 70
++#endif
+ /* Function declaration macros - to move into glplatform.h */
+ 
+ #if defined(_WIN32) && !defined(APIENTRY) && !defined(__CYGWIN__) && !defined(__SCITECH_SNAP__)

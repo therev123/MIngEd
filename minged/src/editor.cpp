@@ -5,11 +5,16 @@
 #include <MEngine.h>
 #include <MKeyboard.h>
 
+
+#include <nui.h>
+
 namespace minged
 {
   Editor::Editor()
   {
     m_IsOpen= false;
+
+    nuiInit(NULL);
   }
 
   void Editor::Update(uint32 dt)
