@@ -6,10 +6,10 @@ function UpdateNUI()
    if os.isdir("nui3") then
       --os.execute("svn update maratis-read-only")
    else
-      os.execute("git clone https://github.com/meeloo/nui3.git")
+      --os.execute("git clone https://github.com/meeloo/nui3.git")
    end
    os.chdir("nui3")
-   os.execute("git checkout nui4")
+   --os.execute("git checkout nui4")
    os.chdir("..")
 end
 

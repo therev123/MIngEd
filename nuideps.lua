@@ -29,7 +29,7 @@ solution "maratis-minged"
 -- BEGINNING OF LIBCSS BUILD
     project "css"
         kind "StaticLib"
-	language "C"
+	language "C++"
 	
 	files { "nui3/deps/libcss/include/**.h", 
 		"nui3/deps/libcss/src/**.c" }
@@ -37,6 +37,10 @@ solution "maratis-minged"
 	includedirs {"nui3/deps/libcss/include",
 		     "nui3/deps/libcss/src",
 		     "nui3/deps/libcss/src/libparserutils"}
+			 
+	if os.is("windows") then
+		defines { "WIN32" }
+	end
 
 	configuration "Release"
 	    defines { "NDEBUG" }
@@ -69,14 +73,18 @@ solution "maratis-minged"
 -- BEGINNING OF UCDATA BUILD
     project "ucdata"
         kind "StaticLib"
-	language "C"
+	language "C++"
 
 	files { "nui3/deps/ucdata/**.h", 
 		"nui3/deps/ucdata/**.c", 
 		"nui3/deps/ucdata/**.cpp" }
 	
 	includedirs {"nui3/deps/ucdata"}
-
+ 
+	if os.is("windows") then
+		defines { "WIN32", "__STDC__" }
+	end
+	
 	configuration "Release"
 	    defines { "NDEBUG" }
 	    flags { "Optimize" }
@@ -108,7 +116,7 @@ solution "maratis-minged"
 -- BEGINNING OF HARFBUZZ BUILD
     project "harfbuzz"
         kind "StaticLib"
-	language "C"
+	language "C++"
 	
 	files { "nui3/deps/harfbuzz/**.h", 
 		"nui3/deps/harfbuzz/**.c", 
@@ -122,7 +130,13 @@ solution "maratis-minged"
 		   "nui3/deps/harfbuzz/hb-uniscribe-shape.cc",
 		   "nui3/deps/harfbuzz/hb-tt-font.cc" }
 
-	defines { "HAVE_GLIB" }
+	if os.is("linux") then
+		defines { "HAVE_GLIB" }
+	else
+		excludes {  "nui3/deps/harfbuzz/hb-gobject**",
+					"nui3/deps/harfbuzz/hb-glib.**",
+					"nui3/deps/harfbuzz/hb-icu.**" }
+	end
 
 	includedirs { "nui3/deps/harfbuzz",
 		      "maratis-read-only/3rdparty/freetype/include" }
