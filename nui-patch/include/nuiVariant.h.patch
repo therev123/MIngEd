@@ -1,0 +1,13 @@
+diff --git a/include/nuiVariant.h b/include/nuiVariant.h
+index ab73560..dce2570 100644
+--- a/include/nuiVariant.h
++++ b/include/nuiVariant.h
+@@ -74,8 +74,6 @@ template <> uint64 nuiAttributeTypeTrait<nuiMainWindow*>::mTypeId;
+ template <> uint64 nuiAttributeTypeTrait<nuiLabel*>::mTypeId;
+ #endif
+ 
+-
+-
+ class nuiVariant
+ {
+ public:

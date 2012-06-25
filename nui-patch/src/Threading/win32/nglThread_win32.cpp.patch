@@ -1,0 +1,22 @@
+diff --git a/src/Threading/win32/nglThread_win32.cpp b/src/Threading/win32/nglThread_win32.cpp
+index 60a6340..8dc91de 100644
+--- a/src/Threading/win32/nglThread_win32.cpp
++++ b/src/Threading/win32/nglThread_win32.cpp
+@@ -108,7 +108,7 @@ static DWORD WINAPI start_thread(void *arg)
+ //
+ //	Constructor of nglThread class 
+ //
+-nglThread::nglThread(Priority priority)
++nglThread::nglThread(Priority priority, size_t StackSize)
+ {
+   mpData = new nglThreadPrivate();
+   
+@@ -117,7 +117,7 @@ nglThread::nglThread(Priority priority)
+   mAutoDelete = false;
+ }
+ 
+-nglThread::nglThread(const nglString& rName, Priority priority)
++nglThread::nglThread(const nglString& rName, Priority priority, size_t StackSize)
+ {
+   mName = rName;
+   mpData = new nglThreadPrivate();

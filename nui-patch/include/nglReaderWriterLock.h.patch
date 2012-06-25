@@ -1,0 +1,12 @@
+diff --git a/include/nglReaderWriterLock.h b/include/nglReaderWriterLock.h
+index f005ec8..126de10 100644
+--- a/include/nglReaderWriterLock.h
++++ b/include/nglReaderWriterLock.h
+@@ -11,6 +11,7 @@
+ #include "nglLock.h"
+ #include "nglGuard.h"
+ #include "nglCondition.h"
++#include "nglAtomic.h"
+ 
+ /*! A multiple reader/one writer lock for multithreading.
+ 

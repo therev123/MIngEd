@@ -1,0 +1,15 @@
+diff --git a/deps/libcss/include/libwapcaplet/libwapcaplet.h b/deps/libcss/include/libwapcaplet/libwapcaplet.h
+index 09784d2..0b9c0ad 100644
+--- a/deps/libcss/include/libwapcaplet/libwapcaplet.h
++++ b/deps/libcss/include/libwapcaplet/libwapcaplet.h
+@@ -33,6 +33,10 @@ typedef _W64 unsigned int   size_t;
+ #define _SIZE_T_DEFINED
+ #endif
+ 
++#ifndef inline
++# define inline __inline
++#endif
++
+ #ifndef __cplusplus
+ typedef int bool;
+ #define false   (bool)0

@@ -1,0 +1,14 @@
+diff --git a/deps/libcss/include/libcss/errors.h b/deps/libcss/include/libcss/errors.h
+index 3177400..767d382 100644
+--- a/deps/libcss/include/libcss/errors.h
++++ b/deps/libcss/include/libcss/errors.h
+@@ -27,5 +27,9 @@ typedef enum css_error {
+ /* Convert a libcss error value to a string */
+ const char *css_error_to_string(css_error error);
+ 
++#ifndef inline
++# define inline __inline
++#endif
++
+ #endif
+ 

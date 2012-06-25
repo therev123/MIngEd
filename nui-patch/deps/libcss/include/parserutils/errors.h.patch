@@ -1,0 +1,15 @@
+diff --git a/deps/libcss/include/parserutils/errors.h b/deps/libcss/include/parserutils/errors.h
+index 74c7f34..04a69a6 100644
+--- a/deps/libcss/include/parserutils/errors.h
++++ b/deps/libcss/include/parserutils/errors.h
+@@ -27,5 +27,10 @@ const char *parserutils_error_to_string(parserutils_error error);
+ /* Convert a string to a parserutils error value */
+ parserutils_error parserutils_error_from_string(const char *str, size_t len);
+ 
++
++#ifndef inline
++# define inline __inline
++#endif
++
+ #endif
+ 

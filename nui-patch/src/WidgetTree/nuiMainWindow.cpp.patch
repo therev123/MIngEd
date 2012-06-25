@@ -1,0 +1,13 @@
+diff --git a/src/WidgetTree/nuiMainWindow.cpp b/src/WidgetTree/nuiMainWindow.cpp
+index 95a027a..505fad0 100644
+--- a/src/WidgetTree/nuiMainWindow.cpp
++++ b/src/WidgetTree/nuiMainWindow.cpp
+@@ -26,7 +26,7 @@
+ #define STUPIDBASE
+ #endif
+ 
+-using namespace std;
++//using namespace std;
+ 
+ #define NUI_MULTISAMPLES 0
+ 
