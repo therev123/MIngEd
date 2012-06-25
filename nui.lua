@@ -50,7 +50,9 @@ solution "maratis-minged"
         files { "nui3/src/**.cpp",
 	        "nui3/include/**.h",
 	        "nui3/graphics/**.cpp",
-	        "nui3/graphics/**.h" }
+	        "nui3/graphics/**.h",
+	        "MNui/src/**.cpp",
+	        "MNui/include/**.h" }
 
 	if os.is("linux") then
 	   if os.is64bit() then
@@ -77,6 +79,7 @@ solution "maratis-minged"
 		   "nui3/src/Audio/ASIO/**.cpp",
 		   "nui3/src/Audio/Android/**.cpp",
 		   "nui3/src/Window/Android/**.cpp",
+		   "nui3/src/Window/Unix/nglWindow_Unix.cpp", -- replaced by MNui window
 		   "nui3/src/Net/Android/**.cpp",
 		   "nui3/src/Window/nglOffscreenContext.cpp",
 		   "nui3/src/Renderers/nuiGLDrawContext.cpp",
