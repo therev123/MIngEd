@@ -86,10 +86,12 @@ solution "maratis-minged"
 		   "nui3/src/Renderers/nuiMemoryDrawContext.cpp",
 		   "nui3/src/Renderers/nuiMetaDrawContext.cpp",
 		   "nui3/src/String/nglStringConv_Android.cpp",
-		   "nui3/src/String/nglStringConv_none.cpp",
 		   "nui3/src/Font/nuiFontLayout.cpp" }
 
 
+	--------------------------------------------------------------------------------
+	-- Beginning of OS specific excludes
+	--------------------------------------------------------------------------------
 	if not os.is("macosx") then
 	   excludes { "nui3/src/Image/nglImageCGCodec.cpp",
 		      "nui3/src/String/nglStringConv_Carbon.cpp",
@@ -122,10 +124,26 @@ solution "maratis-minged"
 		      "nui3/src/String/nglStringConv_mlang.cpp",
 		      "nui3/src/Video/nuiVideoDecoder_WinXX.cpp" }
 	end
+	
+	if not os.is("linux") then
+	   excludes { "nui3/src/Window/Unix/**.cpp",
+				  "nui3/src/Time/Unix/**.cpp",
+				  "nui3/src/Threading/posix/**.cpp"}
+	end
+	
+	--------------------------------------------------------------------------------
+	-- End of OS specific excludes
+	--------------------------------------------------------------------------------
 
 	if os.is("linux") then
 	   defines { "__LINUX__", "HAVE_GLIB" }
 	   includedirs { "nui3/src/Application/Unix" }
+	   excludes { "nui3/src/String/nglStringConv_none.cpp" }
+	end
+	
+	if os.is("windows") then
+		includedirs { "nui3/src/Application/Win" }
+		excludes { "nui3/src/String/nglStringConv_iconv.cpp" }
 	end
 
 	configuration "Release"
