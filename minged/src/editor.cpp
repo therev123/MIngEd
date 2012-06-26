@@ -12,10 +12,10 @@ namespace minged
 {
   Editor::Editor()
   {
+    App = this;
     m_IsOpen= false;
 
     nglString test = _T("Test\n");
-    //nuiInit(NULL);
   }
 
   void Editor::Update(uint32 dt)

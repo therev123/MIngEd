@@ -7,6 +7,7 @@ solution "maratis-minged"
 	targetdir "build" 
 	libdirs { "build" }
 
+
 	-- forked version of Maratis player
 	project "Maratis"
 		files { "player/src/**.cpp", "player/include/**.h" }

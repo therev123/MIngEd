@@ -72,7 +72,8 @@ solution "maratis-minged"
 		      "maratis-read-only/3rdparty/freetype/include",
 		      "maratis-read-only/3rdparty/libpng",
 		      "maratis-read-only/3rdparty/zlib",
-		      "maratis-read-only/3rdparty/libjpeg"}
+		      "maratis-read-only/3rdparty/libjpeg",
+		      "MNui/include" }
 
 	excludes { "nui3/src/Time/Android/**.cpp",
 		   "nui3/src/Application/Android/**.cpp",
@@ -80,6 +81,7 @@ solution "maratis-minged"
 		   "nui3/src/Audio/Android/**.cpp",
 		   "nui3/src/Window/Android/**.cpp",
 		   "nui3/src/Window/Unix/nglWindow_Unix.cpp", -- replaced by MNui window
+		   "nui3/src/Application/Unix/nglApplication_Unix.cpp", -- replaced by MNui application
 		   "nui3/src/Net/Android/**.cpp",
 		   "nui3/src/Window/nglOffscreenContext.cpp",
 		   "nui3/src/Renderers/nuiGLDrawContext.cpp",

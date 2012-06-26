@@ -26,6 +26,14 @@
 #include <string.h>
 #include <wchar.h>
 
+#include "mnui.h"
+
+/*
+ * X events settings
+ */
+
+#define NGL_CLICK_DELAY 250
+
 const nglChar* gpWindowErrorTable[] =
 {
 /*  0 */ _T("No error"),
@@ -34,40 +42,6 @@ const nglChar* gpWindowErrorTable[] =
 /*  3 */ _T("Properties out of range"),
          NULL
 };
-
-/*
- * PC-102/105 mapping (XFree86)
- */
-
-#define NGL_KEYMAP_SIZE 0x80
-#define NGL_KEYMAP_MASK 0x7F
-
-uint gpKeymapXFree86[NGL_KEYMAP_SIZE] = {
-/*  0 */ 0, 0, 0, 0, 0, 0, 0, 0,
-/*  8 */ 0, NK_ESC, NK_1, NK_2, NK_3, NK_4, NK_5, NK_6,
-/* 10 */ NK_7, NK_8, NK_9, NK_0, NK_MINUS, NK_EQUAL, NK_BACKSPACE, NK_TAB,
-/* 18 */ NK_Q, NK_W, NK_E, NK_R, NK_T, NK_Y, NK_U, NK_I,
-/* 20 */ NK_O, NK_P, NK_LBRACKET, NK_RBRACKET, NK_ENTER, NK_LCTRL, NK_A, NK_S,
-/* 28 */ NK_D, NK_F, NK_G, NK_H, NK_J, NK_K, NK_L, NK_SEMICOLON,
-/* 30 */ NK_APOSTROPHE, NK_GRAVE, NK_LSHIFT, NK_NUMBERSIGN, NK_Z, NK_X, NK_C, NK_V,
-/* 38 */ NK_B, NK_N, NK_M, NK_COMMA, NK_PERIOD, NK_SLASH, NK_RSHIFT, NK_PAD_ASTERISK,
-/* 40 */ NK_LALT, NK_SPACE, NK_CAPSLOCK, NK_F1, NK_F2, NK_F3, NK_F4, NK_F5,
-/* 48 */ NK_F6, NK_F7, NK_F8, NK_F9, NK_F10, NK_PAD_LOCK, NK_SCRLOCK, NK_PAD_7,
-/* 50 */ NK_PAD_8, NK_PAD_9, NK_PAD_MINUS, NK_PAD_4, NK_PAD_5, NK_PAD_6, NK_PAD_PLUS, NK_PAD_1,
-/* 58 */ NK_PAD_2, NK_PAD_3, NK_PAD_0, NK_PAD_PERIOD, 0, 0, NK_BACKSLASH, NK_F11,
-/* 60 */ NK_F12, NK_HOME, NK_UP, NK_PAGEUP, NK_LEFT, 0, NK_RIGHT, NK_END,
-/* 68 */ NK_DOWN, NK_PAGEDOWN, NK_INSERT, NK_DELETE, NK_PAD_ENTER, NK_RCTRL, NK_PAUSE, NK_SYSREQ,
-/* 70 */ NK_PAD_SLASH, NK_RALT, 0, NK_LMETA, NK_RMETA, NK_MENU, 0, 0,
-/* 78 */ 0, 0, 0, 0, 0, 0, 0, 0
-};
-
-#define STUB() printf("Not implemented: %s:%s\n", __FILE__, __LINE__);
-
-/*
- * X events settings
- */
-
-#define NGL_CLICK_DELAY 250
 
 /*
  * Constructors
