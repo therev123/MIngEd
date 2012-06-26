@@ -16,8 +16,6 @@
 # include <unistd.h>
 #endif
 
-#include <nui.h>
-
 minged::Editor instance;
 #ifdef MINGED_USE_PTHREAD
 pthread_t thread;
@@ -74,10 +72,6 @@ void StartPlugin()
   pthread_create(&thread, NULL, RunPlugin, &instance);
 #endif/*MINGED_USE_PTHREAD*/
   tick = GetTimeMS();
-
-  nuiInit(NULL);
-
-  instance.OnInit();
 }
 
 void UpdatePlugin()

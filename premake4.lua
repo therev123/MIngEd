@@ -60,32 +60,16 @@ solution "maratis-minged"
 		includedirs {   "maratis-read-only/trunk/dev/MSDK/MCore/Includes/",
 				"maratis-read-only/trunk/dev/MSDK/MEngine/Includes/",
 				"maratis-read-only/trunk/dev/MSDK/MGui/Includes/",
-				"nui3/include",
+				"libRocket/Include",
 				"minged/include" }
 		targetprefix ""
 
 		if os.is("linux") then
 		   defines { "__LINUX__" }
-		   --libnui Linux dependencies
-		   links { "GL", "GLU", "dl", "pthread", "glib-2.0", "X11", "gcrypt", "curl" }
 		end
 
 		links {  -- first the Maratis dependencies
-		        "MCore", "MEngine", -- might need MGui evetually
-		         -- then libnui
-		        "nui", 
-		        -- then all the dependencies for libnui
-		        "png", 
-		        "jpeg", 
-		        "css",  
-		        "tidy",  
-		        "ucdata",  
-		        "harfbuzz",  
-		        "freetype",
-		        "ungif",
-		        "expat",
-		        "zlib"
-		}
+		   "MCore", "MEngine", "rocket" } -- might need MGui evetually
 	
 		configuration "Release"
 			defines { "NDEBUG" }
@@ -98,4 +82,6 @@ solution "maratis-minged"
 	-- load up Maratis into the build
 	dofile "maratis.lua"
 	-- also load libnui
-	dofile "nui.lua"
+	--dofile "nui.lua"
+	-- load libRocket
+	dofile "rocket.lua"

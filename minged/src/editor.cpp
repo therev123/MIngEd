@@ -5,17 +5,23 @@
 #include <MEngine.h>
 #include <MKeyboard.h>
 
-
-#include <nui.h>
+#include <Rocket/Core/Core.h>
+#include <Rocket/Core/SystemInterface.h>
 
 namespace minged
 {
+  class SysInterface : public Rocket::Core::SystemInterface
+  {
+  public:
+    virtual float GetElapsedTime() { return 0.0f; }
+  };
+
+  SysInterface sys;
+
   Editor::Editor()
   {
-    App = this;
+    Rocket::Core::SetSystemInterface(&sys);
     m_IsOpen= false;
-
-    nglString test = _T("Test\n");
   }
 
   void Editor::Update(uint32 dt)

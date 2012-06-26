@@ -3,11 +3,9 @@
 
 #include "minged.h"
 
-#include <nui.h>
-
 namespace minged
 {
-  class Editor : public nglApplication
+  class Editor
   {
   public:
     Editor();
