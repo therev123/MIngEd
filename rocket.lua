@@ -6,6 +6,7 @@ function UpdateRocket()
    if os.isdir("libRocket") then
       -- update libRocket
    else
+      os.execute("git clone https://github.com/lloydw/libRocket.git")
       -- clone libRocket
    end
 end
@@ -30,6 +31,8 @@ solution "maratis-minged"
     -- features
     excludes { "libRocket/Source/Core/Python/**.cpp",
 	       "libRocket/Source/Core/Python/**.h" }
+		   
+	defines { "STATIC_LIB" }
 
     configuration "Release"
         defines { "NDEBUG" }
