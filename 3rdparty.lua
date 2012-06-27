@@ -71,7 +71,9 @@ solution "maratis-minged"
 			"maratis-read-only/3rdparty/freetype/depend/", 
 			"maratis-read-only/3rdparty/freetype/" }
 		files { "maratis-read-only/3rdparty/freetype/**.h", 
-			"maratis-read-only/3rdparty/freetype/*.c" }
+			"maratis-read-only/3rdparty/freetype/*.c", 
+			"maratis-read-only/3rdparty/freetype/depend/ftobjs.c" }
+
 		defines { "FT2_BUILD_LIBRARY" }
 
 		if os.is("windows") then

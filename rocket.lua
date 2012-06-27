@@ -31,6 +31,8 @@ solution "maratis-minged"
     excludes { "libRocket/Source/Core/Python/**.cpp",
 	       "libRocket/Source/Core/Python/**.h" }
 
+    links { "freetype", "zlib" }
+
     configuration "Release"
         defines { "NDEBUG" }
 	flags { "Optimize" }

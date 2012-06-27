@@ -69,7 +69,7 @@ solution "maratis-minged"
 		end
 
 		links {  -- first the Maratis dependencies
-		   "MCore", "MEngine", "rocket" } -- might need MGui evetually
+		   "MCore", "MEngine", "rocket", "freetype" } -- might need MGui evetually
 	
 		configuration "Release"
 			defines { "NDEBUG" }
@@ -81,7 +81,5 @@ solution "maratis-minged"
 
 	-- load up Maratis into the build
 	dofile "maratis.lua"
-	-- also load libnui
-	--dofile "nui.lua"
 	-- load libRocket
 	dofile "rocket.lua"
