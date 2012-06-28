@@ -2,6 +2,8 @@
 #define __MINGED_EDITOR_H__
 
 #include "minged.h"
+#include <Rocket/Core.h>
+#include "Inventory.h"
 
 namespace minged
 {
@@ -9,6 +11,7 @@ namespace minged
   {
   public:
     Editor();
+    ~Editor();
 
     void Update(uint32 dt);
 
@@ -20,6 +23,10 @@ namespace minged
     
   private:
     bool m_IsOpen;
+
+	Rocket::Core::Context* m_Rocket;
+	Inventory* m_Inv1;
+	Inventory* m_Inv2;
   };
 };
 
