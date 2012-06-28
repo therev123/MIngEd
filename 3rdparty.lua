@@ -62,6 +62,9 @@ solution "maratis-minged"
 -- END OF GLEE BUILD
 
 -- BEGINNING OF FREETYPE BUILD
+if os.is("windows") then
+	os.copyfile("maratis-read-only/3rdparty/freetype/win32/freetype.lib", "build/freetype.lib")
+else
 	project "freetype"
 
 		kind "StaticLib"
@@ -88,6 +91,7 @@ solution "maratis-minged"
 		configuration "Debug"
 			defines { "DEBUG" }
 			flags { "Symbols" }
+end
 -- END OF FREETYPE BUILD
 
 -- BEGINNING OF LIBSNDFILE BUILD
