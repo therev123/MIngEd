@@ -21,7 +21,7 @@ solution "maratis-minged"
     kind "StaticLib"
 
     includedirs { "libRocket/Include",
-	          "maratis-read-only/3rdparty/freetype/include" }
+	          "/usr/include/freetype2" }
 
     files { "libRocket/Source/Core/**.cpp",
 	    "libRocket/Source/Core/**.h" }

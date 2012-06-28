@@ -104,7 +104,6 @@ solution "maratis-minged"
 		includedirs {   "maratis-read-only/trunk/dev/MSDK/MCore/Includes/",
 						"maratis-read-only/trunk/dev/MSDK/MEngine/Includes/",
 						"maratis-read-only/trunk/dev/MSDK/MGui/Includes/",
-						"maratis-read-only/3rdparty/freetype/include/",
 						"maratis-read-only/3rdparty/tinyxml/",
 						"maratis-read-only/3rdparty/bullet/",
 						"maratis-read-only/3rdparty/glee/",
