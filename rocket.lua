@@ -32,7 +32,7 @@ solution "maratis-minged"
     excludes { "libRocket/Source/Core/Python/**.cpp",
 	       "libRocket/Source/Core/Python/**.h" }
 		   
-	defines { "STATIC_LIB" }
+    defines { "STATIC_LIB" }
 
     links { "freetype", "zlib" }
 

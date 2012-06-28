@@ -76,6 +76,7 @@ solution "maratis-minged"
 
 		defines { "FT2_BUILD_LIBRARY" }
 
+
 		if os.is("windows") then
 		   defines { "WIN32" }
 		end

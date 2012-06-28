@@ -8,6 +8,8 @@
 #include <Rocket/Core/Core.h>
 #include <Rocket/Core/SystemInterface.h>
 
+#include "ShellRenderInterfaceOpenGL.h"
+
 namespace minged
 {
   class SysInterface : public Rocket::Core::SystemInterface
@@ -17,10 +19,12 @@ namespace minged
   };
 
   SysInterface sys;
+  ShellRenderInterfaceOpenGL render;
 
   Editor::Editor()
   {
     Rocket::Core::SetSystemInterface(&sys);
+    Rocket::Core::SetRenderInterface(&render);
     m_IsOpen= false;
   }
 
