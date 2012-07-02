@@ -66,6 +66,9 @@ solution "maratis-minged"
 
 		if os.is("linux") then
 		   defines { "__LINUX__" }
+		elseif os.is("windows") then
+		   defines { "WIN32" }
+			links { "OpenGL32" }
 		end
 
 		links {  -- first the Maratis dependencies
