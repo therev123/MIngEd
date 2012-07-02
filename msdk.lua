@@ -104,14 +104,20 @@ solution "maratis-minged"
 		includedirs {   "maratis-read-only/trunk/dev/MSDK/MCore/Includes/",
 						"maratis-read-only/trunk/dev/MSDK/MEngine/Includes/",
 						"maratis-read-only/trunk/dev/MSDK/MGui/Includes/",
-						"maratis-read-only/3rdparty/freetype/include/",
 						"maratis-read-only/3rdparty/tinyxml/",
 						"maratis-read-only/3rdparty/bullet/",
 						"maratis-read-only/3rdparty/glee/",
 						"maratis-read-only/3rdparty/devil/",
 						"maratis-read-only/3rdparty/lua/",
 						"maratis-read-only/3rdparty/libsndfile/include/",
-						"maratis-read-only/3rdparty/npk/include/"}
+				"maratis-read-only/3rdparty/npk/include/"}
+
+		if os.is("linux") then
+		   includedirs { "/usr/include/freetype2" } 
+		else
+		   includedirs { "maratis-read-only/3rdparty/freetype/include/" } 
+		end
+
 		links { "MCore", "MEngine", "MGui", "glee", "tinyxml", "npk", "OpenAL32" }
 		defines { "M_PACKAGE_WRITABLE" }
 		

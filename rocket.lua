@@ -20,9 +20,14 @@ solution "maratis-minged"
     language "C++"
     kind "StaticLib"
 
-    includedirs { "libRocket/Include",
-	          "maratis-read-only/3rdparty/freetype/include" }
+    includedirs { "libRocket/Include" }
 
+    if os.is("linux") then
+       includedirs { "/usr/include/freetype2" } 
+    else
+       includedirs { "maratis-read-only/3rdparty/freetype/include/" } 
+    end
+    
     files { "libRocket/Source/Core/**.cpp",
 	    "libRocket/Source/Core/**.h" }
 

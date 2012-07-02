@@ -1,4 +1,5 @@
 #include "editor.h"
+#include "util.h"
 
 #include <stdio.h>
 
@@ -28,7 +29,20 @@ namespace minged
   class SysInterface : public Rocket::Core::SystemInterface
   {
   public:
-    virtual float GetElapsedTime() { return 0.0f; }
+      SysInterface()
+	  {
+	      m_StartTime = minged::util::GetTimeMS();
+	  }
+
+    virtual float GetElapsedTime() 
+	  { 
+	      uint32 dt = util::GetTimeMS() - m_StartTime;
+
+	      return (float)dt / 1000.0f;
+	  }
+
+  private:
+      uint32 m_StartTime;
   };
 
   
@@ -94,6 +108,26 @@ namespace minged
 	Rocket::Core::SetFileInterface(file);
 
 	Rocket::Core::Initialise();
+    m_IsOpen= true;
+  }
+
+  Editor::~Editor()
+  {
+	  delete sys;
+	  delete render;
+	  delete file;
+
+	delete m_Inv1;
+	delete m_Inv2;
+
+	// Shutdown Rocket.
+	m_Rocket->RemoveReference();
+	Rocket::Core::Shutdown();
+
+  }
+
+    void Editor::SetupRocket()
+    {
 	
 	MEngine* engine = MEngine::getInstance();
 	unsigned int w, h;
@@ -113,26 +147,17 @@ namespace minged
 	m_Inv1->AddItem("Closed-Loop Ion Beam");
 	m_Inv1->AddItem("5kT Mega-Bomb");
 
-    m_IsOpen= false;
-  }
-
-  Editor::~Editor()
-  {
-	  delete sys;
-	  delete render;
-	  delete file;
-
-	delete m_Inv1;
-	delete m_Inv2;
-
-	// Shutdown Rocket.
-	m_Rocket->RemoveReference();
-	Rocket::Core::Shutdown();
-
-  }
+    }
 
   void Editor::Update(uint32 dt)
   {
+      static bool test = false;
+      if(test == false)
+      {
+	  SetupRocket();
+	  test = true;
+      }
+      
     CheckToToggle();
 
     if(m_IsOpen)
@@ -154,15 +179,14 @@ namespace minged
 
   void Editor::UpdateOpen(uint32 dt)
   {
-	  printf("Hello\n");
-		m_Rocket->Update();
+      m_Rocket->Update();
   }
-
+    
   void Editor::Render()
   {
     if(m_IsOpen)
     {
-		m_Rocket->Render();
+	m_Rocket->Render();
     }
   }
 };

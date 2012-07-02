@@ -64,6 +64,8 @@ solution "maratis-minged"
 -- BEGINNING OF FREETYPE BUILD
 if os.is("windows") then
 	os.copyfile("maratis-read-only/3rdparty/freetype/win32/freetype.lib", "build/freetype.lib")
+elseif os.is("linux") then
+--   os.copyfile("maratis-read-only/3rdparty/freetype/win32/freetype.lib", "build/freetype.lib")
 else
 	project "freetype"
 
