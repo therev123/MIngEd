@@ -43,6 +43,8 @@ solution "maratis-minged"
 			"jpeg", 
 			"il", 
 			"freetype" }
+
+		defines { "MPLUGIN_DYNAMIC" }
 			
 		configuration "Release"
 			defines { "NDEBUG" }

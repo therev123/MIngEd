@@ -119,7 +119,7 @@ solution "maratis-minged"
 		end
 
 		links { "MCore", "MEngine", "MGui", "glee", "tinyxml", "npk", "OpenAL32" }
-		defines { "M_PACKAGE_WRITABLE" }
+		defines { "M_PACKAGE_WRITABLE", "MPLUGIN_DYNAMIC" }
 		
 		if os.is("windows") then
 		   defines { "WIN32", "IL_STATIC_LIB" }
