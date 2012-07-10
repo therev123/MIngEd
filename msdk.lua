@@ -110,7 +110,14 @@ solution "maratis-minged"
 						"maratis-read-only/3rdparty/devil/",
 						"maratis-read-only/3rdparty/lua/",
 						"maratis-read-only/3rdparty/libsndfile/include/",
-						"maratis-read-only/3rdparty/npk/include/"}
+				"maratis-read-only/3rdparty/npk/include/"}
+
+		if os.is("linux") then
+		   includedirs { "/usr/include/freetype2" } 
+		else
+		   includedirs { "maratis-read-only/3rdparty/freetype/include/" } 
+		end
+
 		links { "MCore", "MEngine", "MGui", "glee", "tinyxml", "npk", "OpenAL32" }
 		defines { "M_PACKAGE_WRITABLE" }
 		

@@ -22,6 +22,8 @@ namespace minged
     void UpdateOpen(uint32 dt);
     
   private:
+    void SetupRocket();
+
     bool m_IsOpen;
 
 	Rocket::Core::Context* m_Rocket;
