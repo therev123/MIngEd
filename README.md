@@ -7,6 +7,8 @@ This requires premake4, git and svn to build
 
 Any questions about compiling or using this project, please feel free to contact me at <philipp@geyer.co.uk>
 
+Update 10.07.12 - Compiles and runs on both Linux and Windows using libRocket, rather than libnui. Unfortunately doesn't render. Have added some extensions to the plugin system
+
 Update 26.06.12 - Compiles and links libnui properly under Linux, also begun the crazy task of integrating one application framework into another one. Have stubbed out nglWindow and nglApplication in MNui. No clue whether it would actually work, but I assume not. Need to now tie in these classes to Maratis. Ideally then working the integration back through things like rendering and image loading until (eventually, with any luck) no OS specific code is compiled
 
 Update 24.06.12 - Now compiles and links under Windows and Linux. Added libnui which definitely compiles under Linux. Yet to check Windows. Still need to integrate libnui properly with minged

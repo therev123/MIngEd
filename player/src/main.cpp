@@ -112,11 +112,7 @@ void AddPreload(CommandParameters &params, char* libname)
   plugin->load(libname);
   if(strlen(plugin->getFilename()) == 0)
   {
-#ifdef WIN32
-	  printf("Unable to load preload: %s\n", libname);
-#else
-      printf("Unable to load preload: %s:\n%s\n", libname, dlerror());
-#endif
+      printf("Unable to load preload: %s\n", libname);
     delete plugin;
     return;
   }

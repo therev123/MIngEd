@@ -13,21 +13,9 @@ function UpdateMaratis()
 end
 
 function ApplyPatches()
-   local dircmd = "find maratis-premake -type f -print"
-   if os.is("windows") then
-      dircmd = "dir /b/s maratis-premake"
-   end
-   os.execute(dircmd .. " > .maratis_tmpfile")
-   for f in io.lines(".maratis_tmpfile") do
-      newf, r = string.gsub(f, "-premake", "-read-only", 1)
-      if string.find(f, ".patch") then
-	 -- apply patch
-	 newf, r = string.gsub(newf, ".patch", "")
-	 os.execute("patch -N " .. newf .. " " .. f)
-      else
-	 os.copyfile(f, newf)
-      end
-   end
+   os.chdir("maratis-read-only")
+   os.execute("patch -p0 -i ../maratis-minged.patch")
+   os.chdir("..")
 end
 
 UpdateMaratis()
