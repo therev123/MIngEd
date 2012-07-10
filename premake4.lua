@@ -65,6 +65,7 @@ solution "maratis-minged"
 				"libRocket/Include",
 				"minged/include" }
 		targetprefix ""
+		defines { "MPLUGIN_DYNAMIC" }
 
 		if os.is("linux") then
 		   defines { "__LINUX__" }
@@ -88,3 +89,33 @@ solution "maratis-minged"
 	dofile "maratis.lua"
 	-- load libRocket
 	dofile "rocket.lua"
+
+-- example plugin extension, built in the Maratis/MIngEd source tree
+	project "Example"
+		kind "SharedLib"
+		language "C++"
+			
+		files { "examples/plugin/*" }
+		includedirs { "examples/plugin",
+			      "maratis-read-only/trunk/dev/MSDK/MCore/Includes",
+			      "maratis-read-only/trunk/dev/MSDK/MEngine/Includes",
+			      "maratis-read-only/trunk/dev/Maratis/Common/MPlugin" } -- this is an unfortunate line
+		targetprefix "" -- Maratis plugins don't have lib*.so
+
+		if os.is("linux") then
+		   defines { "__LINUX__" }
+		elseif os.is("windows") then
+		   defines { "WIN32" }
+		end
+		defines { "MPLUGIN_DYNAMIC" }
+
+		links { "MCore", "MEngine" }
+	
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+

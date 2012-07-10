@@ -37,10 +37,17 @@ solution "maratis-minged"
 				
 		includedirs { "maratis-read-only/trunk/dev/MSDK/MCore/Includes" }
 
+		-- move MPlugin into MEngine
+		files { "maratis-read-only/trunk/dev/Maratis/Common/MPlugin/*" }
+		includedirs { "maratis-read-only/trunk/dev/Maratis/Common/MPlugin",
+			      "maratis-read-only/trunk/dev/MSDK/MEngine/Includes",
+			      "maratis-read-only/trunk/dev/MSDK/MGui/Includes" }
+		defines { "MPLUGIN_DYNAMIC" }
+
 		if os.is("windows") then
 		   defines { "WIN32" }
 		end
-		links { "MCore" }
+		links { "MCore", "MGui" }
 		defines { "MENGINE_DLL" }
 
 		configuration "Release"
@@ -56,7 +63,7 @@ solution "maratis-minged"
 	project "MGui"
 
 		--kind "SharedLib"
-		kind "StaticLib"
+		kind "SharedLib"
 		language "C++"
 
 		files { "maratis-read-only/trunk/dev/MSDK/MGui/Includes/*.h",
@@ -111,6 +118,9 @@ solution "maratis-minged"
 						"maratis-read-only/3rdparty/lua/",
 						"maratis-read-only/3rdparty/libsndfile/include/",
 				"maratis-read-only/3rdparty/npk/include/"}
+
+		-- move MPlugin to MEngine
+		excludes { "maratis-read-only/trunk/dev/Maratis/Common/MPlugin/*" }
 
 		if os.is("linux") then
 		   includedirs { "/usr/include/freetype2" } 

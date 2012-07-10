@@ -7,6 +7,8 @@ This requires premake4, git and svn to build
 
 Any questions about compiling or using this project, please feel free to contact me at <philipp@geyer.co.uk>
 
+Update 10.07.12 mkII - Have got a little sidetracked in order to allow more simple extension and development. I've extended the plugin system to allow static linking (in theory, not tested at all) and provided an example plugin (it does absolutely nothing, just compiles and links). It's possible to compile this both within the Maratis/MIngEd source tree (check /premake4.lua) and as a separate project, by setting the MSDKDIR environment variable (check examples/plugin/premake4.lua) (NOTE: this requires the MSDK to be built from MIngEd as it uses the extended plugin system. Also, to make things a little easier. I've begun work on some packaging scripts, kept in scripts/. For now these are in python, as it's quickest and easiest to get running cross platform (although, it's not now, I've got .so and other linux-y things in there for now) In future, when I fork and modify premake, maybe create a postmake executable with general packaging functionality?
+
 Update 10.07.12 - Compiles and runs on both Linux and Windows using libRocket, rather than libnui. Unfortunately doesn't render. Have added some extensions to the plugin system
 
 Update 26.06.12 - Compiles and links libnui properly under Linux, also begun the crazy task of integrating one application framework into another one. Have stubbed out nglWindow and nglApplication in MNui. No clue whether it would actually work, but I assume not. Need to now tie in these classes to Maratis. Ideally then working the integration back through things like rendering and image loading until (eventually, with any luck) no OS specific code is compiled

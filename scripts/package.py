@@ -27,11 +27,14 @@ def package_headers(pkg):
     for m in ['MCore', 'MEngine', 'MGui']:
         dir_util.copy_tree("maratis-read-only/trunk/dev/MSDK/" + m + "/Includes", 
                            "pkg/Maratis/SDK/" + m + "/Includes")
+    shutil.copy("maratis-read-only/trunk/dev/Maratis/Common/MPlugin/MPlugin.h", "pkg/Maratis/SDK/MEngine/Includes")
 
 def package_libs(pkg):
     print("package_libs")
     for filename in glob.glob(os.path.join("build", "*.so")):
         shutil.copy(filename, "pkg/Maratis/Bin")
+    for m in ['MCore', 'MEngine', 'MGui']:
+        shutil.copy("build/lib" + m + ".so", "pkg/Maratis/SDK/" + m + "/Libs")
     shutil.copy(os.path.join("build", "Maratis"), "pkg/Maratis/Bin")
 
 def archive_package(pkg):
