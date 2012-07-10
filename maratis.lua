@@ -14,7 +14,7 @@ end
 
 function ApplyPatches()
    os.chdir("maratis-read-only")
-   os.execute("patch -p0 -i ../maratis-minged.patch")
+   os.execute("patch -p0 -N -s -i ../maratis-minged.patch")
    os.chdir("..")
 end
 

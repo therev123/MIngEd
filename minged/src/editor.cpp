@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include <MEngine.h>
+#include <MGui.h>
 #include <MKeyboard.h>
 #include <MFile.h>
 
