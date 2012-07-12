@@ -47,7 +47,8 @@ void* RunPlugin(void* data)
 }
 
 uint32 tick;
-void StartPlugin()
+
+MPLUGIN_START_IMPLEMENT(minged)
 {
     instance = new minged::Editor;
 
@@ -70,7 +71,7 @@ void Render()
   instance->Render();
 }
 
-void EndPlugin()
+MPLUGIN_END_IMPLEMENT(minged)
 {
 #ifdef MINGED_USE_PTHREAD
   pthread_exit(&thread);

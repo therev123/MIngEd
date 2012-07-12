@@ -10,15 +10,17 @@
 #   define MINGED_EXPORT
 #endif /*WIN32*/
 
+#include <MEngine.h>
+#include <MPlugin.h>
+
+MPLUGIN_DECLARE(minged);
+
 // don't munge the symbol names
 #ifdef __cplusplus
 extern "C" {
 #endif
-
   //#define MINGED_USE_PTHREAD
 
-  MINGED_EXPORT void StartPlugin();
-  MINGED_EXPORT void UpdatePlugin();
   MINGED_EXPORT void Render();
   MINGED_EXPORT void EndPlugin();
 

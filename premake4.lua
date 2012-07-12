@@ -62,6 +62,7 @@ solution "maratis-minged"
 		includedirs {   "maratis-read-only/trunk/dev/MSDK/MCore/Includes/",
 				"maratis-read-only/trunk/dev/MSDK/MEngine/Includes/",
 				"maratis-read-only/trunk/dev/MSDK/MGui/Includes/",
+				"maratis-read-only/trunk/dev/Maratis/Common/MPlugin",
 				"libRocket/Include",
 				"minged/include" }
 		targetprefix ""
@@ -89,6 +90,32 @@ solution "maratis-minged"
 	dofile "maratis.lua"
 	-- load libRocket
 	dofile "rocket.lua"
+
+-- lua interpreter to build tools
+	project "MTool"
+		kind "ConsoleApp"
+		language "C++"
+			
+		files { "MTool/**.cpp",
+		        "MTool/**.h" }
+		includedirs { "MTool",
+			      "maratis-read-only/3rdparty/lua" }
+
+		if os.is("linux") then
+		   defines { "__LINUX__" }
+		elseif os.is("windows") then
+		   defines { "WIN32" }
+		end
+
+		links { "lua" }
+	
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
 
 -- example plugin extension, built in the Maratis/MIngEd source tree
 	project "Example"

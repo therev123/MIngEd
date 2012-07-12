@@ -190,9 +190,12 @@ int main(int argc, char **argv)
 		window->hideCursor();
 
 	// set current directory
-	char rep[256];
-	getRepertory(rep, argv[0]);
-	window->setCurrentDirectory(rep);
+	if(params.project)
+	{
+	    char rep[256];
+	    getRepertory(rep, params.project);
+	    window->setCurrentDirectory(rep);
+	}
 	
 	// get Maratis (first time call onstructor)
 	MaratisPlayer * maratis = MaratisPlayer::getInstance();
