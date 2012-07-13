@@ -6,7 +6,7 @@ extern "C"
 
 void PrintHelp(const char* run)
 {
-  printf("usage: %s script...\n", run);
+  printf("usage: %s script arguments...\n", run);
 }
 
 int main(int argc, char** argv)
@@ -16,10 +16,31 @@ int main(int argc, char** argv)
       PrintHelp(argv[0]);
       return 0;
   }
+  char* str = (char*)"none";
+  
+  char** Args;
+  
+  int nArgs = argc - 2;
+  if(nArgs > 0)
+    Args = &argv[2];
+  else
+    Args = &str;
 
   lua_State* L = lua_open();
   luaL_openlibs(L);
+
   luaL_loadfile(L, argv[1]);
   lua_pcall(L, 0, LUA_MULTRET, 0);
+  
+  lua_getglobal(L, "main");
+  lua_newtable(L);
+  for(int i = 0; i < nArgs; ++i)
+  {
+    lua_pushstring(L, Args[i]);
+    lua_rawseti(L, -2, i+1);
+  }
+
+  lua_pcall(L, 1, LUA_MULTRET, 0);
+
   lua_close(L);
 }
