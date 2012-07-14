@@ -123,6 +123,7 @@ solution "maratis-minged"
 		excludes { "maratis-read-only/trunk/dev/Maratis/Common/MPlugin/*" }
 
 		if os.is("linux") then
+		   defines { "linux" }
 		   includedirs { "/usr/include/freetype2" } 
 		else
 		   includedirs { "maratis-read-only/3rdparty/freetype/include/" } 

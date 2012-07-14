@@ -108,7 +108,7 @@ solution "maratis-minged"
 		if os.is("linux") then
 		   defines { "__LINUX__" }
 		   links { "dl" }
-		   linkoptions { "-Wl,-rpath=." }
+		   linkoptions { "-Wl,-rpath=$(MSDKDIR)/Bin" }
 		elseif os.is("windows") then
 		   defines { "WIN32" }
 		end

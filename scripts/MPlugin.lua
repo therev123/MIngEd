@@ -9,7 +9,7 @@ function PrintHelp()
 end
 
 function GetPluginDir()
-   return os.getenv("HOME") .. "/.Maratis/plugins/"
+   return os.getenv("HOME") .. "/.Maratis/Plugins/"
 end
 
 function SplitPath(path)

@@ -10,6 +10,8 @@ class MWindow
  public:
   static inline MWindow* getInstance() { return &s_instance; }
   inline const char* getWorkingDirectory() { return getcwd(NULL, 0); }
+  inline const char* getUserDirectory() { return getcwd(NULL, 0); }
+  inline const char* getSystemDirectory() { return getcwd(NULL, 0); }
 };
 
 

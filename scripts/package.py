@@ -55,6 +55,10 @@ def package_tools(pkg):
     for script in glob.glob(os.path.join("scripts", "*.lua")):
         shutil.copy(script, pkg["scriptdir"])
 
+    # Just some wrapper scripts
+    shutil.copy("MaratisPlayer", os.path.join("pkg", "Maratis", "Bin"))
+    shutil.copy("MaratisEditor", os.path.join("pkg", "Maratis", "Bin"))
+
 def archive_package(pkg):
     print("archive_package")
 

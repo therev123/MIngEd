@@ -1,3 +1,76 @@
+Index: trunk/dev/MSDK/MGui/Sources/X11/MX11Window.cpp
+===================================================================
+--- trunk/dev/MSDK/MGui/Sources/X11/MX11Window.cpp	(revision 102)
++++ trunk/dev/MSDK/MGui/Sources/X11/MX11Window.cpp	(working copy)
+@@ -30,6 +30,7 @@
+ //========================================================================
+ 
+ 
++#include "../../Includes/MGui.h"
+ #include "../../Includes/MWindow.h"
+ 
+ #include <stdlib.h>
+@@ -39,9 +40,9 @@
+ #include <X11/extensions/xf86vmode.h>
+ #include <GL/gl.h>
+ #include <GL/glx.h>
++#include <unistd.h>
+ 
+ 
+-
+ // start time
+ static struct timeval startTime;
+ 
+@@ -442,8 +443,9 @@
+ 
+ 				int car = translateChar(&event.xkey);
+ 
+-				if(car == 127 || car == 32 || car == 13 || car == 9) // not return, space, delete etc..
+-					break;
++				//if(car == 127 || car == 32 || car == 13 || car == 9) // not return, space, delete etc..
++				if(car == -1)
++				      break;
+ 
+ 				mevent.type = MWIN_EVENT_CHAR;
+ 				mevent.data[0] = car;
+Index: trunk/dev/MSDK/MGui/Sources/MGui.cpp
+===================================================================
+--- trunk/dev/MSDK/MGui/Sources/MGui.cpp	(revision 102)
++++ trunk/dev/MSDK/MGui/Sources/MGui.cpp	(working copy)
+@@ -28,7 +28,7 @@
+ //========================================================================
+ 
+ 
+-#include <MLoaders/MDevILLoader.h>
++//#include <MLoaders/MDevILLoader.h>
+ #include "../Includes/MGui.h"
+ 
+ 
+@@ -49,7 +49,14 @@
+ 	render->loadIdentity();
+ }
+ 
++imageLoadFunc MImageLoadFunc;
+ 
++void setImageLoader(imageLoadFunc func)
++{
++  MImageLoadFunc = func;
++}
++
++
+ // MGui
+ MGui::MGui(void):
+ m_render(NULL)
+@@ -108,7 +115,8 @@
+ 	}
+ 
+ 	MImage image;
+-	if(M_loadImage(filename, &image))
++	
++	if(m_imageLoader.loadData(filename, &image))
+ 	{
+ 		MGuiTexture * texture = new MGuiTexture();
+ 
 Index: trunk/dev/MSDK/MGui/Includes/MGui.h
 ===================================================================
 --- trunk/dev/MSDK/MGui/Includes/MGui.h	(revision 102)
@@ -90,79 +163,52 @@ Index: trunk/dev/MSDK/MGui/Includes/MWindow.h
  
  #ifdef WIN32
  	#include "WIN32/MWin32Window.h"
-Index: trunk/dev/MSDK/MGui/Sources/X11/MX11Window.cpp
+Index: trunk/dev/MSDK/MEngine/Includes/MEngine.h
 ===================================================================
---- trunk/dev/MSDK/MGui/Sources/X11/MX11Window.cpp	(revision 102)
-+++ trunk/dev/MSDK/MGui/Sources/X11/MX11Window.cpp	(working copy)
-@@ -30,6 +30,7 @@
- //========================================================================
+--- trunk/dev/MSDK/MEngine/Includes/MEngine.h	(revision 102)
++++ trunk/dev/MSDK/MEngine/Includes/MEngine.h	(working copy)
+@@ -49,6 +49,8 @@
  
+ #endif
  
-+#include "../../Includes/MGui.h"
- #include "../../Includes/MWindow.h"
++// for plugin compatability checking
++#define MPLUGIN_AVAILABLE
  
- #include <stdlib.h>
-@@ -39,9 +40,9 @@
- #include <X11/extensions/xf86vmode.h>
- #include <GL/gl.h>
- #include <GL/glx.h>
-+#include <unistd.h>
- 
- 
--
- // start time
- static struct timeval startTime;
- 
-@@ -442,8 +443,9 @@
- 
- 				int car = translateChar(&event.xkey);
- 
--				if(car == 127 || car == 32 || car == 13 || car == 9) // not return, space, delete etc..
--					break;
-+				//if(car == 127 || car == 32 || car == 13 || car == 9) // not return, space, delete etc..
-+				if(car == -1)
-+				      break;
- 
- 				mevent.type = MWIN_EVENT_CHAR;
- 				mevent.data[0] = car;
-Index: trunk/dev/MSDK/MGui/Sources/MGui.cpp
+ // object3d type
+ #define M_OBJECT3D			0
+Index: trunk/dev/MSDK/MCore/Includes/MRenderingContext.h
 ===================================================================
---- trunk/dev/MSDK/MGui/Sources/MGui.cpp	(revision 102)
-+++ trunk/dev/MSDK/MGui/Sources/MGui.cpp	(working copy)
-@@ -28,7 +28,7 @@
- //========================================================================
- 
- 
--#include <MLoaders/MDevILLoader.h>
-+//#include <MLoaders/MDevILLoader.h>
- #include "../Includes/MGui.h"
- 
- 
-@@ -49,7 +49,14 @@
- 	render->loadIdentity();
- }
- 
-+imageLoadFunc MImageLoadFunc;
- 
-+void setImageLoader(imageLoadFunc func)
-+{
-+  MImageLoadFunc = func;
-+}
+--- trunk/dev/MSDK/MCore/Includes/MRenderingContext.h	(revision 102)
++++ trunk/dev/MSDK/MCore/Includes/MRenderingContext.h	(working copy)
+@@ -389,6 +389,9 @@
+ 	virtual void enableBlending(void) = 0;
+ 	virtual void disableBlending(void) = 0;
+ 	virtual void setBlendingMode(M_BLENDING_MODES mode) = 0;
 +
-+
- // MGui
- MGui::MGui(void):
- m_render(NULL)
-@@ -108,7 +115,8 @@
- 	}
++	// points
++	virtual void setPointSize(float min, float max, float threshold) = 0;
+ };
  
- 	MImage image;
--	if(M_loadImage(filename, &image))
-+	
-+	if(m_imageLoader.loadData(filename, &image))
- 	{
- 		MGuiTexture * texture = new MGuiTexture();
+ #endif
+Index: trunk/dev/MSDK/MCore/Includes/MPhysicsContext.h
+===================================================================
+--- trunk/dev/MSDK/MCore/Includes/MPhysicsContext.h	(revision 102)
++++ trunk/dev/MSDK/MCore/Includes/MPhysicsContext.h	(working copy)
+@@ -50,6 +50,7 @@
  
+ 	// world
+ 	virtual void setWorldGravity(const MVector3 & gravity) = 0;
++	virtual MVector3 getWorldGravity() = 0;
+ 
+ 	// create object
+ 	virtual void createGhost(unsigned int * objectId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation) = 0;
+@@ -110,4 +111,4 @@
+ 	virtual void deleteConstraint(unsigned int * constraintId) = 0;
+ };
+ 
+-#endif
+\ No newline at end of file
++#endif
 Index: trunk/dev/MSDK/MCore/Sources/MFileTools.cpp
 ===================================================================
 --- trunk/dev/MSDK/MCore/Sources/MFileTools.cpp	(revision 102)
@@ -175,6 +221,216 @@ Index: trunk/dev/MSDK/MCore/Sources/MFileTools.cpp
  #endif
  
  static MFileOpenHook* s_fileOpenHook = 0;
+Index: trunk/dev/Maratis/Common/MContexts/MBulletContext.cpp
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MBulletContext.cpp	(revision 102)
++++ trunk/dev/Maratis/Common/MContexts/MBulletContext.cpp	(working copy)
+@@ -122,6 +122,14 @@
+ 	m_dynamicsWorld->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
+ }
+ 
++MVector3 MBulletContext::getWorldGravity()
++{
++	if(m_dynamicsWorld == NULL)
++		return MVector3(0.0f, 0.0f, 0.0f);
++	btVector3 gravity = m_dynamicsWorld->getGravity();
++	return MVector3(gravity.x(), gravity.y(), gravity.z());
++}
++
+ // create object
+ void MBulletContext::createGhost(unsigned int * objectId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation)
+ {
+Index: trunk/dev/Maratis/Common/MContexts/MBulletContext.h
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MBulletContext.h	(revision 102)
++++ trunk/dev/Maratis/Common/MContexts/MBulletContext.h	(working copy)
+@@ -71,6 +71,7 @@
+ 
+ 	// world gravity
+ 	void setWorldGravity(const MVector3 & gravity);
++	MVector3 getWorldGravity();
+ 
+ 	// create object
+ 	void createGhost(unsigned int * objectId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation);
+@@ -131,4 +132,4 @@
+ 	void deleteConstraint(unsigned int * constraintId);
+ };
+ 
+-#endif
+\ No newline at end of file
++#endif
+Index: trunk/dev/Maratis/Common/MContexts/MGLContext.cpp
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MGLContext.cpp	(revision 102)
++++ trunk/dev/Maratis/Common/MContexts/MGLContext.cpp	(working copy)
+@@ -209,6 +209,9 @@
+ 
+ 	// anisotropic filtering
+ 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
++
++	glEnable(GL_POINT_SPRITE);
++	glTexEnvi(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);
+ }
+ 
+ MGLContext::~MGLContext(void)
+@@ -1177,3 +1180,13 @@
+ 		break;
+ 	}
+ }
++
++void MGLContext::setPointSize(float min, float max, float threshold)
++{
++	//glPointParameterf(GL_POINT_FADE_THRESHOLD_SIZE, threshold);
++	glPointSize(max);
++	glPointParameterf(GL_POINT_SIZE_MIN, min);
++	glPointParameterf(GL_POINT_SIZE_MAX, max);
++	GLfloat attn[] = { 0.0f, 0.0f, 0.02f };
++	glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, attn);
++}
+Index: trunk/dev/Maratis/Common/MContexts/MGLContext.h
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MGLContext.h	(revision 102)
++++ trunk/dev/Maratis/Common/MContexts/MGLContext.h	(working copy)
+@@ -248,6 +248,9 @@
+ 	void enableBlending(void);
+ 	void disableBlending(void);
+ 	void setBlendingMode(M_BLENDING_MODES mode);
++
++	// points
++	void setPointSize(float min, float max, float threshold);
+ };
+ 
+ #endif
+Index: trunk/dev/Maratis/Common/MPlugin/MPlugin.h
+===================================================================
+--- trunk/dev/Maratis/Common/MPlugin/MPlugin.h	(revision 102)
++++ trunk/dev/Maratis/Common/MPlugin/MPlugin.h	(working copy)
+@@ -31,33 +31,111 @@
+ #ifndef _M_PLUGIN_H
+ #define _M_PLUGIN_H
+ 
+-#ifdef WIN32
+-#include <windows.h>
+-#else
+-#include <dlfcn.h>
+-#endif
++#ifdef MPLUGIN_DYNAMIC
++#  ifdef WIN32
++#    include <windows.h>
++#    define MPLUGIN_EXPORT __declspec(dllexport)
++#  else
++// automagically exported
++#    define MPLUGIN_EXPORT
++#    include <dlfcn.h>
++#  endif /*WIN32*/
++#endif/*MPLUGIN_DYNAMIC*/
+ 
+-class MPlugin
++typedef void * (*FunctionPtr)();
++
++class M_ENGINE_EXPORT MPlugin
+ {
+ public :
+ 
+ 	MPlugin(void);
+ 	~MPlugin(void);
+ 
+-private :
++protected :
+ 
+ 	string m_filename;
+-	
+-#ifdef WIN32
+-    HMODULE m_library;
++
++#ifdef MPLUGIN_DYNAMIC	
++#    ifdef WIN32
++	HMODULE m_library;
++#    else
++	void * m_library;
++#    endif
+ #else
+-	void * m_library;
++        FunctionPtr Start;
++        FunctionPtr End;
++
+ #endif
+-
++	bool m_loaded;
+ public:
+ 	
+ 	void load(const char * filename);
+ 	inline const char * getFilename(void){ return m_filename.c_str(); }
++	inline bool isLoaded(void) { return m_loaded; }
+ };
+ 
+-#endif
+\ No newline at end of file
++// Some nasty macros to help making plugins for both systems that can dynamically
++// load libraries (ie. sensible systems) and for annoying systems like iOS
++// where we can't have shared objects.
++//
++// to use, in the plugin somewhere do as follows:
++//------------AwesomePlugin.h---------------------------------------------------
++// #include <MPlugin.h>
++// 
++// MPLUGIN_DECLARE(MyAwesomePlugin);
++//------------AwesomePlugin.cpp-------------------------------------------------
++// #include "AwesomePlugin.h"
++//
++// MPLUGIN_START_IMPLEMENT(MyAwesomePlugin)
++// {
++//   // this is where you do your code
++// }
++//
++// MPLUGIN_END_IMPLEMENT(MyAwesomePlugin)
++// {
++//   // cleanup here
++// }
++//
++// Everything else should be taken care of
++
++#ifdef MPLUGIN_DYNAMIC
++#    define MPLUGIN_DECLARE(name)		\
++  extern "C" {					\
++  MPLUGIN_EXPORT void StartPlugin();		\
++  MPLUGIN_EXPORT void EndPlugin();		\
++  }
++
++#    define MPLUGIN_START_IMPLEMENT(name)	\
++  void StartPlugin()
++
++#    define MPLUGIN_END_IMPLEMENT(name)		\
++  void EndPlugin()
++#else
++#    define MPLUGIN_DECLARE(name)			\
++  void StartPlugin##name();				\
++  void EndPlugin##name();				\
++  class Plugin##name##AutoStart				\
++  {							\
++  public:						\
++    Plugin##name##AutoStart();				\
++  }							\
++  extern Plugin##name##AutoStart s_##name##AutoStarter;
++
++#   define MPLUGIN_START_IMPLEMENT(name)				\
++  Plugin##name##AutoStart s_##name##AutoStarter;			\
++  Plugin##name##AutoStart::Plugin##name##AutoStart()			\
++  {									\
++    AddPluginFunctions(#name, &StartPlugin##name, &EndPlugin##name);	\
++  }									\
++  void StartPlugin##name()
++
++#   define MPLUGIN_END_IMPLEMENT(name)		\
++  void EndPlugin##name()
++#endif/*MPLUGIN_DYNAMIC*/
++
++// don't worry about this:
++#ifndef MPLUGIN_DYNAMIC
++void AddPluginFunctions(const char* pluginName, FunctionPtr start, FunctionPtr end);
++#endif
++
++#endif
 Index: trunk/dev/Maratis/Common/MPlugin/MPlugin.cpp
 ===================================================================
 --- trunk/dev/Maratis/Common/MPlugin/MPlugin.cpp	(revision 102)
@@ -352,133 +608,3 @@ Index: trunk/dev/Maratis/Common/MPlugin/MPlugin.cpp
 -}
 \ No newline at end of file
 +}
-Index: trunk/dev/Maratis/Common/MPlugin/MPlugin.h
-===================================================================
---- trunk/dev/Maratis/Common/MPlugin/MPlugin.h	(revision 102)
-+++ trunk/dev/Maratis/Common/MPlugin/MPlugin.h	(working copy)
-@@ -31,33 +31,111 @@
- #ifndef _M_PLUGIN_H
- #define _M_PLUGIN_H
- 
--#ifdef WIN32
--#include <windows.h>
--#else
--#include <dlfcn.h>
--#endif
-+#ifdef MPLUGIN_DYNAMIC
-+#  ifdef WIN32
-+#    include <windows.h>
-+#    define MPLUGIN_EXPORT __declspec(dllexport)
-+#  else
-+// automagically exported
-+#    define MPLUGIN_EXPORT
-+#    include <dlfcn.h>
-+#  endif /*WIN32*/
-+#endif/*MPLUGIN_DYNAMIC*/
- 
--class MPlugin
-+typedef void * (*FunctionPtr)();
-+
-+class M_ENGINE_EXPORT MPlugin
- {
- public :
- 
- 	MPlugin(void);
- 	~MPlugin(void);
- 
--private :
-+protected :
- 
- 	string m_filename;
--	
--#ifdef WIN32
--    HMODULE m_library;
-+
-+#ifdef MPLUGIN_DYNAMIC	
-+#    ifdef WIN32
-+	HMODULE m_library;
-+#    else
-+	void * m_library;
-+#    endif
- #else
--	void * m_library;
-+        FunctionPtr Start;
-+        FunctionPtr End;
-+
- #endif
--
-+	bool m_loaded;
- public:
- 	
- 	void load(const char * filename);
- 	inline const char * getFilename(void){ return m_filename.c_str(); }
-+	inline bool isLoaded(void) { return m_loaded; }
- };
- 
--#endif
-\ No newline at end of file
-+// Some nasty macros to help making plugins for both systems that can dynamically
-+// load libraries (ie. sensible systems) and for annoying systems like iOS
-+// where we can't have shared objects.
-+//
-+// to use, in the plugin somewhere do as follows:
-+//------------AwesomePlugin.h---------------------------------------------------
-+// #include <MPlugin.h>
-+// 
-+// MPLUGIN_DECLARE(MyAwesomePlugin);
-+//------------AwesomePlugin.cpp-------------------------------------------------
-+// #include "AwesomePlugin.h"
-+//
-+// MPLUGIN_START_IMPLEMENT(MyAwesomePlugin)
-+// {
-+//   // this is where you do your code
-+// }
-+//
-+// MPLUGIN_END_IMPLEMENT(MyAwesomePlugin)
-+// {
-+//   // cleanup here
-+// }
-+//
-+// Everything else should be taken care of
-+
-+#ifdef MPLUGIN_DYNAMIC
-+#    define MPLUGIN_DECLARE(name)		\
-+  extern "C" {					\
-+  MPLUGIN_EXPORT void StartPlugin();		\
-+  MPLUGIN_EXPORT void EndPlugin();		\
-+  }
-+
-+#    define MPLUGIN_START_IMPLEMENT(name)	\
-+  void StartPlugin()
-+
-+#    define MPLUGIN_END_IMPLEMENT(name)		\
-+  void EndPlugin()
-+#else
-+#    define MPLUGIN_DECLARE(name)			\
-+  void StartPlugin##name();				\
-+  void EndPlugin##name();				\
-+  class Plugin##name##AutoStart				\
-+  {							\
-+  public:						\
-+    Plugin##name##AutoStart();				\
-+  }							\
-+  extern Plugin##name##AutoStart s_##name##AutoStarter;
-+
-+#   define MPLUGIN_START_IMPLEMENT(name)				\
-+  Plugin##name##AutoStart s_##name##AutoStarter;			\
-+  Plugin##name##AutoStart::Plugin##name##AutoStart()			\
-+  {									\
-+    AddPluginFunctions(#name, &StartPlugin##name, &EndPlugin##name);	\
-+  }									\
-+  void StartPlugin##name()
-+
-+#   define MPLUGIN_END_IMPLEMENT(name)		\
-+  void EndPlugin##name()
-+#endif/*MPLUGIN_DYNAMIC*/
-+
-+// don't worry about this:
-+#ifndef MPLUGIN_DYNAMIC
-+void AddPluginFunctions(const char* pluginName, FunctionPtr start, FunctionPtr end);
-+#endif
-+
-+#endif
