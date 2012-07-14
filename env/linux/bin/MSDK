@@ -1,0 +1,28 @@
+#!/bin/bash
+
+DIR=$(dirname $0)
+SDKDIR=$DIR/.MSDK
+MINGED=$DIR/../MIngEd
+STOCK=$DIR/../Maratis
+
+
+function setup
+{
+    if [ -L $SDKDIR ] ; then
+	rm $SDKDIR
+    fi
+
+    if [ ! -e $SDKDIR ] ; then
+	ln -sf $1 $SDKDIR
+    fi
+}
+
+if [ $# -eq 1 ] ; then
+    if [ $1 == "minged" ] ; then
+	setup $MINGED
+    else
+	setup $STOCK
+    fi
+else
+    setup $STOCK
+fi
