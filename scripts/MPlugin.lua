@@ -19,11 +19,20 @@ end
 function CheckPlugin(plugin)
    local path, file, ext = SplitPath(plugin)
    if not ext == "so" then
-      print("plugin " .. plugin .. " has incorrect extension " .. ext)
+      print("Plugin " .. plugin .. " has incorrect extension " .. ext)
       return false
    end
 
-   print("plugin " .. plugin .. " verified")
+   local p = string.gsub(plugin, "." .. ext, "")
+   local success, error = load_plugin(p)
+   if not success then
+      print("Plugin " .. plugin .. " is incompatible with current version of Maratis")
+      print("  " .. error)
+      print("banana")
+      return false
+   end
+
+   print("Plugin " .. plugin .. " verified")
    return true
 end
 

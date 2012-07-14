@@ -97,16 +97,22 @@ solution "maratis-minged"
 		language "C++"
 			
 		files { "MTool/**.cpp",
-		        "MTool/**.h" }
+		        "MTool/**.h",
+		        "maratis-read-only/trunk/dev/Maratis/Common/MPlugin/*" }
 		includedirs { "MTool",
+			      "maratis-read-only/trunk/dev/Maratis/Common/",
 			      "maratis-read-only/3rdparty/lua" }
+
+		defines { "MPLUGIN_DYNAMIC" }
 
 		if os.is("linux") then
 		   defines { "__LINUX__" }
+		   links { "dl" }
+		   linkoptions { "-Wl,-rpath=." }
 		elseif os.is("windows") then
 		   defines { "WIN32" }
 		end
-
+		
 		links { "lua" }
 	
 		configuration "Release"
