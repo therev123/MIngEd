@@ -1,38 +1,3 @@
-Index: trunk/dev/MSDK/MGui/Sources/X11/MX11Window.cpp
-===================================================================
---- trunk/dev/MSDK/MGui/Sources/X11/MX11Window.cpp	(revision 102)
-+++ trunk/dev/MSDK/MGui/Sources/X11/MX11Window.cpp	(working copy)
-@@ -30,6 +30,7 @@
- //========================================================================
- 
- 
-+#include "../../Includes/MGui.h"
- #include "../../Includes/MWindow.h"
- 
- #include <stdlib.h>
-@@ -39,9 +40,9 @@
- #include <X11/extensions/xf86vmode.h>
- #include <GL/gl.h>
- #include <GL/glx.h>
-+#include <unistd.h>
- 
- 
--
- // start time
- static struct timeval startTime;
- 
-@@ -442,8 +443,9 @@
- 
- 				int car = translateChar(&event.xkey);
- 
--				if(car == 127 || car == 32 || car == 13 || car == 9) // not return, space, delete etc..
--					break;
-+				//if(car == 127 || car == 32 || car == 13 || car == 9) // not return, space, delete etc..
-+				if(car == -1)
-+				      break;
- 
- 				mevent.type = MWIN_EVENT_CHAR;
- 				mevent.data[0] = car;
 Index: trunk/dev/MSDK/MGui/Sources/MGui.cpp
 ===================================================================
 --- trunk/dev/MSDK/MGui/Sources/MGui.cpp	(revision 102)
@@ -71,6 +36,95 @@ Index: trunk/dev/MSDK/MGui/Sources/MGui.cpp
  	{
  		MGuiTexture * texture = new MGuiTexture();
  
+Index: trunk/dev/MSDK/MGui/Sources/X11/MX11Window.cpp
+===================================================================
+--- trunk/dev/MSDK/MGui/Sources/X11/MX11Window.cpp	(revision 102)
++++ trunk/dev/MSDK/MGui/Sources/X11/MX11Window.cpp	(working copy)
+@@ -30,6 +30,7 @@
+ //========================================================================
+ 
+ 
++#include "../../Includes/MGui.h"
+ #include "../../Includes/MWindow.h"
+ 
+ #include <stdlib.h>
+@@ -39,9 +40,9 @@
+ #include <X11/extensions/xf86vmode.h>
+ #include <GL/gl.h>
+ #include <GL/glx.h>
++#include <unistd.h>
+ 
+ 
+-
+ // start time
+ static struct timeval startTime;
+ 
+@@ -251,6 +252,20 @@
+ 	return currentDirectory;
+ }
+ 
++const char* MWindow::getUserDirectory(void)
++{
++  static char dir[0xff];
++  snprintf(dir, 0xff, "%s/.Maratis/", getenv("HOME"));
++  return dir;
++}
++
++const char* MWindow::getSystemDirectory(void)
++{
++  static char dir[0xff];
++  snprintf(dir, 0xff, "%s/", getenv("MSDKDIR"));
++  return dir;
++}
++
+ void MWindow::setCursorPos(int x, int y)
+ {
+ 	XWarpPointer(display, None, window, 0, 0, 0, 0, x, y);
+@@ -442,8 +457,9 @@
+ 
+ 				int car = translateChar(&event.xkey);
+ 
+-				if(car == 127 || car == 32 || car == 13 || car == 9) // not return, space, delete etc..
+-					break;
++				//if(car == 127 || car == 32 || car == 13 || car == 9) // not return, space, delete etc..
++				if(car == -1)
++				      break;
+ 
+ 				mevent.type = MWIN_EVENT_CHAR;
+ 				mevent.data[0] = car;
+Index: trunk/dev/MSDK/MGui/Includes/X11/MX11Window.h
+===================================================================
+--- trunk/dev/MSDK/MGui/Includes/X11/MX11Window.h	(revision 102)
++++ trunk/dev/MSDK/MGui/Includes/X11/MX11Window.h	(working copy)
+@@ -124,6 +124,8 @@
+ 	const char * getTempDirectory(void);
+ 	const char * getCurrentDirectory(void);
+ 	inline const char * getWorkingDirectory(void){ return m_workingDirectory; }
++	const char* getUserDirectory(void);
++	const char* getSystemDirectory(void);
+ 
+ 	// joysticks
+ 	MJoystick * getJoystick1(void){ return &m_joysticks[0]; }
+Index: trunk/dev/MSDK/MGui/Includes/MWindow.h
+===================================================================
+--- trunk/dev/MSDK/MGui/Includes/MWindow.h	(revision 102)
++++ trunk/dev/MSDK/MGui/Includes/MWindow.h	(working copy)
+@@ -31,10 +31,11 @@
+ #ifndef _M_WINDOW_H
+ #define _M_WINDOW_H
+ 
+-#include <MWinEvents.h>
+-#include <MMouse.h>
+-#include <MKeyboard.h>
+-#include <MJoystick.h>
++#include "MWinEvents.h"
++#include "MGui.h"
++#include "MMouse.h"
++#include "MKeyboard.h"
++#include "MJoystick.h"
+ 
+ #ifdef WIN32
+ 	#include "WIN32/MWin32Window.h"
 Index: trunk/dev/MSDK/MGui/Includes/MGui.h
 ===================================================================
 --- trunk/dev/MSDK/MGui/Includes/MGui.h	(revision 102)
@@ -143,26 +197,6 @@ Index: trunk/dev/MSDK/MGui/Includes/MGui.h
  
  	// windows
  	void unHighLightAllWindows(void);
-Index: trunk/dev/MSDK/MGui/Includes/MWindow.h
-===================================================================
---- trunk/dev/MSDK/MGui/Includes/MWindow.h	(revision 102)
-+++ trunk/dev/MSDK/MGui/Includes/MWindow.h	(working copy)
-@@ -31,10 +31,11 @@
- #ifndef _M_WINDOW_H
- #define _M_WINDOW_H
- 
--#include <MWinEvents.h>
--#include <MMouse.h>
--#include <MKeyboard.h>
--#include <MJoystick.h>
-+#include "MWinEvents.h"
-+#include "MGui.h"
-+#include "MMouse.h"
-+#include "MKeyboard.h"
-+#include "MJoystick.h"
- 
- #ifdef WIN32
- 	#include "WIN32/MWin32Window.h"
 Index: trunk/dev/MSDK/MEngine/Includes/MEngine.h
 ===================================================================
 --- trunk/dev/MSDK/MEngine/Includes/MEngine.h	(revision 102)
@@ -176,6 +210,18 @@ Index: trunk/dev/MSDK/MEngine/Includes/MEngine.h
  
  // object3d type
  #define M_OBJECT3D			0
+Index: trunk/dev/MSDK/MCore/Sources/MFileTools.cpp
+===================================================================
+--- trunk/dev/MSDK/MCore/Sources/MFileTools.cpp	(revision 102)
++++ trunk/dev/MSDK/MCore/Sources/MFileTools.cpp	(working copy)
+@@ -41,6 +41,7 @@
+ 	#define rmdir _rmdir
+ #else
+ 	#define mkdir(file) mkdir(file, 0777)
++        #include <unistd.h>
+ #endif
+ 
+ static MFileOpenHook* s_fileOpenHook = 0;
 Index: trunk/dev/MSDK/MCore/Includes/MRenderingContext.h
 ===================================================================
 --- trunk/dev/MSDK/MCore/Includes/MRenderingContext.h	(revision 102)
@@ -209,98 +255,23 @@ Index: trunk/dev/MSDK/MCore/Includes/MPhysicsContext.h
 -#endif
 \ No newline at end of file
 +#endif
-Index: trunk/dev/MSDK/MCore/Sources/MFileTools.cpp
+Index: trunk/dev/MSDK/MCore/Includes/MSystemContext.h
 ===================================================================
---- trunk/dev/MSDK/MCore/Sources/MFileTools.cpp	(revision 102)
-+++ trunk/dev/MSDK/MCore/Sources/MFileTools.cpp	(working copy)
-@@ -41,6 +41,7 @@
- 	#define rmdir _rmdir
- #else
- 	#define mkdir(file) mkdir(file, 0777)
-+        #include <unistd.h>
- #endif
+--- trunk/dev/MSDK/MCore/Includes/MSystemContext.h	(revision 102)
++++ trunk/dev/MSDK/MCore/Includes/MSystemContext.h	(working copy)
+@@ -50,6 +50,10 @@
  
- static MFileOpenHook* s_fileOpenHook = 0;
-Index: trunk/dev/Maratis/Common/MContexts/MBulletContext.cpp
-===================================================================
---- trunk/dev/Maratis/Common/MContexts/MBulletContext.cpp	(revision 102)
-+++ trunk/dev/Maratis/Common/MContexts/MBulletContext.cpp	(working copy)
-@@ -122,6 +122,14 @@
- 	m_dynamicsWorld->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
- }
- 
-+MVector3 MBulletContext::getWorldGravity()
-+{
-+	if(m_dynamicsWorld == NULL)
-+		return MVector3(0.0f, 0.0f, 0.0f);
-+	btVector3 gravity = m_dynamicsWorld->getGravity();
-+	return MVector3(gravity.x(), gravity.y(), gravity.z());
-+}
-+
- // create object
- void MBulletContext::createGhost(unsigned int * objectId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation)
- {
-Index: trunk/dev/Maratis/Common/MContexts/MBulletContext.h
-===================================================================
---- trunk/dev/Maratis/Common/MContexts/MBulletContext.h	(revision 102)
-+++ trunk/dev/Maratis/Common/MContexts/MBulletContext.h	(working copy)
-@@ -71,6 +71,7 @@
- 
- 	// world gravity
- 	void setWorldGravity(const MVector3 & gravity);
-+	MVector3 getWorldGravity();
- 
- 	// create object
- 	void createGhost(unsigned int * objectId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation);
-@@ -131,4 +132,4 @@
- 	void deleteConstraint(unsigned int * constraintId);
+ 	// system tick
+ 	virtual unsigned long getSystemTick(void) = 0;
++	
++	// Store directories
++	virtual const char* getUserDirectory(void) = 0;
++	virtual const char* getSystemDirectory(void) = 0;
  };
  
 -#endif
 \ No newline at end of file
 +#endif
-Index: trunk/dev/Maratis/Common/MContexts/MGLContext.cpp
-===================================================================
---- trunk/dev/Maratis/Common/MContexts/MGLContext.cpp	(revision 102)
-+++ trunk/dev/Maratis/Common/MContexts/MGLContext.cpp	(working copy)
-@@ -209,6 +209,9 @@
- 
- 	// anisotropic filtering
- 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
-+
-+	glEnable(GL_POINT_SPRITE);
-+	glTexEnvi(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);
- }
- 
- MGLContext::~MGLContext(void)
-@@ -1177,3 +1180,13 @@
- 		break;
- 	}
- }
-+
-+void MGLContext::setPointSize(float min, float max, float threshold)
-+{
-+	//glPointParameterf(GL_POINT_FADE_THRESHOLD_SIZE, threshold);
-+	glPointSize(max);
-+	glPointParameterf(GL_POINT_SIZE_MIN, min);
-+	glPointParameterf(GL_POINT_SIZE_MAX, max);
-+	GLfloat attn[] = { 0.0f, 0.0f, 0.02f };
-+	glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, attn);
-+}
-Index: trunk/dev/Maratis/Common/MContexts/MGLContext.h
-===================================================================
---- trunk/dev/Maratis/Common/MContexts/MGLContext.h	(revision 102)
-+++ trunk/dev/Maratis/Common/MContexts/MGLContext.h	(working copy)
-@@ -248,6 +248,9 @@
- 	void enableBlending(void);
- 	void disableBlending(void);
- 	void setBlendingMode(M_BLENDING_MODES mode);
-+
-+	// points
-+	void setPointSize(float min, float max, float threshold);
- };
- 
- #endif
 Index: trunk/dev/Maratis/Common/MPlugin/MPlugin.h
 ===================================================================
 --- trunk/dev/Maratis/Common/MPlugin/MPlugin.h	(revision 102)
@@ -435,11 +406,12 @@ Index: trunk/dev/Maratis/Common/MPlugin/MPlugin.cpp
 ===================================================================
 --- trunk/dev/Maratis/Common/MPlugin/MPlugin.cpp	(revision 102)
 +++ trunk/dev/Maratis/Common/MPlugin/MPlugin.cpp	(working copy)
-@@ -30,64 +30,133 @@
+@@ -30,64 +30,145 @@
  
  #include <MEngine.h>
  #include "MPlugin.h"
 +#include <MWindow.h>
++#include <MFileTools.h>
  
 +#include <stdio.h>
  
@@ -528,19 +500,30 @@ Index: trunk/dev/Maratis/Common/MPlugin/MPlugin.cpp
 +
 +
 +	char file[256];
-+	MWindow * window = MWindow::getInstance();
++	MWindow* window = MWindow::getInstance();
++
++	char dirs[3][256];
++	snprintf(dirs[0], 256, window->getWorkingDirectory());
++	snprintf(dirs[1], 256, "%s/Plugins", window->getUserDirectory());
++	snprintf(dirs[2], 256, "%s/Plugins", window->getSystemDirectory());
  	
 -    m_library = LoadLibrary(filename);
 -    if(! m_library)
 -		return;
++	for(int i = 0; i < 3; ++i)
++	{
 +#    ifdef WIN32
-+	getGlobalFilename(file, window->getWorkingDirectory(), (string(filename) + ".dll").c_str());
++	  getGlobalFilename(file, dirs[i], (string(filename) + ".dll").c_str());
 +#    elseif __APPLE__
-+	getGlobalFilename(file, window->getWorkingDirectory(), (string(filename) + ".dylib").c_str());
++	  getGlobalFilename(file, dirs[i], (string(filename) + ".dylib").c_str());
 +#    else // just assume a linux based os
-+	getGlobalFilename(file, window->getWorkingDirectory(), (string(filename) + ".so").c_str());
++	  getGlobalFilename(file, dirs[i], (string(filename) + ".so").c_str());
 +#    endif
  
++	  if(isFileExist(file))
++	     break;
++	}
++
 +#    ifdef WIN32
 +    
 +    m_library = LoadLibrary(file);
@@ -608,3 +591,121 @@ Index: trunk/dev/Maratis/Common/MPlugin/MPlugin.cpp
 -}
 \ No newline at end of file
 +}
+Index: trunk/dev/Maratis/Common/MContexts/MBulletContext.cpp
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MBulletContext.cpp	(revision 102)
++++ trunk/dev/Maratis/Common/MContexts/MBulletContext.cpp	(working copy)
+@@ -122,6 +122,14 @@
+ 	m_dynamicsWorld->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
+ }
+ 
++MVector3 MBulletContext::getWorldGravity()
++{
++	if(m_dynamicsWorld == NULL)
++		return MVector3(0.0f, 0.0f, 0.0f);
++	btVector3 gravity = m_dynamicsWorld->getGravity();
++	return MVector3(gravity.x(), gravity.y(), gravity.z());
++}
++
+ // create object
+ void MBulletContext::createGhost(unsigned int * objectId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation)
+ {
+Index: trunk/dev/Maratis/Common/MContexts/MBulletContext.h
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MBulletContext.h	(revision 102)
++++ trunk/dev/Maratis/Common/MContexts/MBulletContext.h	(working copy)
+@@ -71,6 +71,7 @@
+ 
+ 	// world gravity
+ 	void setWorldGravity(const MVector3 & gravity);
++	MVector3 getWorldGravity();
+ 
+ 	// create object
+ 	void createGhost(unsigned int * objectId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation);
+@@ -131,4 +132,4 @@
+ 	void deleteConstraint(unsigned int * constraintId);
+ };
+ 
+-#endif
+\ No newline at end of file
++#endif
+Index: trunk/dev/Maratis/Common/MContexts/MWinContext.cpp
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MWinContext.cpp	(revision 102)
++++ trunk/dev/Maratis/Common/MContexts/MWinContext.cpp	(working copy)
+@@ -60,3 +60,16 @@
+ 	MWindow * window = MWindow::getInstance();
+ 	return window->getSystemTick();
+ }
++	
++// plugin directories
++const char* MWinContext::getUserDirectory(void)
++{
++  MWindow * window = MWindow::getInstance();
++  return window->getUserDirectory();
++}
++
++const char* MWinContext::getSystemDirectory(void)
++{
++  MWindow * window = MWindow::getInstance();
++  return window->getSystemDirectory();
++}
+Index: trunk/dev/Maratis/Common/MContexts/MGLContext.cpp
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MGLContext.cpp	(revision 102)
++++ trunk/dev/Maratis/Common/MContexts/MGLContext.cpp	(working copy)
+@@ -209,6 +209,9 @@
+ 
+ 	// anisotropic filtering
+ 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
++
++	glEnable(GL_POINT_SPRITE);
++	glTexEnvi(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);
+ }
+ 
+ MGLContext::~MGLContext(void)
+@@ -1177,3 +1180,13 @@
+ 		break;
+ 	}
+ }
++
++void MGLContext::setPointSize(float min, float max, float threshold)
++{
++	//glPointParameterf(GL_POINT_FADE_THRESHOLD_SIZE, threshold);
++	glPointSize(max);
++	glPointParameterf(GL_POINT_SIZE_MIN, min);
++	glPointParameterf(GL_POINT_SIZE_MAX, max);
++	GLfloat attn[] = { 0.0f, 0.0f, 0.02f };
++	glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, attn);
++}
+Index: trunk/dev/Maratis/Common/MContexts/MWinContext.h
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MWinContext.h	(revision 102)
++++ trunk/dev/Maratis/Common/MContexts/MWinContext.h	(working copy)
+@@ -51,6 +51,10 @@
+ 
+ 	// system tick
+ 	unsigned long getSystemTick(void);
++	
++	// plugin directories
++	const char* getUserDirectory(void);
++	const char* getSystemDirectory(void);
+ };
+ 
+-#endif
+\ No newline at end of file
++#endif
+Index: trunk/dev/Maratis/Common/MContexts/MGLContext.h
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MGLContext.h	(revision 102)
++++ trunk/dev/Maratis/Common/MContexts/MGLContext.h	(working copy)
+@@ -248,6 +248,9 @@
+ 	void enableBlending(void);
+ 	void disableBlending(void);
+ 	void setBlendingMode(M_BLENDING_MODES mode);
++
++	// points
++	void setPointSize(float min, float max, float threshold);
+ };
+ 
+ #endif
