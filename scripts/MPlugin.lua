@@ -8,17 +8,13 @@ function PrintHelp()
    print("file: the plugin file")
 end
 
-function GetPluginDir()
-   return os.getenv("HOME") .. "/.Maratis/Plugins/"
-end
-
 function SplitPath(path)
    return string.match(path, "(.-)([^/]-([^%.]+))$")
 end
 
 function CheckPlugin(plugin)
    local path, file, ext = SplitPath(plugin)
-   if not ext == "so" then
+   if not ext == plugin_ext then
       print("Plugin " .. plugin .. " has incorrect extension " .. ext)
       return false
    end
@@ -37,7 +33,7 @@ function CheckPlugin(plugin)
 end
 
 function InstallPlugin(plugin)
-   local dir = GetPluginDir()
+   local dir = plugin_dir()
    local path, file, ext = SplitPath(plugin)
 
    print("Installing " .. file .. " to " .. dir)
@@ -45,7 +41,7 @@ function InstallPlugin(plugin)
    local f = io.open(plugin, "r")
    local t = f:read("*all")
    f:close()
-   local p = io.open(dir .. file, "w")
+   local p = io.open(dir .. "/" .. file, "w")
    p:write(t)
    p:close()
 end

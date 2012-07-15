@@ -110,7 +110,7 @@ solution "maratis-minged"
 		   links { "dl" }
 		   linkoptions { "-Wl,-rpath=$(MSDKDIR)/Bin" }
 		elseif os.is("windows") then
-		   defines { "WIN32" }
+		   defines { "WIN32", "_CRT_SECURE_NO_DEPRECATE" }
 		end
 		
 		links { "lua" }

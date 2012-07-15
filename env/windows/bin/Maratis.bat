@@ -1,0 +1,2 @@
+cd %MSDKDIR%\Bin
+MaratisEditor $*

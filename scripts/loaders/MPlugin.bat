@@ -1,0 +1,1 @@
+%MSDKDIR%/Bin/MTool.exe %MSDKDIR%/Scripts/MPlugin.lua %*

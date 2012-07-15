@@ -10,6 +10,38 @@ def mkdir(path):
         if exc.errno == errno.EEXIST:
             pass
         else: raise
+		
+def ext():
+	if os.name == "nt":
+		return ".dll"
+	elif os.name == "posix":
+		return ".so"
+	elif os.name == "mac":
+		return ".dylib"
+		
+def static_ext():
+	if os.name == "nt":
+		return ".lib"
+	else:
+		return ext()
+		
+def executable_ext():
+	if os.name == "nt":
+		return ".exe"
+	else:
+		return ""
+		
+def loader_ext():
+	if os.name == "nt":
+		return ".bat"
+	else:
+		return ""
+		
+def prefix():
+	if os.name == "nt":
+		return ""
+	else:
+		return "lib"
 
 def make_package_dir():
     print("make_package_dir")
@@ -40,24 +72,23 @@ def package_headers(pkg):
 
 def package_libs(pkg):
     print("package_libs")
-    for filename in glob.glob(os.path.join("build", "*.so")):
+    for filename in glob.glob(os.path.join("build", "*" + ext())):
         shutil.copy(filename, pkg["bindir"])
     for m in pkg["sdkmodules"]:
-        shutil.copy(os.path.join("build","lib" + m + ".so"), os.path.join(pkg["sdkdir"], m, "Libs"))
-    shutil.copy(os.path.join("build", "Maratis"), pkg["bindir"])
-    shutil.copy(os.path.join("build", "MTool"), pkg["bindir"])
+        shutil.copy(os.path.join("build",prefix() + m + static_ext()), os.path.join(pkg["sdkdir"], m, "Libs"))
+    shutil.copy(os.path.join("build", "Maratis" + executable_ext()), pkg["bindir"])
+    shutil.copy(os.path.join("build", "MTool" + executable_ext()), pkg["bindir"])
 
 def package_tools(pkg):
     print("package_tools")
-    shutil.copy(os.path.join("build", "Maratis"), os.path.join("pkg", "Maratis", "Bin"))
-    for loader in glob.glob(os.path.join("scripts", "loaders", "*")):
+    for loader in glob.glob(os.path.join("scripts", "loaders", "*" + loader_ext())):
         shutil.copy(loader, pkg["toolsdir"])
     for script in glob.glob(os.path.join("scripts", "*.lua")):
         shutil.copy(script, pkg["scriptdir"])
 
     # Just some wrapper scripts
-    shutil.copy("MaratisPlayer", os.path.join("pkg", "Maratis", "Bin"))
-    shutil.copy("MaratisEditor", os.path.join("pkg", "Maratis", "Bin"))
+    shutil.copy("MaratisPlayer" + loader_ext(), os.path.join("pkg", "Maratis", "Bin"))
+    shutil.copy("MaratisEditor" + loader_ext(), os.path.join("pkg", "Maratis", "Bin"))
 
 def archive_package(pkg):
     print("archive_package")

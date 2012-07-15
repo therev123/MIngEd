@@ -1,7 +1,11 @@
 #ifndef __MWINDOW_H__
 #define __MWINDOW_H__
 
-#include <unistd.h>
+#ifdef WIN32
+#  include <direct.h>
+#else
+#  include <unistd.h>
+#endif
 
 // placeholder to allow minimal dependencies with MEngine
 class MWindow

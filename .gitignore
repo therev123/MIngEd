@@ -1,0 +1,10 @@
+maratis-read-only/
+libRocket/
+build/
+pkg/
+obj/
+Makefile
+*.make
+*.sln
+*.vcxproj*
+*.suo

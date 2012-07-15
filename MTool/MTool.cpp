@@ -32,8 +32,10 @@ int main(int argc, char** argv)
   luaL_openlibs(L);
 
   luaL_loadfile(L, argv[1]);
-
+  
   lua_register(L, "load_plugin", pluginCheck);
+  lua_register(L, "plugin_ext", pluginExt);
+  lua_register(L, "plugin_dir", pluginDir);
 
   lua_pcall(L, 0, LUA_MULTRET, 0);
   

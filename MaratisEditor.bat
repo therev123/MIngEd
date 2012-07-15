@@ -1,0 +1,1 @@
+Maratis --preload=minged %*
