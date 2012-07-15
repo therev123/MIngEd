@@ -1,4 +1,4 @@
-#include "pluginChecks.h"
+#include "pluginfuncs.h"
 #include "MWindow.h"
 #include "MEngine.h"
 
@@ -14,7 +14,7 @@
 
 MWindow MWindow::s_instance;
 
-int pluginCheck(lua_State* L)
+int mtool_loadPlugin(lua_State* L)
 {
   MPlugin test;
   test.load(lua_tostring(L, -1));
@@ -31,7 +31,7 @@ int pluginCheck(lua_State* L)
   return 2;
 }
 
-int pluginExt(lua_State* L)
+int mtool_pluginExt(lua_State* L)
 {
 #ifdef WIN32
 	lua_pushstring(L, "dll");
@@ -43,7 +43,7 @@ int pluginExt(lua_State* L)
 	return 1;
 }
 
-int pluginDir(lua_State* L)
+int mtool_pluginDir(lua_State* L)
 {
 	char dir[255];
 #ifdef WIN32

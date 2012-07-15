@@ -4,7 +4,21 @@ extern "C"
 #include <lauxlib.h>
 }
 
-#include "pluginChecks.h"
+#include "pluginfuncs.h"
+#include "osfuncs.h"
+
+static const luaL_Reg mtool_functions[] = {
+  { "load_plugin", mtool_loadPlugin },
+  { "plugin_ext",  mtool_pluginExt },
+  { "plugin_dir",  mtool_pluginDir },
+  { NULL, NULL }
+};
+
+static const luaL_Reg os_functions[] = {
+  { "mkdir", os_mkdir },
+  { "cp", os_cp },
+  { NULL, NULL }
+};
 
 void PrintHelp(const char* run)
 {
@@ -31,12 +45,11 @@ int main(int argc, char** argv)
   lua_State* L = lua_open();
   luaL_openlibs(L);
 
+  luaL_register(L, "tool", mtool_functions);
+  luaL_register(L, "os", os_functions);
+
   luaL_loadfile(L, argv[1]);
   
-  lua_register(L, "load_plugin", pluginCheck);
-  lua_register(L, "plugin_ext", pluginExt);
-  lua_register(L, "plugin_dir", pluginDir);
-
   lua_pcall(L, 0, LUA_MULTRET, 0);
   
   lua_getglobal(L, "main");

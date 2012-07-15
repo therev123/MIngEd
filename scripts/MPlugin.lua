@@ -14,17 +14,16 @@ end
 
 function CheckPlugin(plugin)
    local path, file, ext = SplitPath(plugin)
-   if not ext == plugin_ext then
+   if not ext == tool.plugin_ext() then
       print("Plugin " .. plugin .. " has incorrect extension " .. ext)
       return false
    end
 
    local p = string.gsub(plugin, "." .. ext, "")
-   local success, error = load_plugin(p)
+   local success, error = tool.load_plugin(p)
    if not success then
       print("Plugin " .. plugin .. " is incompatible with current version of Maratis")
       print("  " .. error)
-      print("banana")
       return false
    end
 
@@ -33,7 +32,7 @@ function CheckPlugin(plugin)
 end
 
 function InstallPlugin(plugin)
-   local dir = plugin_dir()
+   local dir = tool.plugin_dir()
    local path, file, ext = SplitPath(plugin)
 
    print("Installing " .. file .. " to " .. dir)
@@ -46,14 +45,14 @@ function InstallPlugin(plugin)
    p:close()
 end
 
-function main(Args)
-   if #Args < 2 then
+function main(args)
+   if #args < 2 then
       PrintHelp()
-   elseif Args[1] == "install" then
-      if CheckPlugin(Args[2]) then
-	 InstallPlugin(Args[2])
+   elseif args[1] == "install" then
+      if CheckPlugin(args[2]) then
+	 InstallPlugin(args[2])
       end
-   elseif Args[1] == "check" then
-      CheckPlugin(Args[2])
+   elseif args[1] == "check" then
+      CheckPlugin(args[2])
    end
 end
