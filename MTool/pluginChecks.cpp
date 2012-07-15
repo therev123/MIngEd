@@ -8,6 +8,8 @@
 #  include <ShlObj.h>
 #  include <stdio.h>
 #  define snprintf sprintf_s
+#else
+#  include <stdlib.h>
 #endif
 
 MWindow MWindow::s_instance;
@@ -49,9 +51,9 @@ int pluginDir(lua_State* L)
 	SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, appdata);
 	sprintf_s(dir, "%s/Maratis/Plugins", appdata);
 #elif __APPLE__
-	snprintf(dir, "%s/.Maratis/Plugins", getenv("HOME"));
+	snprintf(dir, 255, "%s/.Maratis/Plugins", getenv("HOME"));
 #else
-	snprintf(dir, "%s/.Maratis/Plugins", getenv("HOME"));
+	snprintf(dir, 255, "%s/.Maratis/Plugins", getenv("HOME"));
 #endif
 	lua_pushstring(L, dir);
 	return 1;
