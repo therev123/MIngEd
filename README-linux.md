@@ -18,3 +18,7 @@ NOTE: The environment comes with an `MSDK` scripts which is used for switching b
 
 `MSDK minged` Selects MIngEd as the current SDK.
 `MSDK` Selects the original Maratis distribution.
+
+NOTE:
+-----
+`pkg/Maratis` is a tree structure created to match the standard Maratis distribution. This can be created, once the project is compiled, by running `build/MTool scripts/MPackager.lua` or, once the project has been packaged for the first time, simply `MPackager`
