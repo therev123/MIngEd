@@ -29,6 +29,7 @@ function make_package_dir()
     pkg["scriptdir"]  = pkg["dir"] .. "Scripts/"
     pkg["toolsdir"]   = pkg["dir"] .. "Tools/"
     pkg["bindir"]     = pkg["dir"] .. "Bin/"
+    pkg["plugindir"]     = pkg["dir"] .. "Plugins/"
     pkg["sdkmodules"] = {"MCore", "MEngine", "MGui"}
     pkg["sdkdirs"]    = {"Includes", "Libs", "Doc"}
 
@@ -50,7 +51,7 @@ end
 function package_headers(pkg)
     print("package_headers")
     for i,m in pairs(pkg["sdkmodules"]) do
-       os.cp("maratis-read-only/trunk/dev/MSDK/" .. m .. "/Includes", pkg["sdkdir"] .. m .. "/Includes")
+       os.cp_of_type("maratis-read-only/trunk/dev/MSDK/" .. m .. "/Includes", pkg["sdkdir"] .. m .. "/Includes", ".h")
     end
 
     os.cp("maratis-read-only/trunk/dev/Maratis/Common/MPlugin/MPlugin.h", pkg["sdkdir"] .. "MEngine/Includes")
@@ -58,12 +59,29 @@ function package_headers(pkg)
 
 function package_libs(pkg)
    print("package_libs")
+   os.cp_of_type("build/", pkg["bindir"], ext());
+
+   for i,m in pairs(pkg["sdkmodules"]) do
+      os.cp("build/" .. prefix() .. m .. static_ext(), pkg["sdkdir"] .. m .. "/Libs")
+   end
    os.cp("build/Maratis" .. executable_ext(), pkg["bindir"])
 end
 
 function package_tools(pkg)
    print("package_tools")
+   os.cp("scripts/loaders/", pkg["toolsdir"])
    os.cp("build/MTool" .. executable_ext(), pkg["bindir"])
+
+   os.cp_of_type("scripts/", pkg["scriptdir"], ".lua")
+
+   os.cp("MaratisPlayer" .. loader_ext(), pkg["bindir"])
+   os.cp("MaratisEditor" .. loader_ext(), pkg["bindir"])
+end
+
+function package_plugins(pkg)
+   print("package_plugins")
+   os.cp("build/minged" .. ext(), pkg["plugindir"])
+   os.cp("build/Example" .. ext(), pkg["plugindir"])
 end
 
 function archive_package(pkg)

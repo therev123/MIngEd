@@ -40,7 +40,10 @@ bool copy(const char* source, const char* target)
   }
   else
     snprintf(destination, 0xff, target);
-    
+
+  struct stat stats;
+  stat(source, &stats);
+
   FILE* src = fopen(source, "r");
   if(src == 0)
   {
@@ -64,11 +67,14 @@ bool copy(const char* source, const char* target)
 
   fclose(src);
   fclose(dest);
+
+  // preserve permissions
+  chmod(destination, stats.st_mode);
   
   return true;
 }
 
-bool copydir(const char* source, const char* target)
+bool copydir(const char* source, const char* target, const char* type = 0)
 {
   DIR* dir = opendir(source);
   struct dirent* ent;
@@ -83,12 +89,12 @@ bool copydir(const char* source, const char* target)
     char src[0xff];
     snprintf(dest, 0xff, "%s/%s", target, ent->d_name);
     snprintf(src, 0xff, "%s/%s", source, ent->d_name);
-    if(directory(src))
+    if(directory(src) && type == 0)
     {
       mkdir(dest);
-      copydir(src, dest);
+      copydir(src, dest, type);
     }
-    else
+    else if(type == 0 || strstr(src, type) == src + strlen(src) - strlen(type))
       copy(src, dest);
   }
 }
@@ -107,6 +113,20 @@ int os_cp(lua_State* L)
 
   if(directory(source))
     copydir(source, target);
+  else
+    copy(source, target);
+  return 0;
+}
+
+
+int os_cp_of_type(lua_State* L)
+{
+  const char* source = lua_tostring(L, -3);
+  const char* target = lua_tostring(L, -2);
+  const char* type   = lua_tostring(L, -1);
+
+  if(directory(source))
+    copydir(source, target, type);
   else
     copy(source, target);
   return 0;
