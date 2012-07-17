@@ -14,7 +14,9 @@ end
 
 function ApplyPatches()
    os.chdir("maratis-read-only")
-   os.execute("patch -p0 -N -s -i ../maratis-minged.patch")
+   os.execute("patch -p0 -N -s -i ../maratis-patch/maratis-minged.patch")
+   os.copyfile("../maratis-patch/MProfiler.h", "trunk/dev/MSDK/MEngine/Includes")
+   os.copyfile("../maratis-patch/MProfileScope.cpp", "trunk/dev/MSDK/MEngine/Sources")
    os.chdir("..")
 end
 
