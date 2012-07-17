@@ -63,7 +63,7 @@ bool copy(const char* source, const char* target)
   int n;
   
   while((n = fread(buf, 1, 1024, src)) > 0)
-      fwrite(buf, 1, 1024, dest);
+      fwrite(buf, 1, n, dest);
 
   fclose(src);
   fclose(dest);

@@ -31,8 +31,10 @@ function CheckPlugin(plugin)
    return true
 end
 
-function InstallPlugin(plugin)
-   local dir = tool.plugin_dir()
+function InstallPlugin(plugin, dir)
+   if dir == nil then
+      dir = tool.plugin_dir()
+   end
    local path, file, ext = SplitPath(plugin)
 
    print("Installing " .. file .. " to " .. dir)
@@ -50,7 +52,7 @@ function main(args)
       PrintHelp()
    elseif args[1] == "install" then
       if CheckPlugin(args[2]) then
-	 InstallPlugin(args[2])
+	 InstallPlugin(args[2], args[3])
       end
    elseif args[1] == "check" then
       CheckPlugin(args[2])
