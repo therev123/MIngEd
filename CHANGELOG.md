@@ -1,0 +1,16 @@
+CHANGELOG
+=========
+	
+Update 17.07.12 - Replaced python packaging script with lua one, using MTool. Also (I think, not tested) added functionality to MPlugin(.lua) to allow passing a target directory to install the plugins to. Have considered writing an MPublisher(.lua) also and create npk packages with that. The idea would be that minged itself wouldn't have any publishing code inside, but rather would call $(MSDKDIR)/Tools/MPublisher on the directory of the game currently being run, and that would take care of everything else.
+
+Update 14.07.12 - Added a simple tool framework which is little more than a lua interpreter. Also created one script for this, MPlugin.lua, along with a couple of wrapper scripts, which will check a plugin for compatibility (currently just by attempting to load it) and installs it to ~/.Maratis/Plugins. Also have extended MPlugin yet a bit further to allow loading plugins from different directories. It will check first the current (project) directory, then the user directory (~/.Maratis/Plugins) then the system directory ($(MSDKDIR)/Plugins)
+
+Update 10.07.12 mkII - Have got a little sidetracked in order to allow more simple extension and development. I've extended the plugin system to allow static linking (in theory, not tested at all) and provided an example plugin (it does absolutely nothing, just compiles and links). It's possible to compile this both within the Maratis/MIngEd source tree (check /premake4.lua) and as a separate project, by setting the MSDKDIR environment variable (check examples/plugin/premake4.lua) (NOTE: this requires the MSDK to be built from MIngEd as it uses the extended plugin system. Also, to make things a little easier. I've begun work on some packaging scripts, kept in scripts/. For now these are in python, as it's quickest and easiest to get running cross platform (although, it's not now, I've got .so and other linux-y things in there for now) In future, when I fork and modify premake, maybe create a postmake executable with general packaging functionality?
+
+Update 10.07.12 - Compiles and runs on both Linux and Windows using libRocket, rather than libnui. Unfortunately doesn't render. Have added some extensions to the plugin system
+
+Update 26.06.12 - Compiles and links libnui properly under Linux, also begun the crazy task of integrating one application framework into another one. Have stubbed out nglWindow and nglApplication in MNui. No clue whether it would actually work, but I assume not. Need to now tie in these classes to Maratis. Ideally then working the integration back through things like rendering and image loading until (eventually, with any luck) no OS specific code is compiled
+
+Update 24.06.12 - Now compiles and links under Windows and Linux. Added libnui which definitely compiles under Linux. Yet to check Windows. Still need to integrate libnui properly with minged
+
+Update 20.06.12 - After reworking the premake build system, it compiles! It doesn't link yet (on Windows) but it's a start

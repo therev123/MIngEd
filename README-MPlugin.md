@@ -29,7 +29,9 @@ In the implementation file, the following will create the basis for the plugin.
 Compiling a plugin
 ------------------
 
-using premake4
+Please take a look at the `premake4.lua` found within `examples/plugin` for the correct setup for compiling a Maratis/MIngEd plugin. This script assumes that Maratis (or MIngEd) is installed at `$MSDKDIR`. If compiling Maratis/MIngEd from source, running the relevant `setup` script in `env/${OS}/` should create all environment variables and links required.
+
+For instructions on how to compile a premake4 project, please see the [premake documentation]((http://industriousone.com/premake/userguide).
 
 Installing a plugin
 -------------------
@@ -63,7 +65,7 @@ Instead, from within the game plugin (which is automatically loaded) you can do 
 Publishing a plugin
 -------------------
 
-/To be continued/
+-- Really need to decide how to specify which plugins to pull in for publishing. Auto generated XML file?
 
 TODO
 ----
