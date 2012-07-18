@@ -268,6 +268,7 @@ void MaratisPlayer::loadProject(MProject* proj, const char * filename)
 
 void MaratisPlayer::logicLoop(void)
 {
+        M_PROFILE_SCOPE("MaratisPlayer::logicLoop");
 	MEngine * engine = MEngine::getInstance();
 
 	// game
@@ -278,10 +279,14 @@ void MaratisPlayer::logicLoop(void)
 			game->update();
 		}
 	}
+
+	if(MProfilerContext* profiler = engine->getProfilerContext())
+	  profiler->update();
 }
 
 void MaratisPlayer::graphicLoop(void)
 {
+        M_PROFILE_SCOPE("MaratisPlayer::graphicLoop");
 	MWindow * window = MWindow::getInstance();
 	MEngine * engine = MEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();

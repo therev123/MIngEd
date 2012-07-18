@@ -78,7 +78,7 @@ void draw(void)
 typedef struct CommandParameters
 {
   CommandParameters()
-    : width(1024), height(768), fullscreen(0), project(0)
+    : width(1024), height(768), fullscreen(0), project(0), profile(0)
   {
     preloads = new Plugin*[PRELOAD_MAX];
     for(int i=0; i<PRELOAD_MAX; ++i)
@@ -93,6 +93,7 @@ typedef struct CommandParameters
   unsigned int width;
   unsigned int height;
   unsigned int fullscreen;
+  unsigned int profile;
   Plugin** preloads;
   char* project;
 } CommandParameters;
@@ -149,6 +150,11 @@ void ParseParams(CommandParameters &params, int argc, char** argv)
       {
 	params.fullscreen = 1;
       }
+      else if( strcmp(argv[i], "--profile") == 0 ||
+	       strcmp(argv[i], "-p") == 0 )
+      {
+	params.profile = 1;
+      }
       else if( strstr(argv[i], "--preload=") == argv[i] )
       {
 	AddPreload(params, &argv[i][10]);
@@ -180,6 +186,14 @@ int main(int argc, char **argv)
 	
 	// get engine (first time call onstructor)
 	MEngine * engine = MEngine::getInstance();
+
+	// this needs to be loaded after MEngine is initialised.
+	MPlugin* profiler = 0;
+	if(params.profile != 0)
+	{
+	    profiler = new MPlugin;
+	    profiler->load("MProfiler");
+	}
 
 	// get window (first time call onstructor)
 	MWindow * window = MWindow::getInstance();
@@ -322,5 +336,7 @@ int main(int argc, char **argv)
 	}
 
 	maratis->clear();
+	if(profiler)
+	  delete profiler;
 	return 0;
 }
