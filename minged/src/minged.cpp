@@ -31,19 +31,19 @@ pthread_t thread;
 
 void* RunPlugin(void* data)
 {
-  minged::Editor* editor = (minged::Editor*)data;
-
-  uint32 prevtick = minged::util::GetTimeMS();
-  while(true)
-  {
-      uint32 ms = minged::util::GetTimeMS();
-    uint32 dt = ms - prevtick;
-    editor->Update(dt);
-    uint32 postms = minged::util::GetTimeMS();
-    if(postms - ms < TICKTIME)
-	minged::util::Sleep(TICKTIME - (postms - ms));
-    prevtick = ms;    
-  }
+    minged::Editor* editor = (minged::Editor*)data;
+    
+    uint32 prevtick = minged::util::GetTimeMS();
+    while(true)
+    {
+	uint32 ms = minged::util::GetTimeMS();
+	uint32 dt = ms - prevtick;
+	editor->Update(dt);
+	uint32 postms = minged::util::GetTimeMS();
+	if(postms - ms < TICKTIME)
+	    minged::util::Sleep(TICKTIME - (postms - ms));
+	prevtick = ms;    
+    }
 }
 
 uint32 tick;
@@ -51,30 +51,30 @@ uint32 tick;
 MPLUGIN_START_IMPLEMENT(minged)
 {
     instance = new minged::Editor;
-
+    
 #ifdef MINGED_USE_PTHREAD
-  pthread_create(&thread, NULL, RunPlugin, instance);
+    pthread_create(&thread, NULL, RunPlugin, instance);
 #endif/*MINGED_USE_PTHREAD*/
-  tick = minged::util::GetTimeMS();
+    tick = minged::util::GetTimeMS();
 }
 
 void UpdatePlugin()
 {
     uint32 ms = minged::util::GetTimeMS();
-  uint32 dt = ms - tick;
-  instance->Update(dt);
-  tick = ms;
+    uint32 dt = ms - tick;
+    instance->Update(dt);
+    tick = ms;
 }
 
 void Render()
 {
-  instance->Render();
+    instance->Render();
 }
 
 MPLUGIN_END_IMPLEMENT(minged)
 {
 #ifdef MINGED_USE_PTHREAD
-  pthread_exit(&thread);
+    pthread_exit(&thread);
 #endif/*MINGED_USE_PTHREAD*/
-  delete instance;
+    delete instance;
 }

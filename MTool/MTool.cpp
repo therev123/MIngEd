@@ -6,6 +6,7 @@ extern "C"
 
 #include "pluginfuncs.h"
 #include "osfuncs.h"
+#include "npkfuncs.h"
 
 static const luaL_Reg mtool_functions[] = {
   { "load_plugin", mtool_loadPlugin },
@@ -19,6 +20,12 @@ static const luaL_Reg os_functions[] = {
   { "cp", os_cp },
   { "cp_of_type", os_cp_of_type },
   { NULL, NULL }
+};
+
+static const luaL_Reg npk_functions[] = {
+  { "new", npk_new },
+  { "add", npk_add },
+  { NULL, NULL}
 };
 
 void PrintHelp(const char* run)
@@ -48,6 +55,7 @@ int main(int argc, char** argv)
 
   luaL_register(L, "tool", mtool_functions);
   luaL_register(L, "os", os_functions);
+  luaL_register(L, "npk", npk_functions);
 
   luaL_loadfile(L, argv[1]);
   
