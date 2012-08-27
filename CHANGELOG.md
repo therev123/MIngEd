@@ -1,6 +1,8 @@
 CHANGELOG
 =========
-	
+
+Update 27.08.12 - Removed libRocket dependency. too much hassle to maintain the dependency. Instead, planning on writing simple GUI system in lua. Have got a minged.lua script loaded post-level-load, need to start adding required functionality for the GUI system. Time to get my planning hat on. Have started creating some more helper scripts. Now have MPublisher(.lua) MPackager(.lua) and MPlugin(.lua). MPlugin functionality hasn't changed, MPackager created the correct folder hierarchy for a Maratis distribution from a built source tree and MPublisher (for now) just reads an entire directory and adds it to an npk package. In future, I'd like to be able to add hooks, for example, to load .mesh files, parse, then write out as a binary file. However, for now, that's a lot of work, I may just end up hijacking what's already done in Maratis.
+
 Update 17.07.12 - Replaced python packaging script with lua one, using MTool. Also (I think, not tested) added functionality to MPlugin(.lua) to allow passing a target directory to install the plugins to. Have considered writing an MPublisher(.lua) also and create npk packages with that. The idea would be that minged itself wouldn't have any publishing code inside, but rather would call $(MSDKDIR)/Tools/MPublisher on the directory of the game currently being run, and that would take care of everything else.
 
 Update 14.07.12 - Added a simple tool framework which is little more than a lua interpreter. Also created one script for this, MPlugin.lua, along with a couple of wrapper scripts, which will check a plugin for compatibility (currently just by attempting to load it) and installs it to ~/.Maratis/Plugins. Also have extended MPlugin yet a bit further to allow loading plugins from different directories. It will check first the current (project) directory, then the user directory (~/.Maratis/Plugins) then the system directory ($(MSDKDIR)/Plugins)

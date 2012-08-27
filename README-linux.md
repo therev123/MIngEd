@@ -22,4 +22,4 @@ NOTE: The environment comes with an `MSDK` scripts which is used for switching b
 
 NOTE:
 -----
-`pkg/Maratis` is a tree structure created to match the standard Maratis distribution. This can be created, once the project is compiled, by running `build/MTool scripts/MPackager.lua` or, once the project has been packaged for the first time, simply `MPackager`
+`pkg/Maratis` is a tree structure created to match the standard Maratis distribution. This can be created, once the project is compiled, by running `build/MTool scripts/MPackager.lua` or, once the project has been packaged for the first time, simply `MPackager`. Calling `MPackager` can potentially cause an error, attempting to overwrite MTool, which is currently in use, running the script. This can probably be safely ignored. If you're unsure, and think you may want to make sure MTool is up to date, use 'build/MTool scripts/MPackager.lua' instead.
