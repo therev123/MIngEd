@@ -23,8 +23,10 @@ static const luaL_Reg os_functions[] = {
 };
 
 static const luaL_Reg npk_functions[] = {
-  { "new", npk_new },
+  { "open", npk_open },
   { "add", npk_add },
+  { "add_dir", npk_add_dir },
+  { "close", npk_close },
   { NULL, NULL}
 };
 

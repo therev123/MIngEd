@@ -58,19 +58,6 @@ void windowEvents(MWinEvent * windowEvents)
 	}
 }
 
-// update
-void update(void)
-{
-	MaratisPlayer::getInstance()->logicLoop();
-}
-
-// draw
-void draw(void)
-{
-	MaratisPlayer::getInstance()->graphicLoop();
-	MWindow::getInstance()->swapBuffer();
-}
-
 #ifndef PRELOAD_MAX
 #define PRELOAD_MAX 5
 #endif 
@@ -97,6 +84,26 @@ typedef struct CommandParameters
   Plugin** preloads;
   char* project;
 } CommandParameters;
+
+CommandParameters params;
+
+// update
+void update(void)
+{
+	MaratisPlayer::getInstance()->logicLoop();
+}
+
+// draw
+void draw(void)
+{
+    MaratisPlayer::getInstance()->graphicLoop();
+
+    for(int i=0; i<PRELOAD_MAX; ++i)
+	if(params.preloads[i])
+	    params.preloads[i]->Draw();
+
+    MWindow::getInstance()->swapBuffer();
+}
 
 void AddPreload(CommandParameters &params, char* libname)
 {
@@ -181,7 +188,6 @@ int main(int argc, char **argv)
 {
 	setlocale(LC_NUMERIC, "C");
 	
-	CommandParameters params;
 	ParseParams(params, argc, argv);
 	
 	// get engine (first time call onstructor)
@@ -322,10 +328,6 @@ int main(int argc, char **argv)
 				if(steps > 0){
 					draw();
 				}
-
-				for(i=0; i<PRELOAD_MAX; ++i)
-				  if(params.preloads[i])
-				    params.preloads[i]->Draw();
 			}
 			else
 			{

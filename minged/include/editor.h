@@ -5,6 +5,14 @@
 
 namespace minged
 {
+    enum btnState
+    {
+	eUp,
+	eDown,
+	ePressed,  // first frame
+	eReleased, // first frame
+    };
+
     class Editor
     {
     public:
@@ -15,12 +23,16 @@ namespace minged
 	
 	void Render();
 	
-    protected:
-	void CheckToToggle();
-	void UpdateOpen(uint32 dt);
 	
     private:
+	void CheckToToggle();
+	void UpdateOpen(uint32 dt);
+	void Init();
+
+	bool m_Initialised;
 	bool m_IsOpen;
+
+	btnState m_ToggleButton;
     };
 };
 

@@ -1,33 +1,10 @@
 #include "osfuncs.h"
-
-#include <stdio.h>
-#include <dirent.h>
-#include <sys/stat.h>
-#include <string.h>
-
-#ifdef WIN32
-	#include <direct.h>
-	#define mkdir _mkdir
-	#define rmdir _rmdir
-#else
-	#define mkdir(file) mkdir(file, 0777)
-        #include <unistd.h>
-#endif
-
-bool directory(const char* path)
-{
-  DIR* dir = opendir(path);
-  if(dir == NULL)
-    return false;
-  closedir(dir);
-  return true;
-    
-}
+#include "util.h"
 
 bool copy(const char* source, const char* target)
 {
   char destination[0xff];
-  if(directory(target))
+  if(isDirectory(target))
   {
     if(strstr(source, "/") == 0)
       snprintf(destination, 0xff, "%s/%s", target, source);
@@ -89,7 +66,7 @@ bool copydir(const char* source, const char* target, const char* type = 0)
     char src[0xff];
     snprintf(dest, 0xff, "%s/%s", target, ent->d_name);
     snprintf(src, 0xff, "%s/%s", source, ent->d_name);
-    if(directory(src) && type == 0)
+    if(isDirectory(src) && type == 0)
     {
       mkdir(dest);
       copydir(src, dest, type);
@@ -111,7 +88,7 @@ int os_cp(lua_State* L)
   const char* source = lua_tostring(L, -2);
   const char* target = lua_tostring(L, -1);
 
-  if(directory(source))
+  if(isDirectory(source))
     copydir(source, target);
   else
     copy(source, target);
@@ -125,7 +102,7 @@ int os_cp_of_type(lua_State* L)
   const char* target = lua_tostring(L, -2);
   const char* type   = lua_tostring(L, -1);
 
-  if(directory(source))
+  if(isDirectory(source))
     copydir(source, target, type);
   else
     copy(source, target);

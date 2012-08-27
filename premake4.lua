@@ -54,40 +54,8 @@ solution "maratis-minged"
 			defines { "DEBUG" }
 			flags { "Symbols" }
 
-	project "minged"
-		kind "SharedLib"
-		language "C++"
-
-		files { "minged/**.cpp", "minged/**.h" }
-		includedirs {   "maratis-read-only/trunk/dev/MSDK/MCore/Includes/",
-				"maratis-read-only/trunk/dev/MSDK/MEngine/Includes/",
-				"maratis-read-only/trunk/dev/MSDK/MGui/Includes/",
-				"maratis-read-only/trunk/dev/Maratis/Common/MPlugin",
-				"minged/include" }
-		targetprefix ""
-		defines { "MPLUGIN_DYNAMIC" }
-
-		if os.is("linux") then
-		   defines { "__LINUX__" }
-		elseif os.is("windows") then
-		   defines { "WIN32" }
-			links { "OpenGL32" }
-		end
-
-		links { "MCore", "MEngine" }
-	
-		configuration "Release"
-			defines { "NDEBUG" }
-			flags { "Optimize" }
-
-		configuration "Debug"
-			defines { "DEBUG" }
-			flags { "Symbols" }
-
 	-- load up Maratis into the build
 	dofile "maratis.lua"
-	-- load libRocket
-	--dofile "rocket.lua"
 
 -- lua interpreter to build tools
 	project "MTool"
@@ -113,6 +81,36 @@ solution "maratis-minged"
 		end
 		
 		links { "lua", "npk", "zlib" }
+	
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+
+	project "minged"
+		kind "SharedLib"
+		language "C++"
+
+		files { "minged/**.cpp", "minged/**.h" }
+		includedirs {   "maratis-read-only/trunk/dev/MSDK/MCore/Includes/",
+				"maratis-read-only/trunk/dev/MSDK/MEngine/Includes/",
+				"maratis-read-only/trunk/dev/MSDK/MGui/Includes/",
+				"maratis-read-only/trunk/dev/Maratis/Common/MPlugin",
+				"minged/include" }
+		targetprefix ""
+		defines { "MPLUGIN_DYNAMIC" }
+		
+		if os.is("linux") then
+		   defines { "__LINUX__" }
+		elseif os.is("windows") then
+		   defines { "WIN32" }
+		   links { "OpenGL32" }
+		end
+
+		links { "MCore", "MEngine" }
 	
 		configuration "Release"
 			defines { "NDEBUG" }
