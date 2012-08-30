@@ -7,6 +7,7 @@ extern "C"
 #include "pluginfuncs.h"
 #include "osfuncs.h"
 #include "npkfuncs.h"
+#include "filefuncs.h"
 
 static const luaL_Reg mtool_functions[] = {
   { "load_plugin", mtool_loadPlugin },
@@ -28,6 +29,11 @@ static const luaL_Reg npk_functions[] = {
   { "add_dir", npk_add_dir },
   { "close", npk_close },
   { NULL, NULL}
+};
+
+static const luaL_Reg file_functions[] = {
+    { "embed", file_embed },
+    { NULL, NULL }
 };
 
 void PrintHelp(const char* run)
@@ -58,6 +64,7 @@ int main(int argc, char** argv)
   luaL_register(L, "tool", mtool_functions);
   luaL_register(L, "os", os_functions);
   luaL_register(L, "npk", npk_functions);
+  luaL_register(L, "file", file_functions);
 
   luaL_loadfile(L, argv[1]);
   

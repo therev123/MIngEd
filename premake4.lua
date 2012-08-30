@@ -102,6 +102,9 @@ solution "maratis-minged"
 				"minged/include" }
 		targetprefix ""
 		defines { "MPLUGIN_DYNAMIC" }
+
+		prebuildcommands("build/MTool scripts/Mnpk.lua minged/minged.npk minged/data")
+		prebuildcommands("build/MTool scripts/MEmbedder.lua minged/minged.npk minged/include/minged_npk.h minged_npk")
 		
 		if os.is("linux") then
 		   defines { "__LINUX__" }

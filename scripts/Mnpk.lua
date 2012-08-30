@@ -10,7 +10,7 @@ function main(args)
    if #args < 2 then
       PrintHelp()
    else
-      pkg = npk.open(args[1])
+      local pkg = npk.open(args[1])
       npk.add_dir(pkg, args[2])
       npk.close(pkg)
    end
