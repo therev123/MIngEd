@@ -1,524 +1,3 @@
-Index: 3rdparty/npk/include/npk.h
-===================================================================
---- 3rdparty/npk/include/npk.h	(revision 126)
-+++ 3rdparty/npk/include/npk.h	(working copy)
-@@ -1,6 +1,6 @@
- /*
- 
--    npk - General-Purpose File Packing Library
-+    npk - neat package system
-     See README for copyright and license information.
- 
- */
-@@ -12,7 +12,6 @@
- #include "npk_base.h"
- #include "npk_error.h"
- 
--#define NPK_DEV
- 
- #ifdef __cplusplus
- extern "C" {
-@@ -42,6 +41,25 @@
- NPK_API void        npk_disable_criticalsection ();
- #endif
- 
-+// custom file I/O
-+typedef void*  (*npk_open_func)  (const char*, const char*); // filename, mode as per fopen (ie "r" "wb+" etc)
-+typedef int    (*npk_close_func) (void*);
-+typedef size_t (*npk_read_func)  (void*, size_t, size_t, void*);
-+typedef size_t (*npk_write_func) (const void*, size_t, size_t, void*);
-+typedef int    (*npk_seek_func)  (void*, long, int);
-+typedef long   (*npk_tell_func)  (void*);
-+typedef void   (*npk_rewind_func)(void*);
-+typedef void   (*npk_commit_func)(void*);
-+
-+NPK_API void npk_io_open_func  (npk_open_func func);
-+NPK_API void npk_io_close_func (npk_close_func func);
-+NPK_API void npk_io_read_func  (npk_read_func func);
-+NPK_API void npk_io_write_func (npk_write_func func);
-+NPK_API void npk_io_seek_func  (npk_seek_func func);
-+NPK_API void npk_io_tell_func  (npk_tell_func func);
-+NPK_API void npk_io_rewind_func(npk_rewind_func func);
-+NPK_API void npk_io_commit_func(npk_commit_func func);
-+
- #ifdef __cplusplus
- }
- #endif
-Index: 3rdparty/npk/include/npk_conf.h
-===================================================================
---- 3rdparty/npk/include/npk_conf.h	(revision 126)
-+++ 3rdparty/npk/include/npk_conf.h	(working copy)
-@@ -1,6 +1,6 @@
- /*
- 
--    npk - General-Purpose File Packing Library
-+    npk - neat package system
-     See README for copyright and license information.
- 
-     configuration of npk
-@@ -31,6 +31,7 @@
- #if defined(_WIN32) || defined(_WIN64)
-     #define NPK_PLATFORM_WINDOWS
-     #define NPK_PLATFORM_NAME "Windows"
-+ 	typedef int mode_t;
- #elif defined(linux) || defined(__linux) || defined(__linux__)
-     #define NPK_PLATFORM_LINUX
-     #define NPK_PLATFORM_NAME "Linux"
-@@ -76,4 +77,80 @@
-     #define NPK_DEV_API
- #endif /* NPK_PLATFORM_WINDOWS */
- 
-+#ifdef NPK_PREFIX
-+    #define CONCAT_X(t1,t2) t1##t2
-+    #define CONCAT(t1,t2) CONCAT_X(t1,t2)
-+
-+    #define g_npkError                      CONCAT(NPK_PREFIX_NAME,g_npkError)
-+    #define g_callbackfp                    CONCAT(NPK_PREFIX_NAME,g_callbackfp)
-+    #define g_callbackSize                  CONCAT(NPK_PREFIX_NAME,g_callbackSize)
-+
-+    #define npk_package_open                CONCAT(NPK_PREFIX_NAME,npk_package_open)
-+    #define npk_package_open_with_fd        CONCAT(NPK_PREFIX_NAME,npk_package_open_with_fd)
-+    #define npk_package_close               CONCAT(NPK_PREFIX_NAME,npk_package_close)
-+    #define npk_package_get_entity          CONCAT(NPK_PREFIX_NAME,npk_package_get_entity)
-+    #define npk_package_get_first_entity    CONCAT(NPK_PREFIX_NAME,npk_package_get_first_entity)
-+    #define npk_entity_get_name             CONCAT(NPK_PREFIX_NAME,npk_entity_get_name)
-+    #define npk_entity_get_size             CONCAT(NPK_PREFIX_NAME,npk_entity_get_size)
-+    #define npk_entity_get_packed_size      CONCAT(NPK_PREFIX_NAME,npk_entity_get_packed_size)
-+    #define npk_entity_get_offset           CONCAT(NPK_PREFIX_NAME,npk_entity_get_offset)
-+    #define npk_entity_is_ready             CONCAT(NPK_PREFIX_NAME,npk_entity_is_ready)
-+    #define npk_entity_next                 CONCAT(NPK_PREFIX_NAME,npk_entity_next)
-+    #define npk_entity_read                 CONCAT(NPK_PREFIX_NAME,npk_entity_read)
-+    #define npk_entity_read_partial         CONCAT(NPK_PREFIX_NAME,npk_entity_read_partial)
-+    #define npk_enable_callback             CONCAT(NPK_PREFIX_NAME,npk_enable_callback)
-+    #define npk_disable_callback            CONCAT(NPK_PREFIX_NAME,npk_disable_callback)
-+    #define npk_error_to_str                CONCAT(NPK_PREFIX_NAME,npk_error_to_str)
-+    #define npk_enable_criticalsection      CONCAT(NPK_PREFIX_NAME,npk_enable_criticalsection)
-+    #define npk_disable_criticalsection     CONCAT(NPK_PREFIX_NAME,npk_disable_criticalsection)
-+
-+    #define npk_log                         CONCAT(NPK_PREFIX_NAME,npk_log)
-+    #define npk_error                       CONCAT(NPK_PREFIX_NAME,npk_error)
-+    #define npk_alloc_copy_string           CONCAT(NPK_PREFIX_NAME,npk_alloc_copy_string)
-+    #define npk_get_filetime                CONCAT(NPK_PREFIX_NAME,npk_get_filetime)
-+    #define npk_set_filetime                CONCAT(NPK_PREFIX_NAME,npk_set_filetime)
-+    #define npk_filetime_to_unixtime        CONCAT(NPK_PREFIX_NAME,npk_filetime_to_unixtime)
-+    #define npk_enable_gluetime             CONCAT(NPK_PREFIX_NAME,npk_enable_gluetime)
-+    #define npk_disable_gluetime            CONCAT(NPK_PREFIX_NAME,npk_disable_gluetime)
-+    #define npk_get_bucket                  CONCAT(NPK_PREFIX_NAME,npk_get_bucket)
-+    #define npk_prepare_entityname          CONCAT(NPK_PREFIX_NAME,npk_prepare_entityname)
-+
-+    #define npk_open                        CONCAT(NPK_PREFIX_NAME,npk_open)
-+    #define npk_flush                       CONCAT(NPK_PREFIX_NAME,npk_flush)
-+    #define npk_close                       CONCAT(NPK_PREFIX_NAME,npk_close)
-+
-+    #define npk_seek                        CONCAT(NPK_PREFIX_NAME,npk_seek)
-+    #define npk_tell                        CONCAT(NPK_PREFIX_NAME,npk_tell)
-+    #define npk_read                        CONCAT(NPK_PREFIX_NAME,npk_read)
-+    #define npk_write                       CONCAT(NPK_PREFIX_NAME,npk_write)
-+    #define npk_read_encrypt                CONCAT(NPK_PREFIX_NAME,npk_read_encrypt)
-+    #define npk_write_encrypt               CONCAT(NPK_PREFIX_NAME,npk_write_encrypt)
-+
-+    #define npk_entity_alloc                CONCAT(NPK_PREFIX_NAME,npk_entity_alloc)
-+    #define npk_entity_init                 CONCAT(NPK_PREFIX_NAME,npk_entity_init)
-+    #define npk_entity_get_current_flag     CONCAT(NPK_PREFIX_NAME,npk_entity_get_current_flag)
-+    #define npk_entity_get_new_flag         CONCAT(NPK_PREFIX_NAME,npk_entity_get_new_flag)
-+    #define npk_entity_set_flag             CONCAT(NPK_PREFIX_NAME,npk_entity_set_flag)
-+    #define npk_entity_add_flag             CONCAT(NPK_PREFIX_NAME,npk_entity_add_flag)
-+    #define npk_entity_sub_flag             CONCAT(NPK_PREFIX_NAME,npk_entity_sub_flag)
-+    #define npk_entity_write                CONCAT(NPK_PREFIX_NAME,npk_entity_write)
-+    #define npk_entity_export               CONCAT(NPK_PREFIX_NAME,npk_entity_export)
-+
-+    #define npk_package_alloc               CONCAT(NPK_PREFIX_NAME,npk_package_alloc)
-+    #define npk_package_init                CONCAT(NPK_PREFIX_NAME,npk_package_init)
-+    #define npk_package_save                CONCAT(NPK_PREFIX_NAME,npk_package_save)
-+    #define npk_package_clear               CONCAT(NPK_PREFIX_NAME,npk_package_clear)
-+    #define npk_package_add_file            CONCAT(NPK_PREFIX_NAME,npk_package_add_file)
-+    #define npk_package_add_entity          CONCAT(NPK_PREFIX_NAME,npk_package_add_entity)
-+    #define npk_package_remove_entity       CONCAT(NPK_PREFIX_NAME,npk_package_remove_entity)
-+    #define npk_package_detach_entity       CONCAT(NPK_PREFIX_NAME,npk_package_detach_entity)
-+    #define npk_package_remove_all_entity   CONCAT(NPK_PREFIX_NAME,npk_package_remove_all_entity)
-+    #define npk_package_detach_all_entity   CONCAT(NPK_PREFIX_NAME,npk_package_detach_all_entity)
-+    #define __npk_package_add_entity        CONCAT(NPK_PREFIX_NAME,__npk_package_add_entity)
-+    #define __npk_package_open              CONCAT(NPK_PREFIX_NAME,__npk_package_open)
-+    #define __npk_package_remove_all_entity CONCAT(NPK_PREFIX_NAME,__npk_package_remove_all_entity)
-+
-+
-+#endif /* NPK_PREFIX */
-+
- #endif /* _NPK_DEF_H_ */
-Index: 3rdparty/npk/include/npk_error.h
-===================================================================
---- 3rdparty/npk/include/npk_error.h	(revision 126)
-+++ 3rdparty/npk/include/npk_error.h	(working copy)
-@@ -1,6 +1,6 @@
- /*
- 
--    npk - General-Purpose File Packing Library
-+    npk - neat package system
-     See README for copyright and license information.
- 
-     npk error code
-@@ -11,7 +11,7 @@
- #define _NPK_ERROR_H_
- 
- // Success
--#define NPK_SUCCESS                                         1
-+#define NPK_SUCCESS                                              1
- 
- 
- // Error
-Index: 3rdparty/npk/include/npk_base.h
-===================================================================
---- 3rdparty/npk/include/npk_base.h	(revision 126)
-+++ 3rdparty/npk/include/npk_base.h	(working copy)
-@@ -1,6 +1,6 @@
- /*
- 
--    npk - General-Purpose File Packing Library
-+    npk - neat package system
-     See README for copyright and license information.
- 
-     base type and definitions of npk
-@@ -15,7 +15,7 @@
- typedef int                             NPK_RESULT;
- typedef void*                           NPK_PACKAGE;
- typedef void*                           NPK_ENTITY;
--typedef int                             NPK_HANDLE;
-+typedef ptrdiff_t                       NPK_HANDLE;
- typedef unsigned int                    NPK_FLAG;
- typedef unsigned int                    NPK_HASHKEY;
- typedef int                             NPK_TEAKEY;
-Index: 3rdparty/npk/include/npk_dev.h
-===================================================================
---- 3rdparty/npk/include/npk_dev.h	(revision 126)
-+++ 3rdparty/npk/include/npk_dev.h	(working copy)
-@@ -1,6 +1,6 @@
- /*
- 
--    npk - General-Purpose File Packing Library
-+    npk - neat package system
-     See README for copyright and license information.
- 
-     header for npk development mode
-@@ -116,7 +116,7 @@
- NPK_DEV_API NPK_RESULT  npk_prepare_entityname( NPK_CSTR src, NPK_STR dst, size_t dstLen );
- 
- /* File I/O Functions */
--NPK_DEV_API NPK_RESULT  npk_open( int* handle, NPK_CSTR fileName, bool createfile, bool bcheckexist );
-+NPK_DEV_API NPK_RESULT  npk_open( NPK_HANDLE* handle, NPK_CSTR fileName, bool createfile, bool bcheckexist );
- NPK_DEV_API NPK_RESULT  npk_flush( NPK_HANDLE handle );
- NPK_DEV_API NPK_RESULT  npk_close( NPK_HANDLE handle );
- 
-@@ -156,6 +156,16 @@
- NPK_DEV_API NPK_RESULT  npk_package_remove_all_entity( NPK_PACKAGE package );
- NPK_DEV_API NPK_RESULT  npk_package_detach_all_entity( NPK_PACKAGE package );
- 
-+
-+extern npk_open_func   __open;
-+extern npk_close_func  __close;
-+extern npk_read_func   __read;
-+extern npk_write_func  __write;
-+extern npk_seek_func   __seek;
-+extern npk_tell_func   __tell;
-+extern npk_rewind_func __rewind;
-+extern npk_commit_func __commit;
-+
- #ifdef __cplusplus
- }
- #endif
-Index: 3rdparty/npk/src/npk_common.c
-===================================================================
---- 3rdparty/npk/src/npk_common.c	(revision 126)
-+++ 3rdparty/npk/src/npk_common.c	(working copy)
-@@ -1,17 +1,17 @@
- /*
- 
--    npk - General-Purpose File Packing Library
-+    npk - neat package system
-     See README for copyright and license information.
- 
- */
- 
- #include <stdio.h>
- #include <stdlib.h>
-+#include <stddef.h>
- #include <stdarg.h>
- #include <time.h>
- #include <errno.h>
- #include <fcntl.h>
--#include <memory.h>
- #include <string.h>
- #include <sys/types.h>
- #include <sys/stat.h>
-@@ -32,6 +32,25 @@
- #include "zlib.h"
- 
- 
-+npk_open_func   __open   = NULL;
-+npk_close_func  __close  = NULL;
-+npk_read_func   __read   = NULL;
-+npk_write_func  __write  = NULL;
-+npk_seek_func   __seek   = NULL;
-+npk_tell_func   __tell   = NULL;
-+npk_rewind_func __rewind = NULL;
-+npk_commit_func __commit = NULL;
-+
-+NPK_API void npk_io_open_func  (npk_open_func func)  { __open   = func; }
-+NPK_API void npk_io_close_func (npk_close_func func) { __close  = func; }
-+NPK_API void npk_io_read_func  (npk_read_func func)  { __read   = func; }
-+NPK_API void npk_io_write_func (npk_write_func func) { __write  = func; }
-+NPK_API void npk_io_seek_func  (npk_seek_func func)  { __seek   = func; }
-+NPK_API void npk_io_tell_func  (npk_tell_func func)  { __tell   = func; }
-+NPK_API void npk_io_rewind_func(npk_rewind_func func){ __rewind = func; }
-+NPK_API void npk_io_commit_func(npk_commit_func func){ __commit = func; }
-+
-+
- NPK_RESULT npk_error( NPK_RESULT res )
- {
-     g_npkError = res;
-@@ -161,26 +180,56 @@
-     *pt = (NPK_TIME)((*pft - 116444736000000000LL)/10000000LL);
- }
- 
--NPK_RESULT npk_open( int* handle, NPK_CSTR fileName, bool createfile, bool bcheckexist )
-+NPK_RESULT npk_open( NPK_HANDLE* handle, NPK_CSTR fileName, bool createfile, bool bcheckexist )
- {
-     if( createfile )
-     {
-+        mode_t mask = umask(0);
-         if( bcheckexist )
-         {
--            *handle = open( fileName, O_CREAT | O_EXCL | O_RDWR | O_BINARY, S_IREAD | S_IWRITE );
-+#ifdef NPK_PLATFORM_WINDOWS
-+            if(__open == NULL)
-+                *handle = open( fileName, O_CREAT | O_EXCL | O_RDWR | O_BINARY, S_IREAD & S_IWRITE );
-+            else
-+                *handle = (NPK_HANDLE)__open( fileName, "wb+" );
-+#else
-+            if(__open == NULL)
-+                *handle = open( fileName, O_CREAT | O_EXCL | O_RDWR | O_BINARY, 0666 );
-+            else
-+                *handle = (NPK_HANDLE)__open( fileName, "wb+" );
-+            if( *handle != -1 ) fchmod( *handle, 0666&~mask );
-+#endif
-         }
-         else
-         {
-             *handle = creat( fileName, S_IREAD | S_IWRITE );
-             if( errno == EACCES )
-                 return( npk_error( NPK_ERROR_ReadOnlyFile ) );
--            close( *handle );
-+            if(__close == NULL)
-+                close( *handle );
-+            else
-+                __close((void*)*handle);
- 
--            *handle = open( fileName, O_CREAT | O_RDWR | O_BINARY, S_IREAD | S_IWRITE );
-+#ifdef NPK_PLATFORM_WINDOWS
-+            if(__open == NULL)
-+                *handle = open( fileName, O_CREAT | O_RDWR | O_BINARY, S_IREAD & S_IWRITE );
-+            else
-+                *handle = (NPK_HANDLE)__open( fileName, "wb+" );
-+#else
-+            if(__open == NULL)
-+                *handle = open( fileName, O_CREAT | O_RDWR | O_BINARY, 0666 );
-+            else
-+                *handle = (NPK_HANDLE)__open( fileName, "wb+" );
-+            if( *handle != -1 ) fchmod( *handle, 0666&~mask );
-+#endif
-         }
-+        umask( mask );
-     }
-     else
--        *handle = open( fileName, O_BINARY | O_RDONLY );
-+        if(__open == NULL)
-+            *handle = open( fileName, O_BINARY | O_RDONLY );
-+        else
-+            *handle = (NPK_HANDLE)__open( fileName, "rb+" );
- 
-     if( *handle == -1 )
-     {
-@@ -197,19 +246,25 @@
- 
- NPK_RESULT npk_close( NPK_HANDLE handle )
- {
--    if( handle != 0 )
--        close( handle );
-+    if( handle > 0 )
-+        if(__close == NULL)
-+            close( handle );
-+        else
-+            __close((void*)handle);
- 
-     return NPK_SUCCESS;
- }
- 
- long npk_seek( NPK_HANDLE handle, long offset, int origin )
- {
-+    if(__seek == NULL)
- #ifdef NPK_PLATFORM_WINDOWS
--    return _lseek( handle, offset, origin );
-+        return _lseek( handle, offset, origin );
- #else
--    return lseek( handle, offset, origin );
-+        return lseek( handle, offset, origin );
- #endif
-+    else
-+        return __seek((void*)handle, offset, origin);
- }
- 
- NPK_RESULT npk_read( NPK_HANDLE handle, void* buf, NPK_SIZE size,
-@@ -232,7 +287,10 @@
-             if( ( size - totalread ) < unit )
-                 unit = size - totalread;
- 
--            currentread = read( handle, (NPK_STR)buf + totalread, (unsigned int)unit );
-+            if(__read == NULL)
-+                currentread = read( handle, (NPK_STR)buf + totalread, (unsigned int)unit );
-+            else
-+                currentread = __read( (NPK_STR)buf + totalread, sizeof(char), unit, (void*)handle );
- 
-             if( currentread < unit )
-             {
-Index: 3rdparty/npk/src/npk_dev.c
-===================================================================
---- 3rdparty/npk/src/npk_dev.c	(revision 126)
-+++ 3rdparty/npk/src/npk_dev.c	(working copy)
-@@ -1,17 +1,17 @@
- /*
- 
--    npk - General-Purpose File Packing Library
-+    npk - neat package system
-     See README for copyright and license information.
- 
- */
- 
- #include <stdio.h>
- #include <stdlib.h>
-+#include <stddef.h>
- #include <stdarg.h>
- #include <time.h>
- #include <errno.h>
- #include <fcntl.h>
--#include <memory.h>
- #include <string.h>
- #include <sys/types.h>
- #include <sys/stat.h>
-@@ -112,22 +112,28 @@
- {
-     if( handle != 0 )
-     {
-+        if(__commit == NULL)
- #ifdef NPK_PLATFORM_WINDOWS
--    _commit( handle );
-+            _commit( handle );
- #else
--    fsync( handle );
-+            fsync( handle );
- #endif
-+        else
-+            __commit( (void*)handle );
-     }
-     return NPK_SUCCESS;
- }
- 
- long npk_tell( NPK_HANDLE handle )
- {
-+    if(__seek == NULL)
- #ifdef NPK_PLATFORM_WINDOWS
--    return _lseek( handle, 0, SEEK_CUR );
-+        return _lseek( handle, 0, SEEK_CUR );
- #else
--    return lseek( handle, 0, SEEK_CUR );
-+        return lseek( handle, 0, SEEK_CUR );
- #endif
-+    else
-+        return __seek( (void*)handle, 0, SEEK_CUR );
- }
- 
- NPK_RESULT npk_write( NPK_HANDLE handle, const void* buf, NPK_SIZE size,
-@@ -150,7 +156,10 @@
-             if( (int)( size - totalwritten ) < unit )
-                 unit = size - totalwritten;
- 
--            currentwritten = write( handle, (NPK_STR)buf + totalwritten, (unsigned int)unit );
-+            if( __write == NULL)
-+                currentwritten = write( handle, (NPK_STR)buf + totalwritten, (unsigned int)unit );
-+            else
-+                currentwritten = __write( (NPK_STR)buf + totalwritten, sizeof(char*), (unsigned int)unit, (void*)handle );
- 
-             if( currentwritten < unit )
-             {
-@@ -257,7 +266,7 @@
-     void*               buf = NULL;
-     void*               buf_for_zlib = NULL;
-     NPK_SIZE            size, endpos, startpos;
--    int                 filehandle;
-+    NPK_HANDLE          filehandle;
-     int                 z_res;
- 
-     if( !eb )
-@@ -453,7 +462,7 @@
-     NPK_SIZE            len;
-     int                 savecount = 0;
-     NPK_STR             savefilename = NULL;
--    int                 savefilehandle;
-+    NPK_HANDLE          savefilehandle;
-     NPK_CHAR*           buf;
-     NPK_CHAR*           buf_pos;
-     NPK_PACKAGEINFO_V23 header_v23;
-Index: 3rdparty/npk/src/npk.c
-===================================================================
---- 3rdparty/npk/src/npk.c	(revision 126)
-+++ 3rdparty/npk/src/npk.c	(working copy)
-@@ -1,13 +1,13 @@
- /*
- 
--    npk - General-Purpose File Packing Library
-+    npk - neat package system
-     See README for copyright and license information.
- 
- */
- 
- #include <stdio.h>
- #include <stdlib.h>
--#include <memory.h>
-+#include <stddef.h>
- #include <time.h>
- #include <sys/stat.h>
- #include "npk.h"
-@@ -283,10 +283,8 @@
- 
- npk_package_open_return_null_with_free:
-     if( pb )
--        if( pb->handle_ > 0 )
--            npk_close( pb->handle_ );
-+        npk_package_close( pb );
- 
--    NPK_SAFE_FREE( pb );
-     return NULL;
- }
- 
-@@ -313,10 +311,8 @@
- 
- npk_package_open_return_null_with_free:
-     if( pb )
--        if( pb->handle_ > 0 )
--            npk_close( pb->handle_ );
-+        npk_package_close( pb );
- 
--    NPK_SAFE_FREE( pb );
-     return NULL;
- }
- 
-@@ -609,6 +605,8 @@
- 
-     if( eb->info_.flag_ & NPK_ENTITY_ENCRYPT_TEA )
-         tea_decode_buffer(buf, size, pb->teakey_, (pb->info_.version_ >= NPK_VERSION_ENCRYPTREMAINS));
-+    if( eb->info_.flag_ & NPK_ENTITY_ENCRYPT_XXTEA )
-+        xxtea_decode_buffer(buf, size, pb->teakey_, (pb->info_.version_ >= NPK_VERSION_ENCRYPTREMAINS));
- 
- #ifdef NPK_PLATFORM_WINDOWS
-     if( g_useCriticalSection )
 Index: trunk/dev/MSDK/MGui/Sources/MGui.cpp
 ===================================================================
 --- trunk/dev/MSDK/MGui/Sources/MGui.cpp	(revision 126)
@@ -639,6 +118,97 @@ Index: trunk/dev/MSDK/MGui/Sources/X11/MX11Window.cpp
  void MWindow::setCursorPos(int x, int y)
  {
  	XWarpPointer(display, None, window, 0, 0, 0, 0, x, y);
+Index: trunk/dev/MSDK/MGui/Includes/MGuiButton.h
+===================================================================
+--- trunk/dev/MSDK/MGui/Includes/MGuiButton.h	(revision 126)
++++ trunk/dev/MSDK/MGui/Includes/MGuiButton.h	(working copy)
+@@ -39,7 +39,7 @@
+ 	MGUI_BUTTON_GROUP,
+ };
+ 
+-class MGuiButton : public MGui2d
++class M_GUI_EXPORT MGuiButton : public MGui2d
+ {
+ private:
+ 
+Index: trunk/dev/MSDK/MGui/Includes/MGuiImage.h
+===================================================================
+--- trunk/dev/MSDK/MGui/Includes/MGuiImage.h	(revision 126)
++++ trunk/dev/MSDK/MGui/Includes/MGuiImage.h	(working copy)
+@@ -32,7 +32,7 @@
+ #define _M_GUI_IMAGE_H
+ 
+ 
+-class MGuiImage : public MGui2d
++class M_GUI_EXPORT MGuiImage : public MGui2d
+ {
+ public:
+ 
+Index: trunk/dev/MSDK/MGui/Includes/MGuiText.h
+===================================================================
+--- trunk/dev/MSDK/MGui/Includes/MGuiText.h	(revision 126)
++++ trunk/dev/MSDK/MGui/Includes/MGuiText.h	(working copy)
+@@ -32,7 +32,7 @@
+ #define _M_GUI_TEXT_H
+ 
+ 
+-class MGuiText : public MGui2d
++class M_GUI_EXPORT MGuiText : public MGui2d
+ {
+ private:
+ 
+Index: trunk/dev/MSDK/MGui/Includes/MGuiTextureFont.h
+===================================================================
+--- trunk/dev/MSDK/MGui/Includes/MGuiTextureFont.h	(revision 126)
++++ trunk/dev/MSDK/MGui/Includes/MGuiTextureFont.h	(working copy)
+@@ -32,7 +32,7 @@
+ #define _M_GUI_TEXTURE_FONT_H
+ 
+ 
+-class MGuiTextureFont
++class M_GUI_EXPORT MGuiTextureFont
+ {
+ private:
+ 
+Index: trunk/dev/MSDK/MGui/Includes/MGuiEditText.h
+===================================================================
+--- trunk/dev/MSDK/MGui/Includes/MGuiEditText.h	(revision 126)
++++ trunk/dev/MSDK/MGui/Includes/MGuiEditText.h	(working copy)
+@@ -32,7 +32,7 @@
+ #define _M_GUI_EDIT_TEXT_H
+ 
+ 
+-class MGuiEditText : public MGui2d
++class M_GUI_EXPORT MGuiEditText : public MGui2d
+ {
+ private:
+ 
+Index: trunk/dev/MSDK/MGui/Includes/MJoystick.h
+===================================================================
+--- trunk/dev/MSDK/MGui/Includes/MJoystick.h	(revision 126)
++++ trunk/dev/MSDK/MGui/Includes/MJoystick.h	(working copy)
+@@ -32,7 +32,7 @@
+ #define _M_JOYSTICK_H
+ 
+ 
+-class MJoystick
++class M_GUI_EXPORT MJoystick
+ {
+ public:
+ 
+Index: trunk/dev/MSDK/MGui/Includes/MKeyboard.h
+===================================================================
+--- trunk/dev/MSDK/MGui/Includes/MKeyboard.h	(revision 126)
++++ trunk/dev/MSDK/MGui/Includes/MKeyboard.h	(working copy)
+@@ -32,7 +32,7 @@
+ #define _M_KEYBOARD_H
+ 
+ 
+-class MKeyboard
++class M_GUI_EXPORT MKeyboard
+ {
+ protected:
+ 
 Index: trunk/dev/MSDK/MGui/Includes/MGuiSlide.h
 ===================================================================
 --- trunk/dev/MSDK/MGui/Includes/MGuiSlide.h	(revision 126)
@@ -844,97 +414,6 @@ Index: trunk/dev/MSDK/MGui/Includes/MGui2d.h
  {
  public:
  
-Index: trunk/dev/MSDK/MGui/Includes/MGuiButton.h
-===================================================================
---- trunk/dev/MSDK/MGui/Includes/MGuiButton.h	(revision 126)
-+++ trunk/dev/MSDK/MGui/Includes/MGuiButton.h	(working copy)
-@@ -39,7 +39,7 @@
- 	MGUI_BUTTON_GROUP,
- };
- 
--class MGuiButton : public MGui2d
-+class M_GUI_EXPORT MGuiButton : public MGui2d
- {
- private:
- 
-Index: trunk/dev/MSDK/MGui/Includes/MGuiImage.h
-===================================================================
---- trunk/dev/MSDK/MGui/Includes/MGuiImage.h	(revision 126)
-+++ trunk/dev/MSDK/MGui/Includes/MGuiImage.h	(working copy)
-@@ -32,7 +32,7 @@
- #define _M_GUI_IMAGE_H
- 
- 
--class MGuiImage : public MGui2d
-+class M_GUI_EXPORT MGuiImage : public MGui2d
- {
- public:
- 
-Index: trunk/dev/MSDK/MGui/Includes/MGuiText.h
-===================================================================
---- trunk/dev/MSDK/MGui/Includes/MGuiText.h	(revision 126)
-+++ trunk/dev/MSDK/MGui/Includes/MGuiText.h	(working copy)
-@@ -32,7 +32,7 @@
- #define _M_GUI_TEXT_H
- 
- 
--class MGuiText : public MGui2d
-+class M_GUI_EXPORT MGuiText : public MGui2d
- {
- private:
- 
-Index: trunk/dev/MSDK/MGui/Includes/MGuiTextureFont.h
-===================================================================
---- trunk/dev/MSDK/MGui/Includes/MGuiTextureFont.h	(revision 126)
-+++ trunk/dev/MSDK/MGui/Includes/MGuiTextureFont.h	(working copy)
-@@ -32,7 +32,7 @@
- #define _M_GUI_TEXTURE_FONT_H
- 
- 
--class MGuiTextureFont
-+class M_GUI_EXPORT MGuiTextureFont
- {
- private:
- 
-Index: trunk/dev/MSDK/MGui/Includes/MGuiEditText.h
-===================================================================
---- trunk/dev/MSDK/MGui/Includes/MGuiEditText.h	(revision 126)
-+++ trunk/dev/MSDK/MGui/Includes/MGuiEditText.h	(working copy)
-@@ -32,7 +32,7 @@
- #define _M_GUI_EDIT_TEXT_H
- 
- 
--class MGuiEditText : public MGui2d
-+class M_GUI_EXPORT MGuiEditText : public MGui2d
- {
- private:
- 
-Index: trunk/dev/MSDK/MGui/Includes/MJoystick.h
-===================================================================
---- trunk/dev/MSDK/MGui/Includes/MJoystick.h	(revision 126)
-+++ trunk/dev/MSDK/MGui/Includes/MJoystick.h	(working copy)
-@@ -32,7 +32,7 @@
- #define _M_JOYSTICK_H
- 
- 
--class MJoystick
-+class M_GUI_EXPORT MJoystick
- {
- public:
- 
-Index: trunk/dev/MSDK/MGui/Includes/MKeyboard.h
-===================================================================
---- trunk/dev/MSDK/MGui/Includes/MKeyboard.h	(revision 126)
-+++ trunk/dev/MSDK/MGui/Includes/MKeyboard.h	(working copy)
-@@ -32,7 +32,7 @@
- #define _M_KEYBOARD_H
- 
- 
--class MKeyboard
-+class M_GUI_EXPORT MKeyboard
- {
- protected:
- 
 Index: trunk/dev/MSDK/MEngine/Sources/MArmature.cpp
 ===================================================================
 --- trunk/dev/MSDK/MEngine/Sources/MArmature.cpp	(revision 126)
@@ -1070,6 +549,35 @@ Index: trunk/dev/MSDK/MCore/Sources/MString.cpp
 \ No newline at end of file
 +	m_data[0] = (char)NULL;
 +}
+Index: trunk/dev/MSDK/MCore/Includes/MScriptContext.h
+===================================================================
+--- trunk/dev/MSDK/MCore/Includes/MScriptContext.h	(revision 126)
++++ trunk/dev/MSDK/MCore/Includes/MScriptContext.h	(working copy)
+@@ -41,6 +41,7 @@
+ 
+ 	// run script
+ 	virtual void runScript(const char * filename) = 0;
++	virtual bool addScript(const char * filename) = 0;
+ 
+ 	// call function
+ 	virtual bool startCallFunction(const char* name) = 0;
+Index: trunk/dev/MSDK/MCore/Includes/MSystemContext.h
+===================================================================
+--- trunk/dev/MSDK/MCore/Includes/MSystemContext.h	(revision 126)
++++ trunk/dev/MSDK/MCore/Includes/MSystemContext.h	(working copy)
+@@ -50,6 +50,10 @@
+ 
+ 	// system tick
+ 	virtual unsigned long getSystemTick(void) = 0;
++	
++	// Store directories
++	virtual const char* getUserDirectory(void) = 0;
++	virtual const char* getSystemDirectory(void) = 0;
+ };
+ 
+-#endif
+\ No newline at end of file
++#endif
 Index: trunk/dev/MSDK/MCore/Includes/MRenderingContext.h
 ===================================================================
 --- trunk/dev/MSDK/MCore/Includes/MRenderingContext.h	(revision 126)
@@ -1102,303 +610,6 @@ Index: trunk/dev/MSDK/MCore/Includes/MPhysicsContext.h
  
 -#endif
 \ No newline at end of file
-+#endif
-Index: trunk/dev/MSDK/MCore/Includes/MScriptContext.h
-===================================================================
---- trunk/dev/MSDK/MCore/Includes/MScriptContext.h	(revision 126)
-+++ trunk/dev/MSDK/MCore/Includes/MScriptContext.h	(working copy)
-@@ -41,6 +41,7 @@
- 
- 	// run script
- 	virtual void runScript(const char * filename) = 0;
-+	virtual bool addScript(const char * filename) = 0;
- 
- 	// call function
- 	virtual bool startCallFunction(const char* name) = 0;
-Index: trunk/dev/MSDK/MCore/Includes/MSystemContext.h
-===================================================================
---- trunk/dev/MSDK/MCore/Includes/MSystemContext.h	(revision 126)
-+++ trunk/dev/MSDK/MCore/Includes/MSystemContext.h	(working copy)
-@@ -50,6 +50,10 @@
- 
- 	// system tick
- 	virtual unsigned long getSystemTick(void) = 0;
-+	
-+	// Store directories
-+	virtual const char* getUserDirectory(void) = 0;
-+	virtual const char* getSystemDirectory(void) = 0;
- };
- 
--#endif
-\ No newline at end of file
-+#endif
-Index: trunk/dev/Maratis/Common/MContexts/MBulletContext.h
-===================================================================
---- trunk/dev/Maratis/Common/MContexts/MBulletContext.h	(revision 126)
-+++ trunk/dev/Maratis/Common/MContexts/MBulletContext.h	(working copy)
-@@ -79,6 +79,7 @@
- 
- 	// world gravity
- 	void setWorldGravity(const MVector3 & gravity);
-+	MVector3 getWorldGravity();
- 
- 	// create object
- 	void createGhost(unsigned int * objectId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation);
-@@ -147,4 +148,4 @@
- 	void deleteConstraint(unsigned int * constraintId);
- };
- 
--#endif
-\ No newline at end of file
-+#endif
-Index: trunk/dev/Maratis/Common/MContexts/MWinContext.cpp
-===================================================================
---- trunk/dev/Maratis/Common/MContexts/MWinContext.cpp	(revision 126)
-+++ trunk/dev/Maratis/Common/MContexts/MWinContext.cpp	(working copy)
-@@ -60,3 +60,16 @@
- 	MWindow * window = MWindow::getInstance();
- 	return window->getSystemTick();
- }
-+	
-+// plugin directories
-+const char* MWinContext::getUserDirectory(void)
-+{
-+  MWindow * window = MWindow::getInstance();
-+  return window->getUserDirectory();
-+}
-+
-+const char* MWinContext::getSystemDirectory(void)
-+{
-+  MWindow * window = MWindow::getInstance();
-+  return window->getSystemDirectory();
-+}
-Index: trunk/dev/Maratis/Common/MContexts/MGLContext.cpp
-===================================================================
---- trunk/dev/Maratis/Common/MContexts/MGLContext.cpp	(revision 126)
-+++ trunk/dev/Maratis/Common/MContexts/MGLContext.cpp	(working copy)
-@@ -220,6 +220,9 @@
- 
- 	// anisotropic filtering
- 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
-+
-+	glEnable(GL_POINT_SPRITE);
-+	glTexEnvi(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);
- }
- 
- MGLContext::~MGLContext(void)
-@@ -1188,3 +1191,13 @@
- 		break;
- 	}
- }
-+
-+void MGLContext::setPointSize(float min, float max, float threshold)
-+{
-+	//glPointParameterf(GL_POINT_FADE_THRESHOLD_SIZE, threshold);
-+	glPointSize(max);
-+	glPointParameterf(GL_POINT_SIZE_MIN, min);
-+	glPointParameterf(GL_POINT_SIZE_MAX, max);
-+	GLfloat attn[] = { 0.0f, 0.0f, 0.02f };
-+	glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, attn);
-+}
-Index: trunk/dev/Maratis/Common/MContexts/MWinContext.h
-===================================================================
---- trunk/dev/Maratis/Common/MContexts/MWinContext.h	(revision 126)
-+++ trunk/dev/Maratis/Common/MContexts/MWinContext.h	(working copy)
-@@ -51,6 +51,10 @@
- 
- 	// system tick
- 	unsigned long getSystemTick(void);
-+	
-+	// plugin directories
-+	const char* getUserDirectory(void);
-+	const char* getSystemDirectory(void);
- };
- 
--#endif
-\ No newline at end of file
-+#endif
-Index: trunk/dev/Maratis/Common/MContexts/MGLContext.h
-===================================================================
---- trunk/dev/Maratis/Common/MContexts/MGLContext.h	(revision 126)
-+++ trunk/dev/Maratis/Common/MContexts/MGLContext.h	(working copy)
-@@ -248,6 +248,9 @@
- 	void enableBlending(void);
- 	void disableBlending(void);
- 	void setBlendingMode(M_BLENDING_MODES mode);
-+
-+	// points
-+	void setPointSize(float min, float max, float threshold);
- };
- 
- #endif
-Index: trunk/dev/Maratis/Common/MContexts/MBulletContext.cpp
-===================================================================
---- trunk/dev/Maratis/Common/MContexts/MBulletContext.cpp	(revision 126)
-+++ trunk/dev/Maratis/Common/MContexts/MBulletContext.cpp	(working copy)
-@@ -129,6 +129,14 @@
- 	m_dynamicsWorld->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
- }
- 
-+MVector3 MBulletContext::getWorldGravity()
-+{
-+	if(m_dynamicsWorld == NULL)
-+		return MVector3(0.0f, 0.0f, 0.0f);
-+	btVector3 gravity = m_dynamicsWorld->getGravity();
-+	return MVector3(gravity.x(), gravity.y(), gravity.z());
-+}
-+
- // create object
- void MBulletContext::createGhost(unsigned int * objectId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation)
- {
-Index: trunk/dev/Maratis/Common/MFileManager/MPackageManagerNPK.cpp
-===================================================================
---- trunk/dev/Maratis/Common/MFileManager/MPackageManagerNPK.cpp	(revision 126)
-+++ trunk/dev/Maratis/Common/MFileManager/MPackageManagerNPK.cpp	(working copy)
-@@ -34,7 +34,7 @@
- #include <npk.h>
- #include <npk_dev.h>
- 
--#define M_MAX_PACKAGES 1
-+#define M_MAX_PACKAGES 10
- 
- int teakey[4] = { 0,0,0,0 };
- 
-@@ -350,4 +350,4 @@
- 	// loaded the package, now save it for later access
- 	m_packages[pkgNum] = pack;
- 	return pack;
--}
-\ No newline at end of file
-+}
-Index: trunk/dev/Maratis/Common/MPlugin/MPlugin.h
-===================================================================
---- trunk/dev/Maratis/Common/MPlugin/MPlugin.h	(revision 126)
-+++ trunk/dev/Maratis/Common/MPlugin/MPlugin.h	(working copy)
-@@ -31,33 +31,111 @@
- #ifndef _M_PLUGIN_H
- #define _M_PLUGIN_H
- 
--#ifdef WIN32
--#include <windows.h>
--#else
--#include <dlfcn.h>
--#endif
-+#ifdef MPLUGIN_DYNAMIC
-+#  ifdef WIN32
-+#    include <windows.h>
-+#    define MPLUGIN_EXPORT __declspec(dllexport)
-+#  else
-+// automagically exported
-+#    define MPLUGIN_EXPORT
-+#    include <dlfcn.h>
-+#  endif /*WIN32*/
-+#endif/*MPLUGIN_DYNAMIC*/
- 
--class MPlugin
-+typedef void * (*FunctionPtr)();
-+
-+class M_ENGINE_EXPORT MPlugin
- {
- public :
- 
- 	MPlugin(void);
- 	~MPlugin(void);
- 
--private :
-+protected :
- 
- 	string m_filename;
--	
--#ifdef WIN32
--    HMODULE m_library;
-+
-+#ifdef MPLUGIN_DYNAMIC	
-+#    ifdef WIN32
-+	HMODULE m_library;
-+#    else
-+	void * m_library;
-+#    endif
- #else
--	void * m_library;
-+        FunctionPtr Start;
-+        FunctionPtr End;
-+
- #endif
--
-+	bool m_loaded;
- public:
- 	
- 	void load(const char * filename);
- 	inline const char * getFilename(void){ return m_filename.c_str(); }
-+	inline bool isLoaded(void) { return m_loaded; }
- };
- 
--#endif
-\ No newline at end of file
-+// Some nasty macros to help making plugins for both systems that can dynamically
-+// load libraries (ie. sensible systems) and for annoying systems like iOS
-+// where we can't have shared objects.
-+//
-+// to use, in the plugin somewhere do as follows:
-+//------------AwesomePlugin.h---------------------------------------------------
-+// #include <MPlugin.h>
-+// 
-+// MPLUGIN_DECLARE(MyAwesomePlugin);
-+//------------AwesomePlugin.cpp-------------------------------------------------
-+// #include "AwesomePlugin.h"
-+//
-+// MPLUGIN_START_IMPLEMENT(MyAwesomePlugin)
-+// {
-+//   // this is where you do your code
-+// }
-+//
-+// MPLUGIN_END_IMPLEMENT(MyAwesomePlugin)
-+// {
-+//   // cleanup here
-+// }
-+//
-+// Everything else should be taken care of
-+
-+#ifdef MPLUGIN_DYNAMIC
-+#    define MPLUGIN_DECLARE(name)		\
-+  extern "C" {					\
-+  MPLUGIN_EXPORT void StartPlugin();		\
-+  MPLUGIN_EXPORT void EndPlugin();		\
-+  }
-+
-+#    define MPLUGIN_START_IMPLEMENT(name)	\
-+  void StartPlugin()
-+
-+#    define MPLUGIN_END_IMPLEMENT(name)		\
-+  void EndPlugin()
-+#else
-+#    define MPLUGIN_DECLARE(name)			\
-+  void StartPlugin##name();				\
-+  void EndPlugin##name();				\
-+  class Plugin##name##AutoStart				\
-+  {							\
-+  public:						\
-+    Plugin##name##AutoStart();				\
-+  }							\
-+  extern Plugin##name##AutoStart s_##name##AutoStarter;
-+
-+#   define MPLUGIN_START_IMPLEMENT(name)				\
-+  Plugin##name##AutoStart s_##name##AutoStarter;			\
-+  Plugin##name##AutoStart::Plugin##name##AutoStart()			\
-+  {									\
-+    AddPluginFunctions(#name, &StartPlugin##name, &EndPlugin##name);	\
-+  }									\
-+  void StartPlugin##name()
-+
-+#   define MPLUGIN_END_IMPLEMENT(name)		\
-+  void EndPlugin##name()
-+#endif/*MPLUGIN_DYNAMIC*/
-+
-+// don't worry about this:
-+#ifndef MPLUGIN_DYNAMIC
-+void AddPluginFunctions(const char* pluginName, FunctionPtr start, FunctionPtr end);
-+#endif
-+
 +#endif
 Index: trunk/dev/Maratis/Common/MPlugin/MPlugin.cpp
 ===================================================================
@@ -1589,6 +800,136 @@ Index: trunk/dev/Maratis/Common/MPlugin/MPlugin.cpp
 -}
 \ No newline at end of file
 +}
+Index: trunk/dev/Maratis/Common/MPlugin/MPlugin.h
+===================================================================
+--- trunk/dev/Maratis/Common/MPlugin/MPlugin.h	(revision 126)
++++ trunk/dev/Maratis/Common/MPlugin/MPlugin.h	(working copy)
+@@ -31,33 +31,111 @@
+ #ifndef _M_PLUGIN_H
+ #define _M_PLUGIN_H
+ 
+-#ifdef WIN32
+-#include <windows.h>
+-#else
+-#include <dlfcn.h>
+-#endif
++#ifdef MPLUGIN_DYNAMIC
++#  ifdef WIN32
++#    include <windows.h>
++#    define MPLUGIN_EXPORT __declspec(dllexport)
++#  else
++// automagically exported
++#    define MPLUGIN_EXPORT
++#    include <dlfcn.h>
++#  endif /*WIN32*/
++#endif/*MPLUGIN_DYNAMIC*/
+ 
+-class MPlugin
++typedef void * (*FunctionPtr)();
++
++class M_ENGINE_EXPORT MPlugin
+ {
+ public :
+ 
+ 	MPlugin(void);
+ 	~MPlugin(void);
+ 
+-private :
++protected :
+ 
+ 	string m_filename;
+-	
+-#ifdef WIN32
+-    HMODULE m_library;
++
++#ifdef MPLUGIN_DYNAMIC	
++#    ifdef WIN32
++	HMODULE m_library;
++#    else
++	void * m_library;
++#    endif
+ #else
+-	void * m_library;
++        FunctionPtr Start;
++        FunctionPtr End;
++
+ #endif
+-
++	bool m_loaded;
+ public:
+ 	
+ 	void load(const char * filename);
+ 	inline const char * getFilename(void){ return m_filename.c_str(); }
++	inline bool isLoaded(void) { return m_loaded; }
+ };
+ 
+-#endif
+\ No newline at end of file
++// Some nasty macros to help making plugins for both systems that can dynamically
++// load libraries (ie. sensible systems) and for annoying systems like iOS
++// where we can't have shared objects.
++//
++// to use, in the plugin somewhere do as follows:
++//------------AwesomePlugin.h---------------------------------------------------
++// #include <MPlugin.h>
++// 
++// MPLUGIN_DECLARE(MyAwesomePlugin);
++//------------AwesomePlugin.cpp-------------------------------------------------
++// #include "AwesomePlugin.h"
++//
++// MPLUGIN_START_IMPLEMENT(MyAwesomePlugin)
++// {
++//   // this is where you do your code
++// }
++//
++// MPLUGIN_END_IMPLEMENT(MyAwesomePlugin)
++// {
++//   // cleanup here
++// }
++//
++// Everything else should be taken care of
++
++#ifdef MPLUGIN_DYNAMIC
++#    define MPLUGIN_DECLARE(name)		\
++  extern "C" {					\
++  MPLUGIN_EXPORT void StartPlugin();		\
++  MPLUGIN_EXPORT void EndPlugin();		\
++  }
++
++#    define MPLUGIN_START_IMPLEMENT(name)	\
++  void StartPlugin()
++
++#    define MPLUGIN_END_IMPLEMENT(name)		\
++  void EndPlugin()
++#else
++#    define MPLUGIN_DECLARE(name)			\
++  void StartPlugin##name();				\
++  void EndPlugin##name();				\
++  class Plugin##name##AutoStart				\
++  {							\
++  public:						\
++    Plugin##name##AutoStart();				\
++  }							\
++  extern Plugin##name##AutoStart s_##name##AutoStarter;
++
++#   define MPLUGIN_START_IMPLEMENT(name)				\
++  Plugin##name##AutoStart s_##name##AutoStarter;			\
++  Plugin##name##AutoStart::Plugin##name##AutoStart()			\
++  {									\
++    AddPluginFunctions(#name, &StartPlugin##name, &EndPlugin##name);	\
++  }									\
++  void StartPlugin##name()
++
++#   define MPLUGIN_END_IMPLEMENT(name)		\
++  void EndPlugin##name()
++#endif/*MPLUGIN_DYNAMIC*/
++
++// don't worry about this:
++#ifndef MPLUGIN_DYNAMIC
++void AddPluginFunctions(const char* pluginName, FunctionPtr start, FunctionPtr end);
++#endif
++
++#endif
 Index: trunk/dev/Maratis/Common/MScript/MScript.cpp
 ===================================================================
 --- trunk/dev/Maratis/Common/MScript/MScript.cpp	(revision 126)
@@ -1604,7 +945,7 @@ Index: trunk/dev/Maratis/Common/MScript/MScript.cpp
  	const char * filename = lua_tostring(L, 1);
  
  	// save current directory
-@@ -2445,6 +2445,29 @@
+@@ -2445,6 +2445,31 @@
  	m_isRunning = true;
  }
  
@@ -1620,7 +961,8 @@ Index: trunk/dev/Maratis/Common/MScript/MScript.cpp
 +    
 +    // do file and update current directory
 +    getRepertory(g_currentDirectory, globalFilename);
-+    bool rtn = luaL_dofile(m_state, globalFilename) == 0;
++    char * text = readTextFile(globalFilename);
++    bool rtn = luaL_dostring(m_state, text) == 0;
 +
 +    if(!rtn)
 +	printf("ERROR lua script: \n %s\n", lua_tostring(m_state, -1));
@@ -1628,13 +970,14 @@ Index: trunk/dev/Maratis/Common/MScript/MScript.cpp
 +    // set back to current
 +    strcpy(g_currentDirectory, current);
 +    m_isRunning = m_isRunning || rtn;
++    SAFE_FREE(text);
 +    return rtn;
 +}
 +
  bool MScript::startCallFunction(const char* name)
  {
  	if(m_isRunning)
-@@ -2571,4 +2594,4 @@
+@@ -2571,4 +2596,4 @@
  
  void MScript::pushPointer(void* value){
  	lua_pushinteger(m_state, (lua_Integer)value);
@@ -1653,3 +996,707 @@ Index: trunk/dev/Maratis/Common/MScript/MScript.h
  
  	// call function
  	bool startCallFunction(const char* name);
+Index: trunk/dev/Maratis/Common/MContexts/MBulletContext.h
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MBulletContext.h	(revision 126)
++++ trunk/dev/Maratis/Common/MContexts/MBulletContext.h	(working copy)
+@@ -79,6 +79,7 @@
+ 
+ 	// world gravity
+ 	void setWorldGravity(const MVector3 & gravity);
++	MVector3 getWorldGravity();
+ 
+ 	// create object
+ 	void createGhost(unsigned int * objectId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation);
+@@ -147,4 +148,4 @@
+ 	void deleteConstraint(unsigned int * constraintId);
+ };
+ 
+-#endif
+\ No newline at end of file
++#endif
+Index: trunk/dev/Maratis/Common/MContexts/MWinContext.cpp
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MWinContext.cpp	(revision 126)
++++ trunk/dev/Maratis/Common/MContexts/MWinContext.cpp	(working copy)
+@@ -60,3 +60,16 @@
+ 	MWindow * window = MWindow::getInstance();
+ 	return window->getSystemTick();
+ }
++	
++// plugin directories
++const char* MWinContext::getUserDirectory(void)
++{
++  MWindow * window = MWindow::getInstance();
++  return window->getUserDirectory();
++}
++
++const char* MWinContext::getSystemDirectory(void)
++{
++  MWindow * window = MWindow::getInstance();
++  return window->getSystemDirectory();
++}
+Index: trunk/dev/Maratis/Common/MContexts/MGLContext.cpp
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MGLContext.cpp	(revision 126)
++++ trunk/dev/Maratis/Common/MContexts/MGLContext.cpp	(working copy)
+@@ -220,6 +220,9 @@
+ 
+ 	// anisotropic filtering
+ 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
++
++	glEnable(GL_POINT_SPRITE);
++	glTexEnvi(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);
+ }
+ 
+ MGLContext::~MGLContext(void)
+@@ -1188,3 +1191,13 @@
+ 		break;
+ 	}
+ }
++
++void MGLContext::setPointSize(float min, float max, float threshold)
++{
++	//glPointParameterf(GL_POINT_FADE_THRESHOLD_SIZE, threshold);
++	glPointSize(max);
++	glPointParameterf(GL_POINT_SIZE_MIN, min);
++	glPointParameterf(GL_POINT_SIZE_MAX, max);
++	GLfloat attn[] = { 0.0f, 0.0f, 0.02f };
++	glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, attn);
++}
+Index: trunk/dev/Maratis/Common/MContexts/MWinContext.h
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MWinContext.h	(revision 126)
++++ trunk/dev/Maratis/Common/MContexts/MWinContext.h	(working copy)
+@@ -51,6 +51,10 @@
+ 
+ 	// system tick
+ 	unsigned long getSystemTick(void);
++	
++	// plugin directories
++	const char* getUserDirectory(void);
++	const char* getSystemDirectory(void);
+ };
+ 
+-#endif
+\ No newline at end of file
++#endif
+Index: trunk/dev/Maratis/Common/MContexts/MGLContext.h
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MGLContext.h	(revision 126)
++++ trunk/dev/Maratis/Common/MContexts/MGLContext.h	(working copy)
+@@ -248,6 +248,9 @@
+ 	void enableBlending(void);
+ 	void disableBlending(void);
+ 	void setBlendingMode(M_BLENDING_MODES mode);
++
++	// points
++	void setPointSize(float min, float max, float threshold);
+ };
+ 
+ #endif
+Index: trunk/dev/Maratis/Common/MContexts/MBulletContext.cpp
+===================================================================
+--- trunk/dev/Maratis/Common/MContexts/MBulletContext.cpp	(revision 126)
++++ trunk/dev/Maratis/Common/MContexts/MBulletContext.cpp	(working copy)
+@@ -129,6 +129,14 @@
+ 	m_dynamicsWorld->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
+ }
+ 
++MVector3 MBulletContext::getWorldGravity()
++{
++	if(m_dynamicsWorld == NULL)
++		return MVector3(0.0f, 0.0f, 0.0f);
++	btVector3 gravity = m_dynamicsWorld->getGravity();
++	return MVector3(gravity.x(), gravity.y(), gravity.z());
++}
++
+ // create object
+ void MBulletContext::createGhost(unsigned int * objectId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation)
+ {
+Index: trunk/dev/Maratis/Common/MFileManager/MPackageManagerNPK.cpp
+===================================================================
+--- trunk/dev/Maratis/Common/MFileManager/MPackageManagerNPK.cpp	(revision 126)
++++ trunk/dev/Maratis/Common/MFileManager/MPackageManagerNPK.cpp	(working copy)
+@@ -34,7 +34,7 @@
+ #include <npk.h>
+ #include <npk_dev.h>
+ 
+-#define M_MAX_PACKAGES 1
++#define M_MAX_PACKAGES 10
+ 
+ int teakey[4] = { 0,0,0,0 };
+ 
+@@ -145,7 +145,7 @@
+ 	
+ 	if(strstr(mode, "w") != 0)
+ 		return MStdFile::getNew(path, mode);
+-	
++
+ 	// look within the package for a file with the requested name
+ 	if(MPackageEnt ent = engine->getPackageManager()->findEntity(localFilename))
+ 		return MPackageFile::getNew(ent);
+@@ -180,6 +180,15 @@
+ 
+ void MPackageManagerNPK::init()
+ {
++    npk_io_open_func((npk_open_func)M_fopen);
++    npk_io_close_func((npk_close_func)M_fclose);
++    npk_io_read_func((npk_read_func)M_fread);
++    npk_io_write_func((npk_write_func)M_fwrite);
++    npk_io_seek_func((npk_seek_func)M_fseek);
++    npk_io_tell_func((npk_tell_func)M_ftell);
++    npk_io_rewind_func((npk_rewind_func)M_rewind);
++
++
+ 	if(! m_fileOpenHook)
+ 	{
+ 		m_fileOpenHook = new MPackageFileOpenHook;
+@@ -350,4 +359,4 @@
+ 	// loaded the package, now save it for later access
+ 	m_packages[pkgNum] = pack;
+ 	return pack;
+-}
+\ No newline at end of file
++}
+Index: 3rdparty/npk/include/npk_dev.h
+===================================================================
+--- 3rdparty/npk/include/npk_dev.h	(revision 126)
++++ 3rdparty/npk/include/npk_dev.h	(working copy)
+@@ -1,6 +1,6 @@
+ /*
+ 
+-    npk - General-Purpose File Packing Library
++    npk - neat package system
+     See README for copyright and license information.
+ 
+     header for npk development mode
+@@ -116,7 +116,7 @@
+ NPK_DEV_API NPK_RESULT  npk_prepare_entityname( NPK_CSTR src, NPK_STR dst, size_t dstLen );
+ 
+ /* File I/O Functions */
+-NPK_DEV_API NPK_RESULT  npk_open( int* handle, NPK_CSTR fileName, bool createfile, bool bcheckexist );
++NPK_DEV_API NPK_RESULT  npk_open( NPK_HANDLE* handle, NPK_CSTR fileName, bool createfile, bool bcheckexist );
+ NPK_DEV_API NPK_RESULT  npk_flush( NPK_HANDLE handle );
+ NPK_DEV_API NPK_RESULT  npk_close( NPK_HANDLE handle );
+ 
+@@ -156,6 +156,16 @@
+ NPK_DEV_API NPK_RESULT  npk_package_remove_all_entity( NPK_PACKAGE package );
+ NPK_DEV_API NPK_RESULT  npk_package_detach_all_entity( NPK_PACKAGE package );
+ 
++
++extern npk_open_func   __open;
++extern npk_close_func  __close;
++extern npk_read_func   __read;
++extern npk_write_func  __write;
++extern npk_seek_func   __seek;
++extern npk_tell_func   __tell;
++extern npk_rewind_func __rewind;
++extern npk_commit_func __commit;
++
+ #ifdef __cplusplus
+ }
+ #endif
+Index: 3rdparty/npk/include/npk.h
+===================================================================
+--- 3rdparty/npk/include/npk.h	(revision 126)
++++ 3rdparty/npk/include/npk.h	(working copy)
+@@ -1,6 +1,6 @@
+ /*
+ 
+-    npk - General-Purpose File Packing Library
++    npk - neat package system
+     See README for copyright and license information.
+ 
+ */
+@@ -12,7 +12,6 @@
+ #include "npk_base.h"
+ #include "npk_error.h"
+ 
+-#define NPK_DEV
+ 
+ #ifdef __cplusplus
+ extern "C" {
+@@ -42,6 +41,25 @@
+ NPK_API void        npk_disable_criticalsection ();
+ #endif
+ 
++// custom file I/O
++typedef void*  (*npk_open_func)  (const char*, const char*); // filename, mode as per fopen (ie "r" "wb+" etc)
++typedef int    (*npk_close_func) (void*);
++typedef size_t (*npk_read_func)  (void*, size_t, size_t, void*);
++typedef size_t (*npk_write_func) (const void*, size_t, size_t, void*);
++typedef int    (*npk_seek_func)  (void*, long, int);
++typedef long   (*npk_tell_func)  (void*);
++typedef void   (*npk_rewind_func)(void*);
++typedef void   (*npk_commit_func)(void*);
++
++NPK_API void npk_io_open_func  (npk_open_func func);
++NPK_API void npk_io_close_func (npk_close_func func);
++NPK_API void npk_io_read_func  (npk_read_func func);
++NPK_API void npk_io_write_func (npk_write_func func);
++NPK_API void npk_io_seek_func  (npk_seek_func func);
++NPK_API void npk_io_tell_func  (npk_tell_func func);
++NPK_API void npk_io_rewind_func(npk_rewind_func func);
++NPK_API void npk_io_commit_func(npk_commit_func func);
++
+ #ifdef __cplusplus
+ }
+ #endif
+Index: 3rdparty/npk/include/npk_conf.h
+===================================================================
+--- 3rdparty/npk/include/npk_conf.h	(revision 126)
++++ 3rdparty/npk/include/npk_conf.h	(working copy)
+@@ -1,6 +1,6 @@
+ /*
+ 
+-    npk - General-Purpose File Packing Library
++    npk - neat package system
+     See README for copyright and license information.
+ 
+     configuration of npk
+@@ -31,6 +31,7 @@
+ #if defined(_WIN32) || defined(_WIN64)
+     #define NPK_PLATFORM_WINDOWS
+     #define NPK_PLATFORM_NAME "Windows"
++ 	typedef int mode_t;
+ #elif defined(linux) || defined(__linux) || defined(__linux__)
+     #define NPK_PLATFORM_LINUX
+     #define NPK_PLATFORM_NAME "Linux"
+@@ -76,4 +77,80 @@
+     #define NPK_DEV_API
+ #endif /* NPK_PLATFORM_WINDOWS */
+ 
++#ifdef NPK_PREFIX
++    #define CONCAT_X(t1,t2) t1##t2
++    #define CONCAT(t1,t2) CONCAT_X(t1,t2)
++
++    #define g_npkError                      CONCAT(NPK_PREFIX_NAME,g_npkError)
++    #define g_callbackfp                    CONCAT(NPK_PREFIX_NAME,g_callbackfp)
++    #define g_callbackSize                  CONCAT(NPK_PREFIX_NAME,g_callbackSize)
++
++    #define npk_package_open                CONCAT(NPK_PREFIX_NAME,npk_package_open)
++    #define npk_package_open_with_fd        CONCAT(NPK_PREFIX_NAME,npk_package_open_with_fd)
++    #define npk_package_close               CONCAT(NPK_PREFIX_NAME,npk_package_close)
++    #define npk_package_get_entity          CONCAT(NPK_PREFIX_NAME,npk_package_get_entity)
++    #define npk_package_get_first_entity    CONCAT(NPK_PREFIX_NAME,npk_package_get_first_entity)
++    #define npk_entity_get_name             CONCAT(NPK_PREFIX_NAME,npk_entity_get_name)
++    #define npk_entity_get_size             CONCAT(NPK_PREFIX_NAME,npk_entity_get_size)
++    #define npk_entity_get_packed_size      CONCAT(NPK_PREFIX_NAME,npk_entity_get_packed_size)
++    #define npk_entity_get_offset           CONCAT(NPK_PREFIX_NAME,npk_entity_get_offset)
++    #define npk_entity_is_ready             CONCAT(NPK_PREFIX_NAME,npk_entity_is_ready)
++    #define npk_entity_next                 CONCAT(NPK_PREFIX_NAME,npk_entity_next)
++    #define npk_entity_read                 CONCAT(NPK_PREFIX_NAME,npk_entity_read)
++    #define npk_entity_read_partial         CONCAT(NPK_PREFIX_NAME,npk_entity_read_partial)
++    #define npk_enable_callback             CONCAT(NPK_PREFIX_NAME,npk_enable_callback)
++    #define npk_disable_callback            CONCAT(NPK_PREFIX_NAME,npk_disable_callback)
++    #define npk_error_to_str                CONCAT(NPK_PREFIX_NAME,npk_error_to_str)
++    #define npk_enable_criticalsection      CONCAT(NPK_PREFIX_NAME,npk_enable_criticalsection)
++    #define npk_disable_criticalsection     CONCAT(NPK_PREFIX_NAME,npk_disable_criticalsection)
++
++    #define npk_log                         CONCAT(NPK_PREFIX_NAME,npk_log)
++    #define npk_error                       CONCAT(NPK_PREFIX_NAME,npk_error)
++    #define npk_alloc_copy_string           CONCAT(NPK_PREFIX_NAME,npk_alloc_copy_string)
++    #define npk_get_filetime                CONCAT(NPK_PREFIX_NAME,npk_get_filetime)
++    #define npk_set_filetime                CONCAT(NPK_PREFIX_NAME,npk_set_filetime)
++    #define npk_filetime_to_unixtime        CONCAT(NPK_PREFIX_NAME,npk_filetime_to_unixtime)
++    #define npk_enable_gluetime             CONCAT(NPK_PREFIX_NAME,npk_enable_gluetime)
++    #define npk_disable_gluetime            CONCAT(NPK_PREFIX_NAME,npk_disable_gluetime)
++    #define npk_get_bucket                  CONCAT(NPK_PREFIX_NAME,npk_get_bucket)
++    #define npk_prepare_entityname          CONCAT(NPK_PREFIX_NAME,npk_prepare_entityname)
++
++    #define npk_open                        CONCAT(NPK_PREFIX_NAME,npk_open)
++    #define npk_flush                       CONCAT(NPK_PREFIX_NAME,npk_flush)
++    #define npk_close                       CONCAT(NPK_PREFIX_NAME,npk_close)
++
++    #define npk_seek                        CONCAT(NPK_PREFIX_NAME,npk_seek)
++    #define npk_tell                        CONCAT(NPK_PREFIX_NAME,npk_tell)
++    #define npk_read                        CONCAT(NPK_PREFIX_NAME,npk_read)
++    #define npk_write                       CONCAT(NPK_PREFIX_NAME,npk_write)
++    #define npk_read_encrypt                CONCAT(NPK_PREFIX_NAME,npk_read_encrypt)
++    #define npk_write_encrypt               CONCAT(NPK_PREFIX_NAME,npk_write_encrypt)
++
++    #define npk_entity_alloc                CONCAT(NPK_PREFIX_NAME,npk_entity_alloc)
++    #define npk_entity_init                 CONCAT(NPK_PREFIX_NAME,npk_entity_init)
++    #define npk_entity_get_current_flag     CONCAT(NPK_PREFIX_NAME,npk_entity_get_current_flag)
++    #define npk_entity_get_new_flag         CONCAT(NPK_PREFIX_NAME,npk_entity_get_new_flag)
++    #define npk_entity_set_flag             CONCAT(NPK_PREFIX_NAME,npk_entity_set_flag)
++    #define npk_entity_add_flag             CONCAT(NPK_PREFIX_NAME,npk_entity_add_flag)
++    #define npk_entity_sub_flag             CONCAT(NPK_PREFIX_NAME,npk_entity_sub_flag)
++    #define npk_entity_write                CONCAT(NPK_PREFIX_NAME,npk_entity_write)
++    #define npk_entity_export               CONCAT(NPK_PREFIX_NAME,npk_entity_export)
++
++    #define npk_package_alloc               CONCAT(NPK_PREFIX_NAME,npk_package_alloc)
++    #define npk_package_init                CONCAT(NPK_PREFIX_NAME,npk_package_init)
++    #define npk_package_save                CONCAT(NPK_PREFIX_NAME,npk_package_save)
++    #define npk_package_clear               CONCAT(NPK_PREFIX_NAME,npk_package_clear)
++    #define npk_package_add_file            CONCAT(NPK_PREFIX_NAME,npk_package_add_file)
++    #define npk_package_add_entity          CONCAT(NPK_PREFIX_NAME,npk_package_add_entity)
++    #define npk_package_remove_entity       CONCAT(NPK_PREFIX_NAME,npk_package_remove_entity)
++    #define npk_package_detach_entity       CONCAT(NPK_PREFIX_NAME,npk_package_detach_entity)
++    #define npk_package_remove_all_entity   CONCAT(NPK_PREFIX_NAME,npk_package_remove_all_entity)
++    #define npk_package_detach_all_entity   CONCAT(NPK_PREFIX_NAME,npk_package_detach_all_entity)
++    #define __npk_package_add_entity        CONCAT(NPK_PREFIX_NAME,__npk_package_add_entity)
++    #define __npk_package_open              CONCAT(NPK_PREFIX_NAME,__npk_package_open)
++    #define __npk_package_remove_all_entity CONCAT(NPK_PREFIX_NAME,__npk_package_remove_all_entity)
++
++
++#endif /* NPK_PREFIX */
++
+ #endif /* _NPK_DEF_H_ */
+Index: 3rdparty/npk/include/npk_error.h
+===================================================================
+--- 3rdparty/npk/include/npk_error.h	(revision 126)
++++ 3rdparty/npk/include/npk_error.h	(working copy)
+@@ -1,6 +1,6 @@
+ /*
+ 
+-    npk - General-Purpose File Packing Library
++    npk - neat package system
+     See README for copyright and license information.
+ 
+     npk error code
+@@ -11,7 +11,7 @@
+ #define _NPK_ERROR_H_
+ 
+ // Success
+-#define NPK_SUCCESS                                         1
++#define NPK_SUCCESS                                              1
+ 
+ 
+ // Error
+Index: 3rdparty/npk/include/npk_base.h
+===================================================================
+--- 3rdparty/npk/include/npk_base.h	(revision 126)
++++ 3rdparty/npk/include/npk_base.h	(working copy)
+@@ -1,6 +1,6 @@
+ /*
+ 
+-    npk - General-Purpose File Packing Library
++    npk - neat package system
+     See README for copyright and license information.
+ 
+     base type and definitions of npk
+@@ -15,7 +15,7 @@
+ typedef int                             NPK_RESULT;
+ typedef void*                           NPK_PACKAGE;
+ typedef void*                           NPK_ENTITY;
+-typedef int                             NPK_HANDLE;
++typedef ptrdiff_t                       NPK_HANDLE;
+ typedef unsigned int                    NPK_FLAG;
+ typedef unsigned int                    NPK_HASHKEY;
+ typedef int                             NPK_TEAKEY;
+Index: 3rdparty/npk/src/npk_common.c
+===================================================================
+--- 3rdparty/npk/src/npk_common.c	(revision 126)
++++ 3rdparty/npk/src/npk_common.c	(working copy)
+@@ -1,17 +1,17 @@
+ /*
+ 
+-    npk - General-Purpose File Packing Library
++    npk - neat package system
+     See README for copyright and license information.
+ 
+ */
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <stddef.h>
+ #include <stdarg.h>
+ #include <time.h>
+ #include <errno.h>
+ #include <fcntl.h>
+-#include <memory.h>
+ #include <string.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+@@ -32,6 +32,25 @@
+ #include "zlib.h"
+ 
+ 
++npk_open_func   __open   = NULL;
++npk_close_func  __close  = NULL;
++npk_read_func   __read   = NULL;
++npk_write_func  __write  = NULL;
++npk_seek_func   __seek   = NULL;
++npk_tell_func   __tell   = NULL;
++npk_rewind_func __rewind = NULL;
++npk_commit_func __commit = NULL;
++
++NPK_API void npk_io_open_func  (npk_open_func func)  { __open   = func; }
++NPK_API void npk_io_close_func (npk_close_func func) { __close  = func; }
++NPK_API void npk_io_read_func  (npk_read_func func)  { __read   = func; }
++NPK_API void npk_io_write_func (npk_write_func func) { __write  = func; }
++NPK_API void npk_io_seek_func  (npk_seek_func func)  { __seek   = func; }
++NPK_API void npk_io_tell_func  (npk_tell_func func)  { __tell   = func; }
++NPK_API void npk_io_rewind_func(npk_rewind_func func){ __rewind = func; }
++NPK_API void npk_io_commit_func(npk_commit_func func){ __commit = func; }
++
++
+ NPK_RESULT npk_error( NPK_RESULT res )
+ {
+     g_npkError = res;
+@@ -161,26 +180,56 @@
+     *pt = (NPK_TIME)((*pft - 116444736000000000LL)/10000000LL);
+ }
+ 
+-NPK_RESULT npk_open( int* handle, NPK_CSTR fileName, bool createfile, bool bcheckexist )
++NPK_RESULT npk_open( NPK_HANDLE* handle, NPK_CSTR fileName, bool createfile, bool bcheckexist )
+ {
+     if( createfile )
+     {
++        mode_t mask = umask(0);
+         if( bcheckexist )
+         {
+-            *handle = open( fileName, O_CREAT | O_EXCL | O_RDWR | O_BINARY, S_IREAD | S_IWRITE );
++#ifdef NPK_PLATFORM_WINDOWS
++            if(__open == NULL)
++                *handle = open( fileName, O_CREAT | O_EXCL | O_RDWR | O_BINARY, S_IREAD & S_IWRITE );
++            else
++                *handle = (NPK_HANDLE)__open( fileName, "wb+" );
++#else
++            if(__open == NULL)
++                *handle = open( fileName, O_CREAT | O_EXCL | O_RDWR | O_BINARY, 0666 );
++            else
++                *handle = (NPK_HANDLE)__open( fileName, "wb+" );
++            if( *handle != -1 ) fchmod( *handle, 0666&~mask );
++#endif
+         }
+         else
+         {
+             *handle = creat( fileName, S_IREAD | S_IWRITE );
+             if( errno == EACCES )
+                 return( npk_error( NPK_ERROR_ReadOnlyFile ) );
+-            close( *handle );
++            if(__close == NULL)
++                close( *handle );
++            else
++                __close((void*)*handle);
+ 
+-            *handle = open( fileName, O_CREAT | O_RDWR | O_BINARY, S_IREAD | S_IWRITE );
++#ifdef NPK_PLATFORM_WINDOWS
++            if(__open == NULL)
++                *handle = open( fileName, O_CREAT | O_RDWR | O_BINARY, S_IREAD & S_IWRITE );
++            else
++                *handle = (NPK_HANDLE)__open( fileName, "wb+" );
++#else
++            if(__open == NULL)
++                *handle = open( fileName, O_CREAT | O_RDWR | O_BINARY, 0666 );
++            else
++                *handle = (NPK_HANDLE)__open( fileName, "wb+" );
++            if( *handle != -1 ) fchmod( *handle, 0666&~mask );
++#endif
+         }
++        umask( mask );
+     }
+     else
+-        *handle = open( fileName, O_BINARY | O_RDONLY );
++        if(__open == NULL)
++            *handle = open( fileName, O_BINARY | O_RDONLY );
++        else
++            *handle = (NPK_HANDLE)__open( fileName, "rb+" );
+ 
+     if( *handle == -1 )
+     {
+@@ -197,19 +246,25 @@
+ 
+ NPK_RESULT npk_close( NPK_HANDLE handle )
+ {
+-    if( handle != 0 )
+-        close( handle );
++    if( handle > 0 )
++        if(__close == NULL)
++            close( handle );
++        else
++            __close((void*)handle);
+ 
+     return NPK_SUCCESS;
+ }
+ 
+ long npk_seek( NPK_HANDLE handle, long offset, int origin )
+ {
++    if(__seek == NULL)
+ #ifdef NPK_PLATFORM_WINDOWS
+-    return _lseek( handle, offset, origin );
++        return _lseek( handle, offset, origin );
+ #else
+-    return lseek( handle, offset, origin );
++        return lseek( handle, offset, origin );
+ #endif
++    else
++        return __seek((void*)handle, offset, origin);
+ }
+ 
+ NPK_RESULT npk_read( NPK_HANDLE handle, void* buf, NPK_SIZE size,
+@@ -218,6 +273,7 @@
+     NPK_SIZE currentread;
+     NPK_SIZE totalread = 0;
+     NPK_SIZE unit = cbsize;
++    
+ 
+     if( cb )
+     {
+@@ -232,7 +288,10 @@
+             if( ( size - totalread ) < unit )
+                 unit = size - totalread;
+ 
+-            currentread = read( handle, (NPK_STR)buf + totalread, (unsigned int)unit );
++            if(__read == NULL)
++                currentread = read( handle, (NPK_STR)buf + totalread, (unsigned int)unit );
++            else
++                currentread = __read( (NPK_STR)buf + totalread, sizeof(char), unit, (void*)handle );
+ 
+             if( currentread < unit )
+             {
+@@ -251,7 +310,10 @@
+     }
+     else
+     {
+-        currentread = read( handle, (NPK_STR)buf, size );
++	if(__read == NULL)
++	    currentread = read( handle, (NPK_STR)buf, size );
++	else
++	    currentread = __read((NPK_STR)buf, sizeof(char), size, (void*)handle);
+ 
+         if( currentread < size )
+         {
+Index: 3rdparty/npk/src/npk_dev.c
+===================================================================
+--- 3rdparty/npk/src/npk_dev.c	(revision 126)
++++ 3rdparty/npk/src/npk_dev.c	(working copy)
+@@ -1,17 +1,17 @@
+ /*
+ 
+-    npk - General-Purpose File Packing Library
++    npk - neat package system
+     See README for copyright and license information.
+ 
+ */
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <stddef.h>
+ #include <stdarg.h>
+ #include <time.h>
+ #include <errno.h>
+ #include <fcntl.h>
+-#include <memory.h>
+ #include <string.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+@@ -112,22 +112,28 @@
+ {
+     if( handle != 0 )
+     {
++        if(__commit == NULL)
+ #ifdef NPK_PLATFORM_WINDOWS
+-    _commit( handle );
++            _commit( handle );
+ #else
+-    fsync( handle );
++            fsync( handle );
+ #endif
++        else
++            __commit( (void*)handle );
+     }
+     return NPK_SUCCESS;
+ }
+ 
+ long npk_tell( NPK_HANDLE handle )
+ {
++    if(__seek == NULL)
+ #ifdef NPK_PLATFORM_WINDOWS
+-    return _lseek( handle, 0, SEEK_CUR );
++        return _lseek( handle, 0, SEEK_CUR );
+ #else
+-    return lseek( handle, 0, SEEK_CUR );
++        return lseek( handle, 0, SEEK_CUR );
+ #endif
++    else
++        return __seek( (void*)handle, 0, SEEK_CUR );
+ }
+ 
+ NPK_RESULT npk_write( NPK_HANDLE handle, const void* buf, NPK_SIZE size,
+@@ -150,7 +156,10 @@
+             if( (int)( size - totalwritten ) < unit )
+                 unit = size - totalwritten;
+ 
+-            currentwritten = write( handle, (NPK_STR)buf + totalwritten, (unsigned int)unit );
++            if( __write == NULL)
++                currentwritten = write( handle, (NPK_STR)buf + totalwritten, (unsigned int)unit );
++            else
++                currentwritten = __write( (NPK_STR)buf + totalwritten, sizeof(char*), (unsigned int)unit, (void*)handle );
+ 
+             if( currentwritten < unit )
+             {
+@@ -257,7 +266,7 @@
+     void*               buf = NULL;
+     void*               buf_for_zlib = NULL;
+     NPK_SIZE            size, endpos, startpos;
+-    int                 filehandle;
++    NPK_HANDLE          filehandle;
+     int                 z_res;
+ 
+     if( !eb )
+@@ -453,7 +462,7 @@
+     NPK_SIZE            len;
+     int                 savecount = 0;
+     NPK_STR             savefilename = NULL;
+-    int                 savefilehandle;
++    NPK_HANDLE          savefilehandle;
+     NPK_CHAR*           buf;
+     NPK_CHAR*           buf_pos;
+     NPK_PACKAGEINFO_V23 header_v23;
+Index: 3rdparty/npk/src/npk.c
+===================================================================
+--- 3rdparty/npk/src/npk.c	(revision 126)
++++ 3rdparty/npk/src/npk.c	(working copy)
+@@ -1,13 +1,13 @@
+ /*
+ 
+-    npk - General-Purpose File Packing Library
++    npk - neat package system
+     See README for copyright and license information.
+ 
+ */
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include <memory.h>
++#include <stddef.h>
+ #include <time.h>
+ #include <sys/stat.h>
+ #include "npk.h"
+@@ -283,10 +283,8 @@
+ 
+ npk_package_open_return_null_with_free:
+     if( pb )
+-        if( pb->handle_ > 0 )
+-            npk_close( pb->handle_ );
++        npk_package_close( pb );
+ 
+-    NPK_SAFE_FREE( pb );
+     return NULL;
+ }
+ 
+@@ -313,10 +311,8 @@
+ 
+ npk_package_open_return_null_with_free:
+     if( pb )
+-        if( pb->handle_ > 0 )
+-            npk_close( pb->handle_ );
++        npk_package_close( pb );
+ 
+-    NPK_SAFE_FREE( pb );
+     return NULL;
+ }
+ 
+@@ -609,6 +605,8 @@
+ 
+     if( eb->info_.flag_ & NPK_ENTITY_ENCRYPT_TEA )
+         tea_decode_buffer(buf, size, pb->teakey_, (pb->info_.version_ >= NPK_VERSION_ENCRYPTREMAINS));
++    if( eb->info_.flag_ & NPK_ENTITY_ENCRYPT_XXTEA )
++        xxtea_decode_buffer(buf, size, pb->teakey_, (pb->info_.version_ >= NPK_VERSION_ENCRYPTREMAINS));
+ 
+ #ifdef NPK_PLATFORM_WINDOWS
+     if( g_useCriticalSection )

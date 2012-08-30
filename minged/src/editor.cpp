@@ -1,6 +1,8 @@
 #include "editor.h"
 #include "util.h"
 
+#include "minged_npk.h"
+
 #include <stdio.h>
 
 #include <MEngine.h>
@@ -8,8 +10,10 @@
 #include <MKeyboard.h>
 #include <MFile.h>
 
+#define PACKAGE_NAME "minged.npk"
+
 namespace minged
-{    
+{
     Editor::Editor()
     {
 	m_Initialised = false;
@@ -19,11 +23,20 @@ namespace minged
     
     Editor::~Editor()
     {
+	delete m_FileManager;
     }
 
     void Editor::Init()
     {
 	MEngine* engine = MEngine::getInstance();
+
+	m_FileManager = new EmbedFileOpenHook;
+	m_FileManager->AddEmbeddedFile(PACKAGE_NAME, minged_npk, minged_npkSize());
+	
+	char filename[255];
+	getGlobalFilename(filename, engine->getSystemContext()->getWorkingDirectory(), PACKAGE_NAME);
+	engine->getPackageManager()->loadPackage(filename);
+
 	MScriptContext* script = engine->getScriptContext();
 	script->addScript("minged/minged.lua");
 	m_Initialised = true;

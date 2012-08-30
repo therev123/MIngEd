@@ -11,14 +11,14 @@ void writeFile(const char* path, const char* name, const char* data, long size)
     fprintf(fp, "#ifndef __%s_H__\n", name);
     fprintf(fp, "#define __%s_H__\n\n", name);
     fprintf(fp, "long %sSize() { return %d; }\n\n", name, size);
-    fprintf(fp, "extern const char[%d] %s = \n", size, name);
+    fprintf(fp, "const char %s[%d] = \n", name, size);
     fprintf(fp, "{\n");
     for(long i = 0; i < size; i++)
     {
 	fprintf(fp, "\t0x%.2hhx,", data[i]);
 	if(i != 0 && i%10 == 9) fprintf(fp, "\n");
     }
-    fprintf(fp, "\n}\n");
+    fprintf(fp, "\n};\n");
     fprintf(fp, "\n\n");
     fprintf(fp, "#endif/*__%s_H__*/\n", name);
 
