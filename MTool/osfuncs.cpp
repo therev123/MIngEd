@@ -108,3 +108,24 @@ int os_cp_of_type(lua_State* L)
     copy(source, target);
   return 0;
 }
+
+void _rmdir(const char* path)
+{
+    DIR* dir = opendir(path);
+    dirent* ent = NULL;
+    while(ent = readdir(dir))
+	if(isDirectory(ent->d_name))
+	    rmdir(ent->d_name);
+	else
+	    remove(ent->d_name);
+    closedir(dir);
+}
+
+int os_rm(lua_State* L)
+{
+    const char* path = lua_tostring(L, -1);
+    if(isDirectory(path))
+	_rmdir(path);
+    else
+	remove(path);
+}

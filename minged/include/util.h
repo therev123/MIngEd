@@ -13,6 +13,16 @@ namespace util
 
     void Sleep(uint32 ms);
 
+    //----------------------------------------
+    // Hash
+    // A general purpose hash function
+    // http://www.partow.net/programming/hashfunctions/
+    //----------------------------------------
+    uint32 Hash(const char* Hash);
+    
+    // returns smallest power of 2 which is greater than the value supplied
+    int Pow2(int x);
+    
 }
 };
 

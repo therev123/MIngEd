@@ -13,5 +13,6 @@ int os_cp(lua_State* L);
 
 int os_cp_of_type(lua_State* L);
 
+int os_rm(lua_State* L);
 
 #endif/*__MTOOL_OS_FUNCS_H__*/

@@ -1,6 +1,7 @@
 #include "util.h"
 
 #include <time.h>
+#include <cstring>
 
 #define MStoNS(_ms) (_ms * 1000000)
 #define NStoMS(_ns) (_ns / 1000000)
@@ -32,6 +33,31 @@ void Sleep(uint32 ms)
     nanosleep(&t, NULL);
 #endif
 }
+
+// BPHash function as found on
+// http://www.partow.net/programming/hashfunctions/
+uint32 Hash(const char* str)
+{
+    uint32 len = strlen(str);
+    uint32 hash = 0;
+    uint32 i    = 0;
+    for(i = 0; i < len; str++, i++)
+	hash = hash << 7 ^ (*str);
+    
+    return hash;
+}
+    
+int Pow2(int x)
+{
+    --x;
+    x |= x >> 1;
+    x |= x >> 2;
+    x |= x >> 4;
+    x |= x >> 8;
+    x |= x >> 16;
+    return x+1;
+}
+
 
 }
 }

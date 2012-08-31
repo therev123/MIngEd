@@ -1,4 +1,6 @@
 #include "editor.h"
+
+#include "atlas.h"
 #include "util.h"
 
 #include "minged_npk.h"
@@ -23,6 +25,10 @@ namespace minged
     
     Editor::~Editor()
     {
+	MEngine* engine = MEngine::getInstance();
+	if(MScriptContext* script = engine->getScriptContext())
+	    script->callFunction("mingedCleanup");
+
 	delete m_FileManager;
     }
 
@@ -38,7 +44,15 @@ namespace minged
 	engine->getPackageManager()->loadPackage(filename);
 
 	MScriptContext* script = engine->getScriptContext();
+	
+	// load the script
 	script->addScript("minged/minged.lua");
+
+	// register all minged functions
+	Atlas::RegisterScript(script);
+
+	script->callFunction("mingedInit");
+
 	m_Initialised = true;
     }
 

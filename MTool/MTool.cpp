@@ -20,6 +20,7 @@ static const luaL_Reg os_functions[] = {
   { "mkdir", os_mkdir },
   { "cp", os_cp },
   { "cp_of_type", os_cp_of_type },
+  { "rm", os_rm },
   { NULL, NULL }
 };
 
