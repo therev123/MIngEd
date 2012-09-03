@@ -30,6 +30,7 @@
 #include <MPlugin/MPlugin.h>
 #include <MProject/MProject.h>
 
+#include "embedFile.h"
 
 class MaratisPlayer
 {
@@ -47,6 +48,7 @@ public:
 	}
 
 private:
+	minged::EmbedFileOpenHook* m_embedFileManager;
 
 	// MEngine
 	MSoundContext * m_soundContext;

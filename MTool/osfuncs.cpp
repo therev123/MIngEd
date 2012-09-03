@@ -128,4 +128,5 @@ int os_rm(lua_State* L)
 	_rmdir(path);
     else
 	remove(path);
+    return 0;
 }

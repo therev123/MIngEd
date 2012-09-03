@@ -48,6 +48,8 @@
 #include <MRenderers/MStandardRenderer.h>
 #include <MRenderers/MFixedRenderer.h>
 
+#include "maratis_npk.h"
+
 
 MaratisPlayer::MaratisPlayer(void):
 m_gamePlugin(NULL),
@@ -66,6 +68,14 @@ m_renderer(NULL)
 		m_packageManager = new MPackageManagerNPK();
 	}
 
+	// embedded data
+	{
+		m_embedFileManager = new minged::EmbedFileOpenHook;
+		m_embedFileManager->AddEmbeddedFile("maratis.npk", maratis_npk, maratis_npkSize());
+		char filename[255];
+		getGlobalFilename(filename, m_system->getWorkingDirectory(), "maratis.npk");
+	}
+
 	// start
 	start();
 }
@@ -73,6 +83,8 @@ m_renderer(NULL)
 MaratisPlayer::~MaratisPlayer(void)
 {
 	clear();
+
+	SAFE_DELETE(m_embedFileManager);
 
 	SAFE_DELETE(m_game);
 	SAFE_DELETE(m_level);
@@ -154,6 +166,11 @@ void MaratisPlayer::start(void)
 		if(m_renderer == NULL)
 			m_renderer = new MStandardRenderer();
 		engine->setRenderer(m_renderer);
+
+	}
+	// embedded data
+	{
+		m_packageManager->loadPackage("maratis.npk");
 	}
 }
 

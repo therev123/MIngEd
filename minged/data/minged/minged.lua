@@ -1,9 +1,14 @@
+require("MUtil")
+require("MIngEd")
 
 function mingedInit()
-   atlas = minged_atlas_create()
-   img = minged_atlas_add(atlas, "minged/test.png")
-   minged_atlas_generate(atlas)
+   atlas = MIngEd.Atlas()
+   img = atlas:add_image("minged/test.png")
+   atlas:generate()
    minged_image_destroy(img)
+   atlas:test()
+
+   help(MIngEd.GUI.Manager)
 end
 
 function mingedUpdate()
@@ -13,5 +18,5 @@ function mingedRender()
 end
 
 function mingedCleanup()
-   minged_atlas_destroy(atlas)
+   atlas:destroy()
 end
