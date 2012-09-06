@@ -1,22 +1,19 @@
 require("MUtil")
 require("MIngEd")
 
+-- I guess I don't need these any more?
 function mingedInit()
-   atlas = MIngEd.Atlas()
-   img = atlas:add_image("minged/test.png")
-   atlas:generate()
-   minged_image_destroy(img)
-   atlas:test()
-
-   help(MIngEd.GUI.Manager)
+   MIngEd.init()
 end
 
 function mingedUpdate()
+   MIngEd.update()
 end
 
 function mingedRender()
+   MIngEd.render()
 end
 
 function mingedCleanup()
-   atlas:destroy()
+   MIngEd.cleanup()
 end

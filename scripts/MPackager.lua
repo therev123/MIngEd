@@ -74,8 +74,8 @@ function package_tools(pkg)
 
    os.cp_of_type("scripts/", pkg["scriptdir"], ".lua")
 
-   os.cp("MaratisPlayer" .. loader_ext(), pkg["bindir"])
-   os.cp("MaratisEditor" .. loader_ext(), pkg["bindir"])
+   os.cp("env/MaratisPlayer" .. loader_ext(), pkg["bindir"])
+   os.cp("env/MaratisEditor" .. loader_ext(), pkg["bindir"])
 end
 
 function package_plugins(pkg)

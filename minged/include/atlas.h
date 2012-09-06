@@ -18,13 +18,15 @@ public:
 
     bool AddImage(MImage* image, const char* name);
     void Generate(bool clear);
-    bool GetUVs(MVector2& uv, const char* image);
+    bool GetUVs(MVector2* uv, const char* image);
+
+    void Select();
 private:
     typedef struct _imageDef imageDef;
     typedef std::map<uint32, imageDef> imageMap;
     typedef imageMap::iterator         imageMapIter;
 
-    void WriteImage(imageDef& image, MImage& atlas);
+    void WriteImage(imageDef& image);
 
     int      m_BPP;
     int      m_MaxSize;
@@ -35,6 +37,8 @@ private:
 
     uint32   m_TextureID;
     char*    m_Layout;
+
+    MImage   m_Atlas;
 };
 
 };

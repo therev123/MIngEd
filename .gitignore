@@ -8,3 +8,5 @@ Makefile
 *.sln
 *.vcxproj*
 *.suo
+*.npk
+*_npk.h

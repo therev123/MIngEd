@@ -1,6 +1,7 @@
 #include "editor.h"
 
 #include "atlas.h"
+#include "renderer.h"
 #include "util.h"
 
 #include "minged_npk.h"
@@ -50,6 +51,7 @@ namespace minged
 
 	// register all minged functions
 	Atlas::RegisterScript(script);
+	Renderer::RegisterScript(script);
 
 	script->callFunction("mingedInit");
 
@@ -108,26 +110,7 @@ namespace minged
 	    if(MScriptContext* script = engine->getScriptContext())
 		script->callFunction("mingedRender");
 
-	    MRenderingContext* render = engine->getRenderingContext();
-	    MSystemContext* system = engine->getSystemContext();
-
-	    static MVector3 testQuad[4] = 
-	    {
-		MVector3(0,0,1),
-		MVector3(256,0,1),
-		MVector3(256,256,1),
-		MVector3(0,256,1)
-	    };
-
-	    unsigned int w, h;
-	    system->getScreenSize(&w, &h);
-
-	    render->setViewport(0, 0, w, h);
-	    render->setOrthoView(0, w, 0, h, 0.1, 100);
-	    render->enableVertexArray();
-	    render->setVertexPointer(M_FLOAT, 3, testQuad);
-	    render->setDepthMask(false);
-	    render->drawArray(M_PRIMITIVE_TRIANGLE_FAN, 0, 4);
+	    Renderer::Flush();
 	}
     }
 };

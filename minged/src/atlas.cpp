@@ -1,6 +1,10 @@
 #include "atlas.h"
 
+#include "renderer.h"
+
 #include <MEngine.h>
+
+minged::Atlas* g_Selected = NULL;
 
 namespace minged
 {
@@ -64,9 +68,35 @@ namespace minged
 	MEngine* engine = MEngine::getInstance();
 	MScriptContext* script = engine->getScriptContext();
 
-	if(Atlas* atlas = (Atlas*)script->getPointer(1))
+	if(Atlas* atlas = (Atlas*)script->getPointer(0))
 	    atlas->Generate(true);
 	return 0;
+    }
+
+    int ScriptAtlasSelect()
+    {
+	MEngine* engine = MEngine::getInstance();
+	MScriptContext* script = engine->getScriptContext();
+
+	if(Atlas* atlas = (Atlas*)script->getPointer(0))
+	    atlas->Select();
+	return 0;	
+    }
+
+    int ScriptAtlasGetUVs()
+    {
+	MEngine* engine = MEngine::getInstance();
+	MScriptContext* script = engine->getScriptContext();
+
+	MVector2 uvs[2];
+	if(Atlas* atlas = (Atlas*)script->getPointer(0))
+	    atlas->GetUVs(uvs, script->getString(1));
+
+	script->pushFloat(uvs[0].x);
+	script->pushFloat(uvs[0].y);
+	script->pushFloat(uvs[1].x);
+	script->pushFloat(uvs[1].y);
+	return 4;
     }
 
     typedef struct _imageDef
@@ -87,11 +117,13 @@ namespace minged
 
     void Atlas::RegisterScript(MScriptContext* script)
     {
-	script->addFunction("minged_atlas_create", ScriptAtlasCreate);
-	script->addFunction("minged_atlas_destroy", ScriptAtlasDestroy);
-	script->addFunction("minged_atlas_add", ScriptAtlasAdd);
-	script->addFunction("minged_image_destroy", ScriptAtlasImageDestroy);
-	script->addFunction("minged_atlas_generate", ScriptAtlasGenerate);
+	script->addFunction("mingedAtlasCreate", ScriptAtlasCreate);
+	script->addFunction("mingedAtlasDestroy", ScriptAtlasDestroy);
+	script->addFunction("mingedAtlasAdd", ScriptAtlasAdd);
+	script->addFunction("mingedAtlasGenerate", ScriptAtlasGenerate);
+	script->addFunction("mingedAtlasSelect", ScriptAtlasSelect);
+	script->addFunction("mingedAtlasGetUVs", ScriptAtlasGetUVs);
+	script->addFunction("mingedImageDestroy", ScriptAtlasImageDestroy);
     }
 
     bool Atlas::AddImage(MImage* image, const char* name)
@@ -134,15 +166,22 @@ namespace minged
 			found = false; // :(
 	}
 
+	// update the layout to block the space for future
+	for(uint32 x = 0; x < w; ++x)
+	    for(uint32 y = 0; y < h;++y)
+		m_Layout[(m_MaxSize * ((uint32)uv.y+y)) + (uint32)uv.x+x] = 1;
+
+	// update the target height
 	for(uint32 x = 0; x < m_MaxSize; ++x)
 	    for(uint32 y = 0; y < m_MaxSize; ++y)
 		if(m_Layout[y*m_MaxSize +x])
-		    m_Height = MAX(m_Height, y);
+		    m_Height = MAX(m_Height, y+1);
 
+	// update the target width
 	for(uint32 y = 0; y < m_MaxSize; ++y)
 	    for(uint32 x = 0; x < m_MaxSize; ++x)
 		if(m_Layout[y*m_MaxSize +x])
-		    m_Width = MAX(m_Width, x);
+		    m_Width = MAX(m_Width, x+1);
 
 	imageDef& def =  m_Images[hash];
 	def.uv = uv;
@@ -152,12 +191,12 @@ namespace minged
 
     void Atlas::Generate(bool clear)
     {
-	MImage atlas;
-	atlas.create(M_UBYTE, m_Width, m_Height, m_BPP);
+	m_Atlas.create(M_UBYTE, m_Width, m_Height, m_BPP);
+
 	for(imageMapIter iImage = m_Images.begin(); 
 	    iImage != m_Images.end(); 
 	    iImage++)
-	    WriteImage(iImage->second, atlas);
+	    WriteImage(iImage->second);
 
 	MEngine* engine = MEngine::getInstance();
 	MRenderingContext* render = engine->getRenderingContext();
@@ -166,29 +205,52 @@ namespace minged
 	    render->createTexture(&m_TextureID);
 
 	render->bindTexture(m_TextureID);
-	render->sendTextureImage(&atlas, false, 1, 0);
+	render->sendTextureImage(&m_Atlas, false, 1, 0);
 
 	if(clear)
 	{
-	    m_Images.clear();
+	    // remove images
             delete [] m_Layout;
             m_Layout = NULL;
         }
     }
 
-    bool Atlas::GetUVs(MVector2& uv, const char* image)
+    void Atlas::Select()
+    {
+	if(g_Selected == this)
+	    return;
+	MEngine* engine = MEngine::getInstance();
+	MRenderingContext* render = engine->getRenderingContext();
+	
+	Renderer::Flush();
+
+	render->enableTexture();
+	render->setBlendingMode(M_BLENDING_ALPHA);
+	render->enableBlending();
+	
+	if(m_TextureID != 0)
+	{
+	    render->bindTexture(m_TextureID);
+	    //render->sendTextureImage(&m_Atlas, false, 1, 0);
+	}
+	g_Selected = this;
+    }
+
+    bool Atlas::GetUVs(MVector2* uv, const char* image)
     {
 	uint32 hash = minged::util::Hash(image);
 	if(m_Images.find(hash) == m_Images.end())
 	    return false;
 
 	imageDef& def = m_Images[hash];
-        uv.x = def.uv.x / (float)m_Width;
-        uv.y = def.uv.y / (float)m_Height;
+        uv[0].x = def.uv.x / (float)m_Width;
+        uv[0].y = def.uv.y / (float)m_Height;
+	uv[1].x = (def.uv.x + (float)def.image->getWidth()) / (float)m_Width;
+	uv[1].y = (def.uv.y + (float)def.image->getHeight()) / (float)m_Height;
 	return true;
     }
 
-    void Atlas::WriteImage(imageDef& image, MImage& atlas)
+    void Atlas::WriteImage(imageDef& image)
     {
 	uint32 _x = image.uv.x;
 	uint32 _y = image.uv.y;
@@ -197,7 +259,7 @@ namespace minged
 	    {
 		unsigned char col[] = { 255, 255, 255, 255 };
 		image.image->readPixel(x, y, col);
-		atlas.writePixel(_x+x, _y+y, col);
+		m_Atlas.writePixel(_x+x, _y+y, col);
 	    }
     }
 

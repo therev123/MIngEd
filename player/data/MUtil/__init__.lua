@@ -7,7 +7,9 @@ dofile("slither.lua")
 dofile("MDoc.lua")
 
 -- Utility functions
+dofile("MVec2.lua")
 dofile("MVec3.lua")
+
 dofile("MCol.lua")
 
 -- C++/lua interface wrappers
