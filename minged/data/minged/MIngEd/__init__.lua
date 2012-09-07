@@ -5,7 +5,7 @@ document[[Maratis Ingame Editor module]](MIngEd)
 dofile("Geom.lua")
 dofile("Atlas.lua")
 dofile("System.lua")
-dofile("GUI.lua")
+require("GUI")
 
 MIngEd.init = 
    document[[Initialise the MIngEd system]](

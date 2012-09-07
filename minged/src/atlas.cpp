@@ -63,6 +63,21 @@ namespace minged
 	return 0;
     }
 
+    int ScriptAtlasImageGetSize()
+    {
+	MEngine* engine = MEngine::getInstance();
+	MScriptContext* script = engine->getScriptContext();
+
+	MImage* image = (MImage*)script->getPointer(0);
+	if(image)
+	{
+	    script->pushInteger(image->getWidth());
+	    script->pushInteger(image->getHeight());
+	    return 2;
+	}
+	return 0;
+    }
+
     int ScriptAtlasGenerate()
     {
 	MEngine* engine = MEngine::getInstance();
@@ -124,6 +139,7 @@ namespace minged
 	script->addFunction("mingedAtlasSelect", ScriptAtlasSelect);
 	script->addFunction("mingedAtlasGetUVs", ScriptAtlasGetUVs);
 	script->addFunction("mingedImageDestroy", ScriptAtlasImageDestroy);
+	script->addFunction("mingedImageGetSize", ScriptAtlasImageGetSize);
     }
 
     bool Atlas::AddImage(MImage* image, const char* name)
