@@ -6,6 +6,8 @@
 
 minged::Atlas* g_Selected = NULL;
 
+#define PAD 2
+
 namespace minged
 {
     int ScriptAtlasCreate()
@@ -144,9 +146,9 @@ namespace minged
 
     bool Atlas::AddImage(MImage* image, const char* name)
     {
-	uint32 hash = minged::util::Hash(name);
-	if(m_Images.find(hash) != m_Images.end())
+	if(m_Images.find(name) != m_Images.end())
 	    return false;
+	
 
         if(m_Layout == NULL)
 	{
@@ -176,15 +178,16 @@ namespace minged
 
 	    // check for every pixel in this area
 	    found = true; // be optimistic
-	    for(uint32 x = 0; x < w; ++x)
-		for(uint32 y = 0; y < h; ++y)
+	    for(uint32 x = 0; x < w + PAD; ++x)
+		for(uint32 y = 0; y < h + PAD; ++y)
 		    if(m_Layout[(m_MaxSize * ((uint32)uv.y+y)) + (uint32)uv.x+x])
 			found = false; // :(
+	    ++i;
 	}
 
 	// update the layout to block the space for future
-	for(uint32 x = 0; x < w; ++x)
-	    for(uint32 y = 0; y < h;++y)
+	for(uint32 x = 0 ; x < w + PAD; ++x)
+	    for(uint32 y = PAD; y < h + PAD;++y)
 		m_Layout[(m_MaxSize * ((uint32)uv.y+y)) + (uint32)uv.x+x] = 1;
 
 	// update the target height
@@ -199,15 +202,20 @@ namespace minged
 		if(m_Layout[y*m_MaxSize +x])
 		    m_Width = MAX(m_Width, x+1);
 
-	imageDef& def =  m_Images[hash];
-	def.uv = uv;
+	imageDef& def =  m_Images[name];
+	def.uv = uv + MVector2(PAD/2, PAD/2);
 	def.image = image;
+
 	return true;
     }
 
     void Atlas::Generate(bool clear)
     {
 	m_Atlas.create(M_UBYTE, m_Width, m_Height, m_BPP);
+	unsigned char col[]= {255, 255, 255, 255};
+	for(uint32 x = 0; x < m_Width; ++x)
+	    for(uint32 y = 0; y < m_Height; ++y) 
+		m_Atlas.writePixel(x, y, col);
 
 	for(imageMapIter iImage = m_Images.begin(); 
 	    iImage != m_Images.end(); 
@@ -254,11 +262,10 @@ namespace minged
 
     bool Atlas::GetUVs(MVector2* uv, const char* image)
     {
-	uint32 hash = minged::util::Hash(image);
-	if(m_Images.find(hash) == m_Images.end())
+	if(m_Images.find(image) == m_Images.end())
 	    return false;
 
-	imageDef& def = m_Images[hash];
+	imageDef& def = m_Images[image];
         uv[0].x = def.uv.x / (float)m_Width;
         uv[0].y = def.uv.y / (float)m_Height;
 	uv[1].x = (def.uv.x + (float)def.image->getWidth()) / (float)m_Width;
@@ -270,13 +277,38 @@ namespace minged
     {
 	uint32 _x = image.uv.x;
 	uint32 _y = image.uv.y;
-	for(uint32 x = 0; x < image.image->getWidth(); ++x)
-	    for(uint32 y = 0; y < image.image->getHeight(); ++y)
+	uint32 h = image.image->getHeight();
+	uint32 w = image.image->getWidth();
+	unsigned char col[]= {255, 255, 255, 255};
+	for(uint32 x = 0; x < w; ++x)
+	    for(uint32 y = 0; y < h; ++y)
 	    {
-		unsigned char col[] = { 255, 255, 255, 255 };
 		image.image->readPixel(x, y, col);
+		/*col[0] = _x % 256;
+		col[1] = _y % 256;
+		col[2] = 255;
+		col[3] = 255;*/
 		m_Atlas.writePixel(_x+x, _y+y, col);
 	    }
+
+	// got to write padding too
+	for(uint32 i = 1; i <= PAD/2; ++i)
+	{
+	    for(uint32 x = 0; x < w; ++x)
+	    {
+		image.image->readPixel(x, 0, col);
+		m_Atlas.writePixel(_x+x, _y-i, col);
+		image.image->readPixel(x, h-1, col);
+		m_Atlas.writePixel(_x+x, _y+i+h-1, col);
+	    }
+	    for(uint32 y = 0; y < h; ++y)
+	    {
+		image.image->readPixel(0, y, col);
+		m_Atlas.writePixel(_x-i, _y+y, col);
+		image.image->readPixel(w-1, y, col);
+		m_Atlas.writePixel(_x+i+w-1, _y+y, col);
+	    }
+	}
     }
 
 };

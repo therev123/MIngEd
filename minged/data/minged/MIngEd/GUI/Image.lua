@@ -7,6 +7,7 @@ class("GUI.Image")
 		 self.name = name
 		 self.id = atlas:addImage(name)
 		 self.atlas = atlas
+		 if not self.id then print("Unable to add " .. name) end
 	      end,
 
    destroy = function(self)
@@ -16,7 +17,7 @@ class("GUI.Image")
    render = function(self, quad)	       
 	       self.atlas:select()
 	       local uv1, uv2 = self.atlas:getUVs(self.name)
-	       
+
 	       RendererAddQuad( 
 		  { quad.left,     quad.top},
 		  {     uv1.x,        uv1.y},

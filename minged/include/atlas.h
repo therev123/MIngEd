@@ -23,7 +23,7 @@ public:
     void Select();
 private:
     typedef struct _imageDef imageDef;
-    typedef std::map<uint32, imageDef> imageMap;
+    typedef std::map<std::string, imageDef> imageMap;
     typedef imageMap::iterator         imageMapIter;
 
     void WriteImage(imageDef& image);

@@ -46,7 +46,7 @@ class("GUI.Manager")
 	    end,
 
    getImage = function(self, name)
-		 return self.images[name]
+		 return self.images["gui/" .. name]
 	      end,
 
    addElement = function(self, elem)

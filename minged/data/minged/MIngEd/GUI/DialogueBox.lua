@@ -13,20 +13,20 @@ class("GUI.DialogueBox")
    quad;
    scale;
    __init__ = function(self, quad, scale)
-		 local img = MIngEd.GUI.getManager():getImage("minged/test.png")
+		 local gui = MIngEd.GUI.getManager()
 		 self.scale = scale or 1.0
 		 -- top
-		 self.tl = img
-		 self.tm = img
-		 self.tr = img
+		 self.tl = gui:getImage("tl.png")
+		 self.tm = gui:getImage("tm.png")
+		 self.tr = gui:getImage("tr.png")
 		 -- center
-		 self.cl = img
-		 self.cm = img
-		 self.cr = img
-		 -- botto
-		 self.bl = img
-		 self.bm = img
-		 self.br = img
+		 self.cl = gui:getImage("cl.png")
+		 self.cm = gui:getImage("cm.png")
+		 self.cr = gui:getImage("cr.png")
+		 -- bottom
+		 self.bl = gui:getImage("bl.png")
+		 self.bm = gui:getImage("bm.png")
+		 self.br = gui:getImage("br.png")
 
 		 self.quad = quad
 		 
