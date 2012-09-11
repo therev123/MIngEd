@@ -19,3 +19,7 @@ dofile("MEntity.lua")
 -- inherited entity types
 dofile("MCamera.lua")
 dofile("MPhysics.lua")
+
+-- Input
+dofile("MMouse.lua")
+dofile("MKeyboard.lua")

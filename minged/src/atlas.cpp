@@ -120,6 +120,8 @@ namespace minged
     {
 	MVector2 uv;
 	MImage*  image;
+	uint32   width;
+	uint32   height;
     } imageDef;
 
     Atlas::Atlas(int maxSize, int bpp)
@@ -205,6 +207,8 @@ namespace minged
 	imageDef& def =  m_Images[name];
 	def.uv = uv + MVector2(PAD/2, PAD/2);
 	def.image = image;
+	def.width = image->getWidth();
+	def.height = image->getHeight();
 
 	return true;
     }
@@ -268,8 +272,8 @@ namespace minged
 	imageDef& def = m_Images[image];
         uv[0].x = def.uv.x / (float)m_Width;
         uv[0].y = def.uv.y / (float)m_Height;
-	uv[1].x = (def.uv.x + (float)def.image->getWidth()) / (float)m_Width;
-	uv[1].y = (def.uv.y + (float)def.image->getHeight()) / (float)m_Height;
+	uv[1].x = (def.uv.x + (float)def.width) / (float)m_Width;
+	uv[1].y = (def.uv.y + (float)def.height) / (float)m_Height;
 	return true;
     }
 

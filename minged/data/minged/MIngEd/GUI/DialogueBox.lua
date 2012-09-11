@@ -33,6 +33,10 @@ class("GUI.DialogueBox")
 		 MIngEd.GUI.getManager():addElement(self)
 	      end,
 
+   setQuad = function(self, quad)
+		self.quad = quad
+	     end,
+
    render = function(self)
 	       -- for now, just use quad
 	       local quad = self.quad

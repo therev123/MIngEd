@@ -12,12 +12,14 @@ class("GUI.Manager")
    atlas;
    images = {};
    elements = {};
+   font;
    __init__ = function(self)
 		 -- register
 		 MIngEd.getSystem():manage(self)
 	      end,
 
    init = function(self)
+	     self.font = GUI.Font()
 	     if self.atlas then self.atlas:destroy() end
 	     self.atlas = MIngEd.Atlas()
 	     self.images = {}
@@ -25,6 +27,8 @@ class("GUI.Manager")
 		self.images[v] = GUI.Image(v, self.atlas)
 	     end
 	     self.atlas:generate()
+
+	     getMMouse():addObserver(self)
 	  end,
 
    destroy = function(self)
@@ -43,6 +47,10 @@ class("GUI.Manager")
 	       for i,v in ipairs(self.elements) do
 		  if v.render then v:render() end
 	       end
+
+	       if self.mouse then
+		  self.font:print(self.mouse.button, self.mouse.position.x, self.mouse.position.y)
+	       end
 	    end,
 
    getImage = function(self, name)
@@ -52,6 +60,15 @@ class("GUI.Manager")
    addElement = function(self, elem)
 		   table.insert(self.elements, elem)
 		end,
+
+   onMouseButton = function(self, button, state)
+		      print(button, state)
+		      self.mouse = 
+			 {
+			 button = button,
+			 position = getMMouse():getPos()
+		      }
+		   end,
 }
 
 document[[Manager for keeping GUI updated and rendering]](GUI.Manager)
@@ -65,3 +82,4 @@ MIngEd.GUI.getManager = document[[Returns the MIngEd GUI Manager singleton]](
 
 dofile("Image.lua")
 dofile("DialogueBox.lua")
+dofile("Font.lua")

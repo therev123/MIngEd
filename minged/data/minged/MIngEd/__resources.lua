@@ -11,3 +11,11 @@ resources.images =
 "gui/bm.png",
 "gui/br.png"
 }
+
+-- fonts
+dofile("gui/fonts.lua")
+
+resources.fonts = 
+{
+system = systemFontDef
+}

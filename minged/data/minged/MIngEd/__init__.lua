@@ -10,6 +10,8 @@ require("GUI")
 MIngEd.init = 
    document[[Initialise the MIngEd system]](
    function()
+      MIngEd.getSystem():manage(getMMouse())
+      MIngEd.getSystem():manage(getMKeyboard())
       MIngEd.getSystem():init()
    end
 )
