@@ -1,0 +1,62 @@
+--- trunk/dev/Maratis/Common/MFileManager/MPackageManagerNPK.cpp	(revision 126)
++++ trunk/dev/Maratis/Common/MFileManager/MPackageManagerNPK.cpp	(working copy)
+@@ -34,7 +34,7 @@
+ #include <npk.h>
+ #include <npk_dev.h>
+ 
+-#define M_MAX_PACKAGES 1
++#define M_MAX_PACKAGES 10
+ 
+ int teakey[4] = { 0,0,0,0 };
+ 
+@@ -145,11 +145,14 @@
+ 	
+ 	if(strstr(mode, "w") != 0)
+ 		return MStdFile::getNew(path, mode);
+-	
++
+ 	// look within the package for a file with the requested name
+ 	if(MPackageEnt ent = engine->getPackageManager()->findEntity(localFilename))
+ 		return MPackageFile::getNew(ent);
+-	
++
++	if(previousHook)
++	    return previousHook->open(path, mode);
++
+ 	// give up, just look for a new file using stdio
+ 	return MStdFile::getNew(path, mode);
+ }
+@@ -180,9 +183,19 @@
+ 
+ void MPackageManagerNPK::init()
+ {
++    npk_io_open_func((npk_open_func)M_fopen);
++    npk_io_close_func((npk_close_func)M_fclose);
++    npk_io_read_func((npk_read_func)M_fread);
++    npk_io_write_func((npk_write_func)M_fwrite);
++    npk_io_seek_func((npk_seek_func)M_fseek);
++    npk_io_tell_func((npk_tell_func)M_ftell);
++    npk_io_rewind_func((npk_rewind_func)M_rewind);
++
++
+ 	if(! m_fileOpenHook)
+ 	{
+ 		m_fileOpenHook = new MPackageFileOpenHook;
++		m_fileOpenHook->previousHook = M_getFileOpenHook();
+ 		
+ 		MPackageNPK** packages = new MPackageNPK*[M_MAX_PACKAGES];
+ 		m_packages = (MPackage*)packages;
+@@ -200,7 +213,7 @@
+ 	if(m_fileOpenHook)
+ 	{
+ 		if(M_getFileOpenHook() == m_fileOpenHook)
+-			M_registerFileOpenHook(0);
++			M_registerFileOpenHook(m_fileOpenHook->previousHook);
+ 		SAFE_DELETE(m_fileOpenHook);
+ 	}
+ 	
+@@ -350,4 +363,4 @@
+ 	// loaded the package, now save it for later access
+ 	m_packages[pkgNum] = pack;
+ 	return pack;
+-}+}

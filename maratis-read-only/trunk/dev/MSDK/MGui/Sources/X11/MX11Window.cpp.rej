@@ -1,0 +1,45 @@
+--- trunk/dev/MSDK/MGui/Sources/X11/MX11Window.cpp	(revision 126)
++++ trunk/dev/MSDK/MGui/Sources/X11/MX11Window.cpp	(working copy)
+@@ -30,6 +30,7 @@
+ //========================================================================
+ 
+ 
++#include "../../Includes/MGui.h"
+ #include "../../Includes/MWindow.h"
+ 
+ #include <stdlib.h>
+@@ -39,12 +40,12 @@
+ #include <X11/extensions/xf86vmode.h>
+ #include <GL/gl.h>
+ #include <GL/glx.h>
++#include <unistd.h>
+ 
+ #ifndef WIN32
+         #include <unistd.h>
+ #endif
+ 
+-
+ // start time
+ static struct timeval startTime;
+ 
+@@ -254,6 +255,20 @@
+ 	return currentDirectory;
+ }
+ 
++const char* MWindow::getUserDirectory(void)
++{
++  static char dir[0xff];
++  snprintf(dir, 0xff, "%s/.Maratis/", getenv("HOME"));
++  return dir;
++}
++
++const char* MWindow::getSystemDirectory(void)
++{
++  static char dir[0xff];
++  snprintf(dir, 0xff, "%s/", getenv("MSDKDIR"));
++  return dir;
++}
++
+ void MWindow::setCursorPos(int x, int y)
+ {
+ 	XWarpPointer(display, None, window, 0, 0, 0, 0, x, y);

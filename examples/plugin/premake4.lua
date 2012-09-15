@@ -41,7 +41,11 @@ solution "Example"
 			["MCore/*"] = os.getenv("MSDKDIR") .. "SDK/MCore/Includes/**.h",
 			["MEngine/*"] = os.getenv("MSDKDIR") .. "SDK/MEngine/Includes/**.h",
 			["Game/*"] = { "**.h", "**.cpp" }
-		}
+		}		
+		
+		prebuildcommands("Mnpk example.npk data")
+		prebuildcommands("MEmbedder example.npk example_npk.h example_npk")
+
 		
 		-- link to Maratis
 		links { "MCore", "MEngine", "MGui" }

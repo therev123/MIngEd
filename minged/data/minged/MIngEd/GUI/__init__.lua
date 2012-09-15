@@ -47,10 +47,6 @@ class("GUI.Manager")
 	       for i,v in ipairs(self.elements) do
 		  if v.render then v:render() end
 	       end
-
-	       if self.mouse then
-		  self.font:print(self.mouse.button, self.mouse.position.x, self.mouse.position.y)
-	       end
 	    end,
 
    getImage = function(self, name)
@@ -62,12 +58,13 @@ class("GUI.Manager")
 		end,
 
    onMouseButton = function(self, button, state)
-		      print(button, state)
-		      self.mouse = 
-			 {
-			 button = button,
-			 position = getMMouse():getPos()
-		      }
+		      for i=#self.elements, 1, -1 do
+			 if self.elements.mouseEvent then
+			    self.elements:mouseEvent(state, 
+						     getMMouse():getPos(),
+						     button)
+			 end
+		      end
 		   end,
 }
 

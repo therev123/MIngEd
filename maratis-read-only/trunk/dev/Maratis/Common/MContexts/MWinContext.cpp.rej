@@ -1,0 +1,19 @@
+--- trunk/dev/Maratis/Common/MContexts/MWinContext.cpp	(revision 126)
++++ trunk/dev/Maratis/Common/MContexts/MWinContext.cpp	(working copy)
+@@ -60,3 +60,16 @@
+ 	MWindow * window = MWindow::getInstance();
+ 	return window->getSystemTick();
+ }
++	
++// plugin directories
++const char* MWinContext::getUserDirectory(void)
++{
++  MWindow * window = MWindow::getInstance();
++  return window->getUserDirectory();
++}
++
++const char* MWinContext::getSystemDirectory(void)
++{
++  MWindow * window = MWindow::getInstance();
++  return window->getSystemDirectory();
++}

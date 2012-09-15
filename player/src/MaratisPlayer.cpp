@@ -138,6 +138,9 @@ void MaratisPlayer::start(void)
 		engine->getFontLoader()->addLoader(M_loadFont); // font loader
 		engine->getFontLoader()->addLoader(M_loadBinFont); // bin font loader
 
+		// savers
+		engine->getImageSaver()->addLoader(M_saveImage);
+
 		// add behaviors
 		engine->getBehaviorManager()->addBehavior(MBLookAt::getStaticName(), M_OBJECT3D_CAMERA, MBLookAt::getNew);
 		engine->getBehaviorManager()->addBehavior(MBFollow::getStaticName(), M_OBJECT3D, MBFollow::getNew);

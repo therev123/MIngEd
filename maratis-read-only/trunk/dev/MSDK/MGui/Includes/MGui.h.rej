@@ -1,0 +1,70 @@
+--- trunk/dev/MSDK/MGui/Includes/MGui.h	(revision 126)
++++ trunk/dev/MSDK/MGui/Includes/MGui.h	(working copy)
+@@ -32,6 +32,25 @@
+ #define _M_GUI_H
+ 
+ 
++#ifdef WIN32
++
++	// M_GUI_EXPORT
++	#if defined(MGUI_DLL)
++		#define M_GUI_EXPORT __declspec( dllexport )
++	#elif defined(MGUI_STATIC)
++		#define M_GUI_EXPORT
++	#else
++		#define M_GUI_EXPORT __declspec( dllimport )
++	#endif
++
++#else
++
++	// M_GUI_EXPORT
++	#define M_GUI_EXPORT
++
++#endif
++
++
+ // variable types
+ enum M_VAR_TYPE
+ {
+@@ -70,12 +89,15 @@
+ #include "MGuiFileBrowser.h"
+ 
+ 
++typedef bool(*imageLoadFunc)(const char*, void*);
++
+ // global functions
+ void set2dMode(MRenderingContext * render);
++void setImageLoader(imageLoadFunc func);
+ 
+ 
+ // gui texture
+-class MGuiTexture
++class M_GUI_EXPORT MGuiTexture
+ {
+ public:
+ 
+@@ -84,7 +106,7 @@
+ };
+ 
+ // MGui
+-class MGui
++class M_GUI_EXPORT MGui
+ {
+ public:
+ 
+@@ -112,11 +134,15 @@
+ 	// windows
+ 	std::vector <MGuiWindow *> m_windows;
+ 
++	MDataLoader m_imageLoader;
++
+ public:
+ 
+ 	// rendering context
+ 	void setRenderingContext(MRenderingContext * render){ m_render = render; }
+ 	MRenderingContext * getRenderingContext(void){ return m_render; }
++	
++	MDataLoader * getImageLoader(void){ return &m_imageLoader; }
+ 
+ 	// windows
+ 	void unHighLightAllWindows(void);

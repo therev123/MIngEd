@@ -1,0 +1,12 @@
+--- trunk/dev/Maratis/Common/MContexts/MGLContext.h	(revision 126)
++++ trunk/dev/Maratis/Common/MContexts/MGLContext.h	(working copy)
+@@ -248,6 +248,9 @@
+ 	void enableBlending(void);
+ 	void disableBlending(void);
+ 	void setBlendingMode(M_BLENDING_MODES mode);
++
++	// points
++	void setPointSize(float min, float max, float threshold);
+ };
+ 
+ #endif

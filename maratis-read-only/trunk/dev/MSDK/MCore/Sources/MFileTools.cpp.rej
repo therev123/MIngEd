@@ -1,0 +1,15 @@
+--- trunk/dev/MSDK/MCore/Sources/MFileTools.cpp	(revision 126)
++++ trunk/dev/MSDK/MCore/Sources/MFileTools.cpp	(working copy)
+@@ -301,10 +301,10 @@
+ 
+ MFile* M_fopen(const char* path, const char* mode)
+ {
+-	MFile* rtn;
++	MFile* rtn = NULL;
+ 	if(s_fileOpenHook)
+ 		rtn = s_fileOpenHook->open(path, mode);
+-	else
++	if(rtn == NULL)
+ 		rtn = MStdFile::getNew(path, mode);
+ 	
+ 	// if all loading failed, return 0

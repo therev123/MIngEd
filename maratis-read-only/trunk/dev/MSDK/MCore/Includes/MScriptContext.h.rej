@@ -1,0 +1,10 @@
+--- trunk/dev/MSDK/MCore/Includes/MScriptContext.h	(revision 126)
++++ trunk/dev/MSDK/MCore/Includes/MScriptContext.h	(working copy)
+@@ -41,6 +41,7 @@
+ 
+ 	// run script
+ 	virtual void runScript(const char * filename) = 0;
++	virtual bool addScript(const char * filename) = 0;
+ 
+ 	// call function
+ 	virtual bool startCallFunction(const char* name) = 0;

@@ -1,0 +1,11 @@
+--- trunk/dev/MSDK/MGui/Includes/MGuiSlide.h	(revision 126)
++++ trunk/dev/MSDK/MGui/Includes/MGuiSlide.h	(working copy)
+@@ -32,7 +32,7 @@
+ #define _M_GUI_SLIDE_H
+ 
+ 
+-class MGuiSlide : public MGui2d
++class M_GUI_EXPORT MGuiSlide : public MGui2d
+ {
+ private:
+ 

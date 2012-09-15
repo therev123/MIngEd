@@ -34,8 +34,7 @@ class("MMouse")
 
 	       -- handle mouse buttons
 	       for k,v in pairs(self.buttons) do
-		  local pressed = onKeyDown(k)
-		  if pressed == true then
+		  if isKeyPressed(k) == true then
 		     if v == "up" or v == "released" then
 			self.buttons[k] = "pressed"
 			self:sendButtonMessage(k, "pressed")
@@ -60,6 +59,17 @@ class("MMouse")
    getDelta = function(self)
 		 return self.delta
 	      end,
+
+   getButton = function(self, button)
+		  button = button or "MOUSE_BUTTON1"
+		  return self.buttons[button]
+	       end,
+
+   isButtonPressed = function(self, button)
+			local state = self:getButton(button)
+			if state == "up" or state == "pressed" then
+			   return true else return false end
+		     end,
 
    addObserver = function(self, observer)
 		    table.insert(self.observers, observer)

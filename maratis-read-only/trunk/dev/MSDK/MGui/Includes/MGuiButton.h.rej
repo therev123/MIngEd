@@ -1,0 +1,11 @@
+--- trunk/dev/MSDK/MGui/Includes/MGuiButton.h	(revision 126)
++++ trunk/dev/MSDK/MGui/Includes/MGuiButton.h	(working copy)
+@@ -39,7 +39,7 @@
+ 	MGUI_BUTTON_GROUP,
+ };
+ 
+-class MGuiButton : public MGui2d
++class M_GUI_EXPORT MGuiButton : public MGui2d
+ {
+ private:
+ 

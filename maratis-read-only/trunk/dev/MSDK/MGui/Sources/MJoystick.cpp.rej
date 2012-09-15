@@ -1,0 +1,10 @@
+--- trunk/dev/MSDK/MGui/Sources/MJoystick.cpp	(revision 126)
++++ trunk/dev/MSDK/MGui/Sources/MJoystick.cpp	(working copy)
+@@ -28,6 +28,7 @@
+ //========================================================================
+ 
+ 
++#include "../Includes/MGui.h"
+ #include "../Includes/MJoystick.h"
+ 
+ 

@@ -1,0 +1,3 @@
+g#!/bin/bash
+
+$MSDKDIR/Bin/MTool $MSDKDIR/Scripts/MEmbedder.lua $*

@@ -1,0 +1,13 @@
+--- trunk/dev/Maratis/Common/MContexts/MWinContext.h	(revision 126)
++++ trunk/dev/Maratis/Common/MContexts/MWinContext.h	(working copy)
+@@ -51,6 +51,10 @@
+ 
+ 	// system tick
+ 	unsigned long getSystemTick(void);
++	
++	// plugin directories
++	const char* getUserDirectory(void);
++	const char* getSystemDirectory(void);
+ };
+ 
+-#endif+#endif

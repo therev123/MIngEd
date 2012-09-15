@@ -1,0 +1,51 @@
+--- 3rdparty/npk/src/npk.c	(revision 126)
++++ 3rdparty/npk/src/npk.c	(working copy)
+@@ -1,13 +1,13 @@
+ /*
+ 
+-    npk - General-Purpose File Packing Library
++    npk - neat package system
+     See README for copyright and license information.
+ 
+ */
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include <memory.h>
++#include <stddef.h>
+ #include <time.h>
+ #include <sys/stat.h>
+ #include "npk.h"
+@@ -283,10 +283,8 @@
+ 
+ npk_package_open_return_null_with_free:
+     if( pb )
+-        if( pb->handle_ > 0 )
+-            npk_close( pb->handle_ );
++        npk_package_close( pb );
+ 
+-    NPK_SAFE_FREE( pb );
+     return NULL;
+ }
+ 
+@@ -313,10 +311,8 @@
+ 
+ npk_package_open_return_null_with_free:
+     if( pb )
+-        if( pb->handle_ > 0 )
+-            npk_close( pb->handle_ );
++        npk_package_close( pb );
+ 
+-    NPK_SAFE_FREE( pb );
+     return NULL;
+ }
+ 
+@@ -609,6 +605,8 @@
+ 
+     if( eb->info_.flag_ & NPK_ENTITY_ENCRYPT_TEA )
+         tea_decode_buffer(buf, size, pb->teakey_, (pb->info_.version_ >= NPK_VERSION_ENCRYPTREMAINS));
++    if( eb->info_.flag_ & NPK_ENTITY_ENCRYPT_XXTEA )
++        xxtea_decode_buffer(buf, size, pb->teakey_, (pb->info_.version_ >= NPK_VERSION_ENCRYPTREMAINS));
+ 
+ #ifdef NPK_PLATFORM_WINDOWS
+     if( g_useCriticalSection )

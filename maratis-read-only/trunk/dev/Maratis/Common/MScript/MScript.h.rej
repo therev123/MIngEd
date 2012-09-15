@@ -1,0 +1,10 @@
+--- trunk/dev/Maratis/Common/MScript/MScript.h	(revision 126)
++++ trunk/dev/Maratis/Common/MScript/MScript.h	(working copy)
+@@ -60,6 +60,7 @@
+ 
+ 	// run script
+ 	void runScript(const char * filename);
++	bool addScript(const char * filename);
+ 
+ 	// call function
+ 	bool startCallFunction(const char* name);

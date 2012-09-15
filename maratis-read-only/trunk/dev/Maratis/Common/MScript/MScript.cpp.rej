@@ -1,0 +1,209 @@
+--- trunk/dev/Maratis/Common/MScript/MScript.cpp	(revision 126)
++++ trunk/dev/Maratis/Common/MScript/MScript.cpp	(working copy)
+@@ -30,10 +30,12 @@
+ 
+ #include "MScript.h"
+ 
++#include <list>
++#include <string>
+ 
+ char g_currentDirectory[256] = "";
++std::list<std::string> g_loadPath;
+ 
+-
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////
+ // Some frequently used macros
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////
+@@ -2204,31 +2206,78 @@
+ 	return 0;
+ }
+ 
++char* getFile(const char* filename)
++{
++    char* rtn = NULL;
++    for(std::list<std::string>::iterator iPath = g_loadPath.begin(); iPath != g_loadPath.end(); ++iPath)
++    {
++	// make global filename
++	char globalFilename[256];
++	getGlobalFilename(globalFilename, iPath->c_str(), filename);
++
++	if(isFileExist(globalFilename))
++	    rtn = readTextFile(globalFilename);
++
++	if(rtn)
++	{
++	    // do file and update current directory
++	    getRepertory(g_currentDirectory, globalFilename);
++	    g_loadPath.push_back(g_currentDirectory);
++	    return rtn;
++	}
++    }
++}
++
+ int doFile(lua_State * L)
+ {
+ 	if(! isFunctionOk(L, "doFile", 1))
+-		return 0;
+-
++	    return 0;
++	    
+ 	const char * filename = lua_tostring(L, 1);
+-
+-	// save current directory
+-	char current[256];
+-	strcpy(current, g_currentDirectory);
+ 	
+-	// make global filename
+-	char globalFilename[256];
+-	getGlobalFilename(globalFilename, g_currentDirectory, filename);
++	char * text = getFile(filename);
+ 
+-	// do file and update current directory
+-	getRepertory(g_currentDirectory, globalFilename);
+-	luaL_dofile(L, globalFilename);
++	if(!text) return 0;
+ 
+-	// set back to current
+-	strcpy(g_currentDirectory, current);
++	if(luaL_dostring(L, text) != 0)
++	    printf("ERROR lua script: \n %s\n", lua_tostring(L, -1));
++	else
++	    g_loadPath.pop_back();
++
++	SAFE_FREE(text);
++
+ 	return 0;
+ }
+ 
++// similar to dofile
++// should have lookups, so you don't end up calling twice (not that it matters much)
++// will first look for {param}/__init__.lua and then, failing that, {param}.lua
++int require(lua_State* L)
++{
++    if(!isFunctionOk(L, "require", 1))
++	return 0;
+ 
++    const char* filename = lua_tostring(L, 1);
++    char init[256];
++    snprintf(init, 256, "%s/__init__.lua", filename);
++    char file[256];
++    snprintf(file, 256, "%s.lua", filename);
++    char* text = getFile(init);
++    if(text == NULL)
++	text = getFile(file);
++
++    if(!text) return 0;
++
++    if(luaL_dostring(L, text) != 0)
++	printf("ERROR lua script: \n %s\n", lua_tostring(L, -1));
++    else
++	g_loadPath.pop_back();
++    SAFE_FREE(text);
++
++    return 0;
++}
++
++
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////
+ // Init
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////
+@@ -2236,7 +2285,7 @@
+ MScript::MScript(void):
+ m_isRunning(false)
+ {
+-	init();
++//    init();
+ }
+ 
+ MScript::~MScript(void)
+@@ -2248,6 +2297,8 @@
+ {
+ 	// create context
+ 	m_state = lua_open();
++	g_loadPath.clear();
++	g_loadPath.push_back("");
+ 
+ 	luaopen_base(m_state);
+ 	luaopen_table(m_state);
+@@ -2364,6 +2415,7 @@
+ 
+ 	// dofile
+ 	lua_register(m_state, "dofile", doFile);
++	lua_register(m_state, "require", require);
+ 
+ 	// quit
+ 	lua_register(m_state, "quit", quit);
+@@ -2404,9 +2456,10 @@
+ 	if(m_isRunning)
+ 	{
+ 		clear();
+-		init();
++		//	init();
+ 	}
+-
++	init();
++	
+ 	if(! filename)
+ 	{
+ 		m_isRunning = false;
+@@ -2430,6 +2483,7 @@
+ 	
+ 	// current directory
+ 	getRepertory(g_currentDirectory, filename);
++	g_loadPath.push_back(g_currentDirectory);
+ 	
+ 	// do string
+ 	if(luaL_dostring(m_state, text) != 0)
+@@ -2445,6 +2499,34 @@
+ 	m_isRunning = true;
+ }
+ 
++bool MScript::addScript(const char* filename)
++{
++    // save current directory
++    char current[256];
++    strcpy(current, g_currentDirectory);
++    
++    // make global filename
++    char globalFilename[256];
++    getGlobalFilename(globalFilename, g_currentDirectory, filename);
++    
++    // do file and update current directory
++    getRepertory(g_currentDirectory, globalFilename);
++
++    g_loadPath.push_back(g_currentDirectory);
++    char * text = readTextFile(globalFilename);
++    bool rtn = luaL_dostring(m_state, text) == 0;
++
++    if(!rtn)
++	printf("ERROR lua script: \n %s\n", lua_tostring(m_state, -1));
++    
++    // set back to current
++    g_loadPath.pop_back();
++    strcpy(g_currentDirectory, current);
++    m_isRunning = m_isRunning || rtn;
++    SAFE_FREE(text);
++    return rtn;
++}
++
+ bool MScript::startCallFunction(const char* name)
+ {
+ 	if(m_isRunning)
+@@ -2477,8 +2559,10 @@
+ 		endCallFunction();
+ }
+ 
+-void MScript::addFunction(const char * name, int (*function)(void)){
+-	m_functions[name] = function;
++void MScript::addFunction(const char * name, int (*_function)(void)){
++	m_functions[name] = _function;
++	if(m_isRunning)
++	    lua_register(m_state, name, function);
+ }
+ 
+ unsigned int MScript::getArgsNumber(void){
+@@ -2571,4 +2655,4 @@
+ 
+ void MScript::pushPointer(void* value){
+ 	lua_pushinteger(m_state, (lua_Integer)value);
+-}+}

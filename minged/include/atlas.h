@@ -21,6 +21,8 @@ public:
     bool GetUVs(MVector2* uv, const char* image);
 
     void Select();
+
+    MImage* GetImage() { return &m_Atlas; }
 private:
     typedef struct _imageDef imageDef;
     typedef std::map<std::string, imageDef> imageMap;

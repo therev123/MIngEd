@@ -1,0 +1,14 @@
+--- trunk/dev/MSDK/MEngine/Sources/MEngine.cpp	(revision 126)
++++ trunk/dev/MSDK/MEngine/Sources/MEngine.cpp	(working copy)
+@@ -87,6 +87,11 @@
+ 	m_systemContext = systemContext;
+ }
+ 
++void MEngine::setProfilerContext(MProfilerContext * profilerContext)
++{
++	m_profilerContext = profilerContext; 
++}
++
+ void MEngine::setPackageManager(MPackageManager * packageManager)
+ {
+ 	m_packageManager = packageManager;

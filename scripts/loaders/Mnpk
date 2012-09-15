@@ -1,0 +1,3 @@
+#!/bin/bash
+
+$MSDKDIR/Bin/MTool $MSDKDIR/Scripts/Mnpk.lua $*

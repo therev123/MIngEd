@@ -80,6 +80,30 @@ namespace minged
 	return 0;
     }
 
+    int ScriptAtlasImageWrite()
+    {
+	MEngine* engine = MEngine::getInstance();
+	MScriptContext* script = engine->getScriptContext();
+
+	MImage* image = (MImage*)script->getPointer(0);
+	const char* file = script->getString(1);
+
+	engine->getImageSaver()->loadData(file, image);
+	return 0;
+    }
+
+    int ScriptAtlasWrite()
+    {
+	MEngine* engine = MEngine::getInstance();
+	MScriptContext* script = engine->getScriptContext();
+
+	Atlas* atlas = (Atlas*)script->getPointer(0);
+	const char* file = script->getString(1);
+
+	engine->getImageSaver()->loadData(file, atlas->GetImage());
+	return 0;
+    }
+
     int ScriptAtlasGenerate()
     {
 	MEngine* engine = MEngine::getInstance();
@@ -142,8 +166,10 @@ namespace minged
 	script->addFunction("mingedAtlasGenerate", ScriptAtlasGenerate);
 	script->addFunction("mingedAtlasSelect", ScriptAtlasSelect);
 	script->addFunction("mingedAtlasGetUVs", ScriptAtlasGetUVs);
+	script->addFunction("mingedAtlasWrite", ScriptAtlasWrite);
 	script->addFunction("mingedImageDestroy", ScriptAtlasImageDestroy);
 	script->addFunction("mingedImageGetSize", ScriptAtlasImageGetSize);
+	script->addFunction("mingedImageWrite", ScriptAtlasImageWrite);
     }
 
     bool Atlas::AddImage(MImage* image, const char* name)

@@ -1,0 +1,11 @@
+--- trunk/dev/MSDK/MGui/Includes/MGuiMenu.h	(revision 126)
++++ trunk/dev/MSDK/MGui/Includes/MGuiMenu.h	(working copy)
+@@ -32,7 +32,7 @@
+ #define _M_GUI_MENU_H
+ 
+ 
+-class MGuiMenu : public MGui2d
++class M_GUI_EXPORT MGuiMenu : public MGui2d
+ {
+ private:
+ 

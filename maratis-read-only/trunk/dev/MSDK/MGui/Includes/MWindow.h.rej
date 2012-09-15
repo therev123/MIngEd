@@ -1,0 +1,18 @@
+--- trunk/dev/MSDK/MGui/Includes/MWindow.h	(revision 126)
++++ trunk/dev/MSDK/MGui/Includes/MWindow.h	(working copy)
+@@ -31,10 +31,11 @@
+ #ifndef _M_WINDOW_H
+ #define _M_WINDOW_H
+ 
+-#include <MWinEvents.h>
+-#include <MMouse.h>
+-#include <MKeyboard.h>
+-#include <MJoystick.h>
++#include "MWinEvents.h"
++#include "MGui.h"
++#include "MMouse.h"
++#include "MKeyboard.h"
++#include "MJoystick.h"
+ 
+ #ifdef WIN32
+ 	#include "WIN32/MWin32Window.h"
