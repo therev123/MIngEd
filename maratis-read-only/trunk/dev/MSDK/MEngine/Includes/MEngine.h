@@ -91,7 +91,7 @@ class MTextureRef;
 class MArmatureAnimRef;
 class MTexturesAnimRef;
 class MMaterialsAnimRef;
-
+class MIFileLoader;
 
 #include <MCore.h>
 
@@ -185,6 +185,9 @@ private:
 	MDataLoader m_materialsAnimLoader;
 	MDataLoader m_levelLoader;
 
+	// new loader style
+	std::map<std::string, MIFileLoader*> m_fileLoaders;
+
 	// data savers
 	MDataLoader m_imageSaver;
 
@@ -248,6 +251,9 @@ public:
 	MDataLoader * getLevelLoader(void){ return &m_levelLoader; }
 
 	MDataLoader * getImageSaver(void){ return &m_imageSaver; }
+
+	void addFileLoader(const char* ext, MIFileLoader* loader);
+	void* loadFile(const char* file, void* data = 0);
 
 	// behavior manager
 	inline MBehaviorManager * getBehaviorManager(void){ return &m_behaviorManager; }

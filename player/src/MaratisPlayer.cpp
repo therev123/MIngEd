@@ -49,7 +49,7 @@
 #include <MRenderers/MFixedRenderer.h>
 
 #include "maratis_npk.h"
-
+#include "configFile.h"
 
 MaratisPlayer::MaratisPlayer(void):
 m_gamePlugin(NULL),
@@ -137,6 +137,7 @@ void MaratisPlayer::start(void)
 		engine->getLevelLoader()->addLoader(xmlLevelLoad); // level loader
 		engine->getFontLoader()->addLoader(M_loadFont); // font loader
 		engine->getFontLoader()->addLoader(M_loadBinFont); // bin font loader
+		engine->addFileLoader(".yaml", new ConfigFileLoader);
 
 		// savers
 		engine->getImageSaver()->addLoader(M_saveImage);

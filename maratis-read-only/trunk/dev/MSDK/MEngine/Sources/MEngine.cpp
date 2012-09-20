@@ -30,6 +30,8 @@
 
 #include "../Includes/MEngine.h"
 
+#include "MCore.h"
+#include "MConfigFile.h"
 
 MEngine::MEngine(void):
 m_isActive(true),
@@ -95,6 +97,20 @@ void MEngine::setProfilerContext(MProfilerContext * profilerContext)
 void MEngine::setPackageManager(MPackageManager * packageManager)
 {
 	m_packageManager = packageManager;
+}
+
+void MEngine::addFileLoader(const char* ext, MIFileLoader* loader)
+{
+    m_fileLoaders[ext] = loader;
+}
+
+void* MEngine::loadFile(const char* file, void* data)
+{
+    std::map<std::string, MIFileLoader*>::iterator iFL;
+    for(iFL = m_fileLoaders.begin(); iFL != m_fileLoaders.end(); iFL++)
+	if(strstr(file, iFL->first.c_str()) != 0)
+	    return iFL->second->load(file, data);
+    return NULL;
 }
 
 void MEngine::setLevel(MLevel * level)
