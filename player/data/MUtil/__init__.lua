@@ -23,3 +23,15 @@ dofile("MPhysics.lua")
 -- Input
 dofile("MMouse.lua")
 dofile("MKeyboard.lua")
+
+function min(x,y)
+   if x < y then return x else return y end
+end
+
+function max(x,y)
+   if x > y then return x else return y end
+end
+
+function clamp(val, _min, _max)
+   return min(max(val, _min), _max)
+end

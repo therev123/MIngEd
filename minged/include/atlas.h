@@ -6,17 +6,19 @@
 
 #include <map>
 
+#define MINGED_ATLAS_DEFAULT_NAME "atlases/atlas.png"
+
 namespace minged
 {
 
 class Atlas
 {
 public:
-    Atlas(int maxSize = 1024, int bpp = 4);
+    Atlas(int maxSize = 256, int bpp = 4, const char* name = MINGED_ATLAS_DEFAULT_NAME);
 
     static void RegisterScript(MScriptContext* script);
 
-    bool AddImage(MImage* image, const char* name);
+    MImage* AddImage(MImage* image, const char* name);
     void Generate(bool clear);
     bool GetUVs(MVector2* uv, const char* image);
 

@@ -9,7 +9,13 @@ resources.images =
 "gui/cr.png",
 "gui/bl.png",
 "gui/bm.png",
-"gui/br.png"
+"gui/br.png",
+"gui/tile.png",
+"gui/view.png",
+
+"gui/button/inactiveleft.png",
+"gui/button/inactivecenter.png",
+"gui/button/inactiveright.png"
 }
 
 -- fonts

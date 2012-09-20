@@ -1,4 +1,4 @@
-class("GUI.DialogueBox")
+class("GUI.Window")
 {
    tl;
    tm;
@@ -31,7 +31,13 @@ class("GUI.DialogueBox")
 		 self.quad = quad
 		 
 		 MIngEd.GUI.getManager():addElement(self)
+		 
+		 if self.init then self:init() end
 	      end,
+
+   destroy = function(self)
+		MIngEd.GUI.getManager():removeElement(self)
+	     end,
 
    setQuad = function(self, quad)
 		self.quad = quad
@@ -43,9 +49,9 @@ class("GUI.DialogueBox")
 	       local scale = self.scale -- can apply global scale too?
 
 	       -- draw top left
-	       local w, h = self.tl:getSize()
-	       w = w * scale
-	       h = h * scale
+	       local size = self.tl:getSize()
+	       local w = size.x * scale
+	       local h = size.y * scale
 	       local tlq = MIngEd.Quad(quad.left, 
 				       quad.top,
 				       quad.left + w,
@@ -53,9 +59,9 @@ class("GUI.DialogueBox")
 	       self.tl:render(tlq)
 	       
 	       -- draw top right
-	       w, h = self.tr:getSize()
-	       w = w * scale
-	       h = h * scale
+	       size = self.tr:getSize()
+	       w = size.x * scale
+	       h = size.y * scale
 	       local trq = MIngEd.Quad(quad.right - w,
 				       quad.top,
 				       quad.right,
@@ -63,9 +69,9 @@ class("GUI.DialogueBox")
 	       self.tr:render(trq)
 	       
 	       -- draw top middle
-	       w, h = self.tm:getSize()
-	       w = w * scale
-	       h = h * scale
+	       size = self.tm:getSize()
+	       w = size.x * scale
+	       h = size.y * scale
 	       local tmq = MIngEd.Quad(tlq.right,
 				       quad.top,
 				       trq.left,
@@ -73,9 +79,9 @@ class("GUI.DialogueBox")
 	       self.tm:render(tmq)
 
 	       -- draw bottom left
-	       w, h = self.bl:getSize()
-	       w = w * scale
-	       h = h * scale
+	       size = self.bl:getSize()
+	       w = size.x * scale
+	       h = size.y * scale
 	       local blq = MIngEd.Quad(quad.left,
 				       quad.bottom - h,
 				       quad.left + w,
@@ -83,9 +89,9 @@ class("GUI.DialogueBox")
 	       self.bl:render(blq)
 
 	       -- draw bottom right
-	       w, h = self.br:getSize()
-	       w = w * scale
-	       h = h * scale
+	       size = self.br:getSize()
+	       w = size.x * scale
+	       h = size.y * scale
 	       local brq = MIngEd.Quad(quad.right - w,
 				       quad.bottom - h,
 				       quad.right,
@@ -93,9 +99,9 @@ class("GUI.DialogueBox")
 	       self.br:render(brq)
 
 	       -- draw bottom middle
-	       w, h = self.bm:getSize()
-	       w = w * scale
-	       h = h * scale
+	       size = self.bm:getSize()
+	       w = size.x * scale
+	       h = size.y * scale
 	       local bmq = MIngEd.Quad(blq.right,
 				       quad.bottom - h,
 				       brq.left,
@@ -103,9 +109,9 @@ class("GUI.DialogueBox")
 	       self.bm:render(bmq)
 
 	       -- draw center left
-	       w, h = self.cl:getSize()
-	       w = w * scale
-	       h = h * scale
+	       size = self.cl:getSize()
+	       w = size.x * scale
+	       h = size.y * scale
 	       local clq = MIngEd.Quad(quad.left,
 				       tlq.bottom,
 				       quad.left + w,
@@ -113,9 +119,9 @@ class("GUI.DialogueBox")
 	       self.cl:render(clq)
 
 	       -- draw center right
-	       w, h = self.cr:getSize()
-	       w = w * scale
-	       h = h * scale
+	       size = self.cr:getSize()
+	       w = size.x * scale
+	       h = size.y * scale
 	       local crq = MIngEd.Quad(quad.right - w,
 				       trq.bottom,
 				       quad.right,
@@ -128,5 +134,7 @@ class("GUI.DialogueBox")
 				       brq.left,
 				       brq.top)
 	       self.cm:render(cmq)
+	       
+	       if self.onWindowRender then self:onWindowRender() end
 	    end,
 }

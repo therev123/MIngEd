@@ -1054,6 +1054,30 @@ int rayHit(lua_State * L)
 	return 0;
 }
 
+int getRayHitObject(lua_State * L)
+{
+	if(! isFunctionOk(L, "rayHit", 2))
+		return 0;
+	
+	int nbArguments = lua_gettop(L);
+	
+	MVector3 start, end;
+	if(getVector3(L, 1, &start) && getVector3(L, 2, &end))
+	{
+		MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+		
+		unsigned int collisionObjId;
+		MVector3 point;
+		
+		// ray test
+		if(physics->isRayHit(start, end, &collisionObjId, &point))
+		{
+		    
+		}
+	}
+	return 0;
+}
+
 int isKeyPressed(lua_State * L)
 {
 	MInputContext * input = MEngine::getInstance()->getInputContext();
@@ -1941,6 +1965,18 @@ int disableRenderToTexture(lua_State * L)
 	return 0;
 }
 
+int getScreenSize(lua_State * L)
+{
+    if(! isFunctionOk(L, "getScreenSize", 0))
+	return 0;
+
+    unsigned int w, h;
+    MEngine::getInstance()->getSystemContext()->getScreenSize(&w, &h);
+    lua_pushinteger(L, (lua_Integer)w);
+    lua_pushinteger(L, (lua_Integer)h);
+    return 2;
+}
+
 int getBehaviorVariable(lua_State * L)
 {
 	if(! isFunctionOk(L, "getBehaviorVariable", 3))
@@ -2424,6 +2460,7 @@ void MScript::init(void)
 	lua_register(m_state, "disableCameraLayer",	    disableCameraLayer);
 	lua_register(m_state, "enableRenderToTexture",  enableRenderToTexture);
 	lua_register(m_state, "disableRenderToTexture", disableRenderToTexture);
+	lua_register(m_state, "getScreenSize",          getScreenSize);
 
 	// text
 	lua_register(m_state, "getText", getText);
@@ -2481,6 +2518,7 @@ int MScript::function(lua_State * L)
 void MScript::runScript(const char * filename)
 {
 	clear();
+	init();
 
 	if(! filename)
 	{
@@ -2506,8 +2544,6 @@ void MScript::runScript(const char * filename)
 		m_isRunning = false;
 		return;
 	}
-	
-	init();
 	
 	// do string
 	if(luaL_dostring(m_state, text) != 0)

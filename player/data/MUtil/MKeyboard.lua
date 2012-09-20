@@ -42,7 +42,7 @@ class("MKeyboard")
 
    isKeyPressed = function(self, key)
 			local state = self:getKey(key)
-			if state == "up" or state == "pressed" then
+			if state == "down" or state == "pressed" then
 			   return true else return false end
 		     end,
 
@@ -53,7 +53,7 @@ class("MKeyboard")
    sendKeyMessage = function(self, key, state)
 			  for k,v in pairs(self.observers) do
 			     if v.onKeyboard then 
-				v:onKeyboard(button, state) 
+				v:onKeyboard(key, state) 
 			     end
 			  end
 		    end,

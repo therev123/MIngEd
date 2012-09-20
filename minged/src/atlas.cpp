@@ -14,8 +14,11 @@ namespace minged
     {
 	MEngine* engine = MEngine::getInstance();
 	MScriptContext* script = engine->getScriptContext();
+
+	unsigned int size = script->getInteger(0);
+	const char* name = script->getString(1);
 	
-	script->pushPointer(new Atlas);
+	script->pushPointer(new Atlas(size, 4, name));
 	return 1;
     }
 
@@ -40,13 +43,13 @@ namespace minged
 	const char* path = script->getString(1);
 
 	MImage* img = new MImage;
-	if( engine->getImageLoader()->loadData(path, img) )
+	if( engine->getImageLoader()->loadData(path, img) && atlas)
 	{
-	    if(atlas && atlas->AddImage(img, path))
-	    {
-		script->pushPointer(img);
-		return 1;
-	    }
+	    MImage* ref = atlas->AddImage(img, path);
+	    script->pushPointer(ref);
+	    if(ref != img)
+		delete img;
+	    return ref != NULL ? 1 : 0;
 	}
 
 	delete img;
@@ -62,6 +65,21 @@ namespace minged
 	if(image)
 	    delete image;
 
+	return 0;
+    }
+    
+    int ScriptAtlasGetSize()
+    { 
+	MEngine* engine = MEngine::getInstance();
+	MScriptContext* script = engine->getScriptContext();
+	Atlas* atlas = (Atlas*)script->getPointer(0);
+	if(atlas)
+	{
+	    MImage* image = atlas->GetImage();
+	    script->pushInteger(image->getWidth());
+	    script->pushInteger(image->getHeight());
+	    return 2;
+	}
 	return 0;
     }
 
@@ -148,7 +166,7 @@ namespace minged
 	uint32   height;
     } imageDef;
 
-    Atlas::Atlas(int maxSize, int bpp)
+    Atlas::Atlas(int maxSize, int bpp, const char* name)
     : m_MaxSize(maxSize)
     , m_BPP(bpp)
     , m_Width(0)
@@ -167,15 +185,16 @@ namespace minged
 	script->addFunction("mingedAtlasSelect", ScriptAtlasSelect);
 	script->addFunction("mingedAtlasGetUVs", ScriptAtlasGetUVs);
 	script->addFunction("mingedAtlasWrite", ScriptAtlasWrite);
+	script->addFunction("mingedAtlasGetSize", ScriptAtlasGetSize);
 	script->addFunction("mingedImageDestroy", ScriptAtlasImageDestroy);
 	script->addFunction("mingedImageGetSize", ScriptAtlasImageGetSize);
 	script->addFunction("mingedImageWrite", ScriptAtlasImageWrite);
     }
 
-    bool Atlas::AddImage(MImage* image, const char* name)
+    MImage* Atlas::AddImage(MImage* image, const char* name)
     {
 	if(m_Images.find(name) != m_Images.end())
-	    return false;
+	    return m_Images[name].image;
 	
 
         if(m_Layout == NULL)
@@ -199,7 +218,7 @@ namespace minged
 	    // look for the next empty pixel
 	    while(m_Layout[i] && i < fail) ++i;
 	    if(i == fail)
-		return false;
+		return NULL;
 
 	    uv.x = i / m_MaxSize;
 	    uv.y = i % m_MaxSize;
@@ -209,7 +228,7 @@ namespace minged
 	    for(uint32 x = 0; x < w + PAD; ++x)
 		for(uint32 y = 0; y < h + PAD; ++y)
 		    if(m_Layout[(m_MaxSize * ((uint32)uv.y+y)) + (uint32)uv.x+x])
-			found = false; // :(
+			found = NULL; // :(
 	    ++i;
 	}
 
@@ -236,13 +255,13 @@ namespace minged
 	def.width = image->getWidth();
 	def.height = image->getHeight();
 
-	return true;
+	return image;
     }
 
     void Atlas::Generate(bool clear)
     {
 	m_Atlas.create(M_UBYTE, m_Width, m_Height, m_BPP);
-	unsigned char col[]= {255, 255, 255, 255};
+	unsigned char col[]= {255, 255, 255, 0};
 	for(uint32 x = 0; x < m_Width; ++x)
 	    for(uint32 y = 0; y < m_Height; ++y) 
 		m_Atlas.writePixel(x, y, col);

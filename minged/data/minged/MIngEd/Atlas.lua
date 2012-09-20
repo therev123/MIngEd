@@ -2,9 +2,11 @@
 class("MIngEd.Atlas")
 {
    id;
-   __init__ = function(self, size)
+   name;
+   __init__ = function(self, size, name)
 		 size = size or 1024
-		 self.id = mingedAtlasCreate()
+		 self.name = name
+		 self.id = mingedAtlasCreate(size, name)
 	      end,
 
    destroy = function(self)
@@ -40,6 +42,20 @@ class("MIngEd.Atlas")
 	 name = name or ""
 	 u1,v1,u2,v2 = mingedAtlasGetUVs(self.id, name)
 	 return MVec2(u1,v1), MVec2(u2,v2)
+      end
+   ),
+
+   write = 
+      document[[Write the atlas to file]](
+      function(self)
+	 mingedAtlasWrite(self.id, "atlases/" .. self.name .. ".png")
+      end
+   ),
+
+   getSize =
+      document[[Returns the size of the atlas image]](
+      function(self)
+	 return MVec2(mingedAtlasGetSize(self.id))
       end
    ),
 }

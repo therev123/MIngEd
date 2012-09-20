@@ -6,6 +6,8 @@ dofile("Geom.lua")
 dofile("Atlas.lua")
 dofile("System.lua")
 require("GUI")
+require("Modes")
+require("Windows")
 
 MIngEd.init = 
    document[[Initialise the MIngEd system]](
