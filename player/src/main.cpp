@@ -206,8 +206,6 @@ int main(int argc, char **argv)
 
 	// create window
 	window->create("Maratis", params.width, params.height, 32, params.fullscreen > 0);
-	if(false)
-		window->hideCursor();
 
 	// set current directory
 	if(params.project)

@@ -116,9 +116,8 @@ namespace minged
 	MScriptContext* script = engine->getScriptContext();
 
 	Atlas* atlas = (Atlas*)script->getPointer(0);
-	const char* file = script->getString(1);
+	atlas->Save();
 
-	engine->getImageSaver()->loadData(file, atlas->GetImage());
 	return 0;
     }
 
@@ -173,7 +172,13 @@ namespace minged
     , m_Height(0)
     , m_TextureID(0)
     , m_Layout(NULL)
+    , m_Name(name)
     {
+	// TODO: Wrap this mess in an add/change extension function
+	char* deffile = new char[0xff];
+	util::ChangeExtension(m_Name.c_str(), "json", &deffile);
+	m_ConfigFile = (MIConfigFile*)MEngine::getInstance()->loadFile(deffile);
+	delete [] deffile;
     }
 
     void Atlas::RegisterScript(MScriptContext* script)
@@ -333,10 +338,6 @@ namespace minged
 	    for(uint32 y = 0; y < h; ++y)
 	    {
 		image.image->readPixel(x, y, col);
-		/*col[0] = _x % 256;
-		col[1] = _y % 256;
-		col[2] = 255;
-		col[3] = 255;*/
 		m_Atlas.writePixel(_x+x, _y+y, col);
 	    }
 
@@ -360,4 +361,30 @@ namespace minged
 	}
     }
 
+    void Atlas::Save()
+    {
+	MEngine* engine = MEngine::getInstance();
+
+	engine->getImageSaver()->loadData(m_Name.c_str(), &m_Atlas);
+	if(m_ConfigFile)
+	{
+	    m_ConfigFile->Write("atlas/images", m_Images.size());
+	    int i = 0;
+	    for(imageMapIter iImage = m_Images.begin(); iImage != m_Images.end(); iImage++)
+	    {
+		std::string root = "atlas/image";
+		char num[32];
+		snprintf(num, 32, "%d/", i);
+		root += num;
+		++i;
+
+		m_ConfigFile->Write((root + "name").c_str(), iImage->first);
+		//m_ConfigFile->Write((root + "pos").c_str(), iImage->second.uv);
+		m_ConfigFile->Write((root + "w").c_str(), iImage->second.width);
+		m_ConfigFile->Write((root + "h").c_str(), iImage->second.height);
+	    }
+	    m_ConfigFile->Save();
+	}
+    }
+    
 };

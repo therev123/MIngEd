@@ -51,6 +51,8 @@ solution "maratis-minged"
 				"maratis-read-only/trunk/dev/Maratis/Common/",
 				"maratis-read-only/3rdparty/bullet/",
 				"maratis-read-only/3rdparty/lua/",
+				"3rdparty/minidom/",
+				"3rdparty/c_tokenizer/",
 				"player/include" }
 
 		--meh
@@ -79,7 +81,9 @@ solution "maratis-minged"
 			"zlib", 
 			"jpeg", 
 			"il", 
-			"freetype" }
+			"freetype",
+		        "minidom",
+			"c_tokenizer"}
 
 		defines { "MPLUGIN_DYNAMIC" }
 

@@ -23,6 +23,8 @@ namespace util
     // returns smallest power of 2 which is greater than the value supplied
     int Pow2(int x);
     
+    // changes the file extension, or, if one doesn't exist, adds one
+    char* ChangeExtension(const char* file, const char* ext, char** out = 0, int size = 0xff);
 }
 };
 

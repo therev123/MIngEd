@@ -1,6 +1,7 @@
 #include "util.h"
 
 #include <time.h>
+#include <stdio.h>
 #include <cstring>
 
 #define MStoNS(_ms) (_ms * 1000000)
@@ -57,7 +58,23 @@ int Pow2(int x)
     x |= x >> 16;
     return x+1;
 }
-
-
+char* ChangeExtension(const char* file, const char* ext, char** out, int size)
+{
+    if(!out)
+    {
+	out = new char*;
+	(*out) = new char[size];
+    }
+    snprintf((*out), size, file);
+    int strln = strlen(file);
+    int i = strln;
+    while(i > 0 && (*out)[i] !='.') --i;
+    if(i != 0) (*out)[i+1] = 0;
+    else snprintf(&(*out)[strln], size - strln, ".");
+    int len = strlen(*out);
+    snprintf(&(*out)[len], size - len, ext);
+    
+    return *out;
+}
 }
 }

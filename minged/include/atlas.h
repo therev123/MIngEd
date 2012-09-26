@@ -2,6 +2,8 @@
 #define __MINGED_ATLAS_H__
 
 #include <MCore.h>
+#include <MConfigFile.h>
+
 #include "util.h"
 
 #include <map>
@@ -21,16 +23,18 @@ public:
     MImage* AddImage(MImage* image, const char* name);
     void Generate(bool clear);
     bool GetUVs(MVector2* uv, const char* image);
+    MImage* GetImage() { return &m_Atlas; }
 
     void Select();
 
-    MImage* GetImage() { return &m_Atlas; }
+    void Save();
 private:
     typedef struct _imageDef imageDef;
     typedef std::map<std::string, imageDef> imageMap;
     typedef imageMap::iterator         imageMapIter;
 
     void WriteImage(imageDef& image);
+    std::string m_Name;
 
     int      m_BPP;
     int      m_MaxSize;
@@ -43,6 +47,8 @@ private:
     char*    m_Layout;
 
     MImage   m_Atlas;
+
+    MIConfigFile* m_ConfigFile;
 };
 
 };

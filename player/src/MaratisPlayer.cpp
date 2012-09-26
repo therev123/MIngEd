@@ -137,7 +137,10 @@ void MaratisPlayer::start(void)
 		engine->getLevelLoader()->addLoader(xmlLevelLoad); // level loader
 		engine->getFontLoader()->addLoader(M_loadFont); // font loader
 		engine->getFontLoader()->addLoader(M_loadBinFont); // bin font loader
-		engine->addFileLoader(".yaml", new ConfigFileLoader);
+		ConfigFileLoader* loader = new ConfigFileLoader;
+		engine->addFileLoader(".xml", loader);
+		engine->addFileLoader(".json", loader);
+		engine->addFileLoader(".ini", loader);
 
 		// savers
 		engine->getImageSaver()->addLoader(M_saveImage);

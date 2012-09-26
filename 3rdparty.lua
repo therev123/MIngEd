@@ -244,4 +244,50 @@ end
 	if os.is("windows") then
 		libdirs { "maratis-read-only/3rdparty/openal/win32" }
 		includedirs { "maratis-read-only/3rdparty/openal/include" }
-	end
+	     end
+
+
+-- BEGINNING OF MINIDOM BUILD
+	project "minidom"
+
+		kind "StaticLib"
+		language "C++"
+
+		files { "3rdparty/minidom/**.h", 
+			"3rdparty/minidom/**.cpp" }
+
+		includedirs{ "3rdparty/minidom/" }
+
+		defines { "MINIDOM_SUPPORT_XML",
+			  "MINIDOM_SUPPORT_INI",
+			  "MINIDOM_SUPPORT_JSON",
+			  "MINIDOM_ENABLE_DUMP" }
+
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+		configuration "Debug"
+			defines { "DEBUG", "MINIDOM_DEBUG" }
+			flags { "Symbols" }
+-- END OF MINIDOM BUILD
+
+-- BEGINNING OF C_TOKENIZER BUILD
+	project "c_tokenizer"
+
+		kind "StaticLib"
+		language "C++"
+
+		files { "3rdparty/c_tokenizer/**.h", 
+			"3rdparty/c_tokenizer/**.c" }
+
+		includedirs{ "3rdparty/c_tokenizer/" }
+
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+-- END OF C_TOKENIZER BUILD

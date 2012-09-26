@@ -20,8 +20,8 @@ function ApplyPatches()
    os.chdir("..")
 end
 
-UpdateMaratis()
-ApplyPatches()
+--UpdateMaratis()
+--ApplyPatches()
 
 if os.is("windows") then
 	defines { "_WIN32" }

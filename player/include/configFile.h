@@ -4,10 +4,25 @@
 #include "MCore.h"
 #include "MConfigFile.h"
 
+#include <string>
+#include "minidom.h"
+
 class ConfigFile : public MIConfigFile
 {
 public:
     ConfigFile(const char* name);
+
+    bool KeyExists(const char* key);
+
+    void Save();
+    void Load();
+protected:
+    void _Write(const char* key, const char* val);
+    const char* _Read(const char* key);
+
+private:
+    std::string  m_Name;
+    minidom::doc m_State;
 };
 
 class ConfigFileLoader : public MIFileLoader

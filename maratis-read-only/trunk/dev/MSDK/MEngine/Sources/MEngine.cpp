@@ -106,6 +106,7 @@ void MEngine::addFileLoader(const char* ext, MIFileLoader* loader)
 
 void* MEngine::loadFile(const char* file, void* data)
 {
+    printf("Trying to load %s\n", file);
     std::map<std::string, MIFileLoader*>::iterator iFL;
     for(iFL = m_fileLoaders.begin(); iFL != m_fileLoaders.end(); iFL++)
 	if(strstr(file, iFL->first.c_str()) != 0)
