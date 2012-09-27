@@ -174,11 +174,10 @@ namespace minged
     , m_Layout(NULL)
     , m_Name(name)
     {
-	// TODO: Wrap this mess in an add/change extension function
-	char* deffile = new char[0xff];
-	util::ChangeExtension(m_Name.c_str(), "json", &deffile);
+	char deffile[0xff];
+	char* def = deffile;
+	util::ChangeExtension(m_Name.c_str(), "xml", &def);
 	m_ConfigFile = (MIConfigFile*)MEngine::getInstance()->loadFile(deffile);
-	delete [] deffile;
     }
 
     void Atlas::RegisterScript(MScriptContext* script)
@@ -379,7 +378,7 @@ namespace minged
 		++i;
 
 		m_ConfigFile->Write((root + "name").c_str(), iImage->first);
-		//m_ConfigFile->Write((root + "pos").c_str(), iImage->second.uv);
+		m_ConfigFile->Write((root + "pos").c_str(), iImage->second.uv);
 		m_ConfigFile->Write((root + "w").c_str(), iImage->second.width);
 		m_ConfigFile->Write((root + "h").c_str(), iImage->second.height);
 	    }
