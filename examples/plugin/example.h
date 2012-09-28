@@ -1,9 +1,8 @@
 #ifndef __EXAMPLE_PLUGIN_H__
 #define __EXAMPLE_PLUGIN_H__
 
-#include <MEngine.h>
-#include <MPlugin.h>
+#include <MMIngEdPlugin.h>
 
-MPLUGIN_DECLARE(Example);
+MINGED_PLUGIN_DECLARE(Example);
 
 #endif/*__EXAMPLE_PLUGIN_H__*/

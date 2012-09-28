@@ -2,7 +2,7 @@
 #define __MINGED_PLUGIN_H__
 
 #include <MEngine.h>
-#include <MPlugin/MPlugin.h>
+#include <MPlugin.h>
 
 typedef void*(*pFunc)();
 

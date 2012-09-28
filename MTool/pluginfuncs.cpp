@@ -2,7 +2,7 @@
 #include "MWindow.h"
 #include "MEngine.h"
 
-#include <MPlugin/MPlugin.h>
+#include <MPlugin.h>
 
 #ifdef WIN32
 #  include <ShlObj.h>

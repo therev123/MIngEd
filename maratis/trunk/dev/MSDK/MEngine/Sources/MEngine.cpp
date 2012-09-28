@@ -29,6 +29,7 @@
 
 
 #include "../Includes/MEngine.h"
+#include "../Includes/MEmbedFile.h"
 
 #include "MCore.h"
 #include "MConfigFile.h"

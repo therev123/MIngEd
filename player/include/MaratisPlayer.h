@@ -27,10 +27,8 @@
 #define _MARATIS_PLAYER_H
 
 #include <MEngine.h>
-#include <MPlugin/MPlugin.h>
+#include <MPlugin.h>
 #include <MProject/MProject.h>
-
-#include "embedFile.h"
 
 class MaratisPlayer
 {
@@ -48,8 +46,6 @@ public:
 	}
 
 private:
-	minged::EmbedFileOpenHook* m_embedFileManager;
-
 	// MEngine
 	MSoundContext * m_soundContext;
 	MRenderingContext * m_render;
@@ -61,6 +57,7 @@ private:
 	MLevel * m_level;
 	MRenderer * m_renderer;
 	MPackageManager * m_packageManager;
+	MEmbedFileOpenHook * m_embedFileManager;
 
 	// plugins
 	std::vector <MPlugin *> m_plugins;

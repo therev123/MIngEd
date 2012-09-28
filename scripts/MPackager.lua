@@ -18,13 +18,13 @@ function prefix()
    return "lib"
 end
 
-
 function make_package_dir()
     print("make_package_dir")
     pkg = {}
     
     os.mkdir("pkg")
     pkg["dir"]        = "pkg/Maratis/"
+    pkg["srcdir"]     = "maratis/trunk/dev/"
     pkg["sdkdir"]     = pkg["dir"] .. "SDK/"
     pkg["scriptdir"]  = pkg["dir"] .. "Scripts/"
     pkg["toolsdir"]   = pkg["dir"] .. "Tools/"
@@ -32,6 +32,7 @@ function make_package_dir()
     pkg["plugindir"]     = pkg["dir"] .. "Plugins/"
     pkg["sdkmodules"] = {"MCore", "MEngine", "MGui"}
     pkg["sdkdirs"]    = {"Includes", "Libs", "Doc"}
+    pkg["editorfiles"] = { MIngEd = {"MMIngEdPlugin.h"} }
 
     os.mkdir(pkg["dir"])
     os.mkdir(pkg["bindir"])
@@ -44,6 +45,12 @@ function make_package_dir()
 	  os.mkdir(pkg["sdkdir"] ..  m .. "/" .. d)
        end
     end
+    for m,i in pairs(pkg["editorfiles"]) do
+       os.mkdir(pkg["sdkdir"] ..  m )
+       for j,d in pairs(pkg["sdkdirs"]) do
+	  os.mkdir(pkg["sdkdir"] ..  m .. "/" .. d)
+       end
+    end
 
     return pkg
 end
@@ -51,10 +58,16 @@ end
 function package_headers(pkg)
     print("package_headers")
     for i,m in pairs(pkg["sdkmodules"]) do
-       os.cp_of_type("maratis-read-only/trunk/dev/MSDK/" .. m .. "/Includes", pkg["sdkdir"] .. m .. "/Includes", ".h")
+       os.cp_of_type(pkg["srcdir"] .. "MSDK/" .. m .. "/Includes", pkg["sdkdir"] .. m .. "/Includes", ".h")
     end
 
-    os.cp("maratis-read-only/trunk/dev/Maratis/Common/MPlugin/MPlugin.h", pkg["sdkdir"] .. "MEngine/Includes")
+    os.cp(pkg["srcdir"] .. "/Maratis/Common/MPlugin/MPlugin.h", pkg["sdkdir"] .. "MEngine/Includes")
+
+   for m,i in pairs(pkg["editorfiles"]) do
+      for j,f in pairs(i) do
+	 os.cp("minged/include/"..f, pkg["sdkdir"]..m.."/Includes")
+      end
+   end
  end
 
 function package_libs(pkg)

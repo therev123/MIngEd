@@ -15,11 +15,13 @@ solution "maratis-minged"
 			
 		files { "MTool/**.cpp",
 		        "MTool/**.h",
-		        "maratis-read-only/trunk/dev/Maratis/Common/MPlugin/*" }
+		        "maratis/trunk/dev/MSDK/MEngine/Includes/MPlugin.h",
+		        "maratis/trunk/dev/MSDK/MEngine/Sources/MPlugin.cpp" }
 		includedirs { "MTool",
-			      "maratis-read-only/trunk/dev/Maratis/Common/",
-			      "maratis-read-only/3rdparty/lua",
-			      "maratis-read-only/3rdparty/npk/include" }
+			      "maratis/trunk/dev/Maratis/Common/",
+			      "maratis/trunk/dev/MSDK/MEngine/Includes/",
+			      "maratis/3rdparty/lua",
+			      "maratis/3rdparty/npk/include" }
 
 		defines { "MPLUGIN_DYNAMIC" }
 
@@ -45,25 +47,21 @@ solution "maratis-minged"
 	project "Maratis"
 		files { "player/src/**.cpp", "player/include/**.h" }
 
-		includedirs {   "maratis-read-only/trunk/dev/MSDK/MCore/Includes/",
-				"maratis-read-only/trunk/dev/MSDK/MEngine/Includes/",
-				"maratis-read-only/trunk/dev/MSDK/MGui/Includes/",
-				"maratis-read-only/trunk/dev/Maratis/Common/",
-				"maratis-read-only/3rdparty/bullet/",
-				"maratis-read-only/3rdparty/lua/",
+		includedirs {   "maratis/trunk/dev/MSDK/MCore/Includes/",
+				"maratis/trunk/dev/MSDK/MEngine/Includes/",
+				"maratis/trunk/dev/MSDK/MGui/Includes/",
+				"maratis/trunk/dev/Maratis/Common/",
+				"maratis/3rdparty/bullet/",
+				"maratis/3rdparty/lua/",
 				"3rdparty/minidom/",
 				"3rdparty/c_tokenizer/",
 				"player/include" }
-
-		--meh
-		files { "minged/include/embedFile.h", "minged/src/embedFile.cpp" }
-		includedirs { "minged/include" }
 						
 		if os.is("windows") then
 		   defines { "WIN32" }
-			includedirs { "maratis-read-only/3rdparty/openal/include/" }
+			includedirs { "maratis/3rdparty/openal/include/" }
 			links { "OpenAL32", "Opengl32", "libsndfile-1", "Winmm" }
-			libdirs { "maratis-read-only/3rdparty/openal/win32/" }
+			libdirs { "maratis/3rdparty/openal/win32/" }
 		elseif os.is("linux") then
 			links { "GL", "openal", "dl", "X11", "Xxf86vm", "sndfile"}
 			linkoptions { "-Wl,-rpath=." }
@@ -106,10 +104,10 @@ solution "maratis-minged"
 		language "C++"
 
 		files { "minged/**.cpp", "minged/**.h" }
-		includedirs {   "maratis-read-only/trunk/dev/MSDK/MCore/Includes/",
-				"maratis-read-only/trunk/dev/MSDK/MEngine/Includes/",
-				"maratis-read-only/trunk/dev/MSDK/MGui/Includes/",
-				"maratis-read-only/trunk/dev/Maratis/Common/MPlugin",
+		includedirs {   "maratis/trunk/dev/MSDK/MCore/Includes/",
+				"maratis/trunk/dev/MSDK/MEngine/Includes/",
+				"maratis/trunk/dev/MSDK/MGui/Includes/",
+				"maratis/trunk/dev/Maratis/Common/MPlugin",
 				"minged/include" }
 		targetprefix ""
 		defines { "MPLUGIN_DYNAMIC" }
@@ -143,10 +141,14 @@ solution "maratis-minged"
 			
 		files { "examples/plugin/*" }
 		includedirs { "examples/plugin",
-			      "maratis-read-only/trunk/dev/MSDK/MCore/Includes",
-			      "maratis-read-only/trunk/dev/MSDK/MEngine/Includes",
-			      "maratis-read-only/trunk/dev/Maratis/Common/MPlugin" } -- this is an unfortunate line
-		targetprefix "" -- Maratis plugins don't have lib*.so
+			      "maratis/trunk/dev/MSDK/MCore/Includes",
+			      "maratis/trunk/dev/MSDK/MEngine/Includes",
+			      "minged/include/" }
+		targetprefix "" -- Maratis plugins don't have lib*.so		
+
+		prebuildcommands("Mnpk examples/plugin/Example.npk examples/plugin/data")
+		prebuildcommands("MEmbedder examples/plugin/Example.npk examples/plugin/Example_npk.h Example_npk")
+
 
 		if os.is("linux") then
 		   defines { "__LINUX__" }

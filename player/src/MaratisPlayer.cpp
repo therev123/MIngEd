@@ -47,6 +47,7 @@
 #include <MFileManager/MPackageManagerNPK.h>
 #include <MRenderers/MStandardRenderer.h>
 #include <MRenderers/MFixedRenderer.h>
+#include <MEmbedFile.h>
 
 #include "maratis_npk.h"
 #include "configFile.h"
@@ -70,7 +71,7 @@ m_renderer(NULL)
 
 	// embedded data
 	{
-		m_embedFileManager = new minged::EmbedFileOpenHook;
+		m_embedFileManager = new MEmbedFileOpenHook;
 		m_embedFileManager->AddEmbeddedFile("maratis.npk", maratis_npk, maratis_npkSize());
 		char filename[255];
 		getGlobalFilename(filename, m_system->getWorkingDirectory(), "maratis.npk");
@@ -130,6 +131,7 @@ void MaratisPlayer::start(void)
 		engine->setScriptContext(m_script); // script context
 		engine->setInputContext(m_input); // input context
 		engine->setSystemContext(m_system); // system context
+		engine->setEmbedFileManager(m_embedFileManager);
 
 		// loaders
 		engine->getImageLoader()->addLoader(M_loadImage); // image loader

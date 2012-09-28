@@ -93,6 +93,8 @@ class MTexturesAnimRef;
 class MMaterialsAnimRef;
 class MIFileLoader;
 
+class MEmbedFileOpenHook;
+
 #include <MCore.h>
 
 #include "MPackageManager.h"
@@ -150,7 +152,6 @@ class MIFileLoader;
 #include "MLevel.h"
 #include "MGame.h"
 
-
 class M_ENGINE_EXPORT MEngine
 {
 public:
@@ -199,6 +200,8 @@ private:
 
 	// package manager
 	MPackageManager * m_packageManager;
+
+	MEmbedFileOpenHook * m_embedFileManager;
 	
 	// level
 	MLevel * m_level;
@@ -265,6 +268,8 @@ public:
 	void setPackageManager(MPackageManager * packageManager);
 	inline MPackageManager * getPackageManager(void){ return m_packageManager; }
 
+	void setEmbedFileManager(MEmbedFileOpenHook* fileManager) { m_embedFileManager = fileManager; }
+	MEmbedFileOpenHook* getEmbedFileManager(void) { return m_embedFileManager; }
 	// update requests
 	void updateRequests(void);
 

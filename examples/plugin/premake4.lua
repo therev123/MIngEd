@@ -5,11 +5,11 @@ solution "Example"
 
 	-- OS defines
 	if os.is("windows") then
-		defines { "WIN32" }
+	   defines { "WIN32" }
 	elseif os.is("linux") then
-		defines { "linux" }
+	   defines { "linux" }
 	elseif os.is("macosx") then
-		defines { "__APPLE__" }
+	   defines { "__APPLE__" }
 	end
  
 	-- Build the example plugin
@@ -24,6 +24,7 @@ solution "Example"
 		includedirs { os.getenv("MSDKDIR") .. "SDK/MCore/Includes",
 			      os.getenv("MSDKDIR") .. "SDK/MEngine/Includes",
 			      os.getenv("MSDKDIR") .. "SDK/MGui/Includes",
+			      os.getenv("MSDKDIR") .. "SDK/MIngEd/Includes",
 					"."}
 		
 		-- include all the files, including Maratis SDK ones
@@ -40,11 +41,14 @@ solution "Example"
 		vpaths { 
 			["MCore/*"] = os.getenv("MSDKDIR") .. "SDK/MCore/Includes/**.h",
 			["MEngine/*"] = os.getenv("MSDKDIR") .. "SDK/MEngine/Includes/**.h",
+			["MIngEd/*"] = os.getenv("MSDKDIR") .. "SDK/MIngEd/Includes/**.h",
 			["Game/*"] = { "**.h", "**.cpp" }
+			["Editor/*"] = { "data/editor/**.lua"}
+			["Scripts/*"] = { "data/**.lua" }
 		}		
 		
-		prebuildcommands("Mnpk example.npk data")
-		prebuildcommands("MEmbedder example.npk example_npk.h example_npk")
+		prebuildcommands("Mnpk Example.npk data")
+		prebuildcommands("MEmbedder Example.npk Example_npk.h Example_npk")
 
 		
 		-- link to Maratis

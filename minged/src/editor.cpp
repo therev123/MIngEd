@@ -12,6 +12,7 @@
 #include <MGui.h>
 #include <MKeyboard.h>
 #include <MFile.h>
+#include "MEmbedFile.h"
 
 #define PACKAGE_NAME "minged.npk"
 
@@ -29,16 +30,13 @@ namespace minged
 	MEngine* engine = MEngine::getInstance();
 	if(MScriptContext* script = engine->getScriptContext())
 	    script->callFunction("mingedCleanup");
-
-	delete m_FileManager;
     }
 
     void Editor::Init()
     {
 	MEngine* engine = MEngine::getInstance();
 
-	m_FileManager = new EmbedFileOpenHook;
-	m_FileManager->AddEmbeddedFile(PACKAGE_NAME, minged_npk, minged_npkSize());
+	engine->getEmbedFileManager()->AddEmbeddedFile(PACKAGE_NAME, minged_npk, minged_npkSize());
 	
 	char filename[255];
 	getGlobalFilename(filename, engine->getSystemContext()->getWorkingDirectory(), PACKAGE_NAME);

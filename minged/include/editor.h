@@ -2,7 +2,6 @@
 #define __MINGED_EDITOR_H__
 
 #include "minged.h"
-#include "embedFile.h"
 
 namespace minged
 {
@@ -33,8 +32,6 @@ namespace minged
 	bool m_Initialised;
         bool m_IsOpen;
         btnState m_ToggleButton;
-        EmbedFileOpenHook* m_FileManager;
-
     };
 };
 
