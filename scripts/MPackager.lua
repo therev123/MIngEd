@@ -24,13 +24,13 @@ function make_package_dir()
     
     os.mkdir("pkg")
     pkg["dir"]        = "pkg/Maratis/"
-    pkg["srcdir"]     = "maratis/trunk/dev/"
+    pkg["srcdir"]     = "src/"
     pkg["sdkdir"]     = pkg["dir"] .. "SDK/"
     pkg["scriptdir"]  = pkg["dir"] .. "Scripts/"
     pkg["toolsdir"]   = pkg["dir"] .. "Tools/"
     pkg["bindir"]     = pkg["dir"] .. "Bin/"
     pkg["plugindir"]     = pkg["dir"] .. "Plugins/"
-    pkg["sdkmodules"] = {"MCore", "MEngine", "MGui"}
+    pkg["sdkmodules"] = {core="MCore", engine="MEngine", gui="MGui"}
     pkg["sdkdirs"]    = {"Includes", "Libs", "Doc"}
     pkg["editorfiles"] = { MIngEd = {"MMIngEdPlugin.h"} }
 
@@ -56,16 +56,14 @@ function make_package_dir()
 end
 
 function package_headers(pkg)
-    print("package_headers")
-    for i,m in pairs(pkg["sdkmodules"]) do
-       os.cp_of_type(pkg["srcdir"] .. "MSDK/" .. m .. "/Includes", pkg["sdkdir"] .. m .. "/Includes", ".h")
-    end
-
-    os.cp(pkg["srcdir"] .. "/Maratis/Common/MPlugin/MPlugin.h", pkg["sdkdir"] .. "MEngine/Includes")
-
+   print("package_headers")
+   for i,m in pairs(pkg["sdkmodules"]) do
+      os.cp_of_type(pkg["srcdir"] .. i .. "/Includes", pkg["sdkdir"] .. m .. "/Includes", ".h")
+   end
+   
    for m,i in pairs(pkg["editorfiles"]) do
       for j,f in pairs(i) do
-	 os.cp("minged/include/"..f, pkg["sdkdir"]..m.."/Includes")
+	 os.cp("src/minged/include/"..f, pkg["sdkdir"]..m.."/Includes")
       end
    end
  end

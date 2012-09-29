@@ -5,10 +5,10 @@ solution "maratis-minged"
 		kind "StaticLib"
 		language "C++"
 
-		files { "maratis/3rdparty/bullet/**.h", 
-				"maratis/3rdparty/bullet/**.cpp" }
+		files { "3rdparty/bullet/**.h", 
+				"3rdparty/bullet/**.cpp" }
 
-		includedirs {"maratis/3rdparty/bullet"}
+		includedirs {"3rdparty/bullet"}
 
 		configuration "Release"
 			defines { "NDEBUG" }
@@ -25,8 +25,8 @@ solution "maratis-minged"
 		kind "StaticLib"
 		language "C++"
 
-		files { "maratis/3rdparty/tinyxml/**.h", 
-				"maratis/3rdparty/tinyxml/**.cpp" }
+		files { "3rdparty/tinyxml/**.h", 
+				"3rdparty/tinyxml/**.cpp" }
 
 		configuration "Release"
 			defines { "NDEBUG" }
@@ -43,8 +43,8 @@ solution "maratis-minged"
 		kind "StaticLib"
 		language "C++"
 
-		files { "maratis/3rdparty/glee/**.h", 
-				"maratis/3rdparty/glee/**.c" }
+		files { "3rdparty/glee/**.h", 
+				"3rdparty/glee/**.c" }
 
 		if os.is("macosx") then
 			links { "OpenGL.framework", "CoreServices.framework", "Foundation.framework" }
@@ -63,7 +63,7 @@ solution "maratis-minged"
 
 -- BEGINNING OF FREETYPE BUILD
 if os.is("windows") then
-	os.copyfile("maratis/3rdparty/freetype/win32/freetype.lib", "build/freetype.lib")
+	os.copyfile("3rdparty/freetype/win32/freetype.lib", "build/freetype.lib")
 elseif os.is("linux") then
 else
 	project "freetype"
@@ -71,12 +71,12 @@ else
 		kind "StaticLib"
 		language "C++"
 
-		includedirs { "maratis/3rdparty/freetype/include", 
-			"maratis/3rdparty/freetype/depend/", 
-			"maratis/3rdparty/freetype/" }
-		files { "maratis/3rdparty/freetype/**.h", 
-			"maratis/3rdparty/freetype/*.c", 
-			"maratis/3rdparty/freetype/depend/ftobjs.c" }
+		includedirs { "3rdparty/freetype/include", 
+			"3rdparty/freetype/depend/", 
+			"3rdparty/freetype/" }
+		files { "3rdparty/freetype/**.h", 
+			"3rdparty/freetype/*.c", 
+			"3rdparty/freetype/depend/ftobjs.c" }
 
 		defines { "FT2_BUILD_LIBRARY" }
 
@@ -99,12 +99,12 @@ end
 	if os.is("linux") then
 	   local libfiles = { "libsndfile.a", "libsndfile.la", "libsndfile.so" }
 	   for k,file in pairs(libfiles) do
-	      os.copyfile("maratis/3rdparty/libsndfile/linux/" .. file, "build/" .. file) 
+	      os.copyfile("3rdparty/libsndfile/linux/" .. file, "build/" .. file) 
 	   end
 	elseif os.is("windows") then
 	   local libfiles = { "libsndfile-1.dll", "libsndfile-1.lib" }
 	   for k,file in pairs(libfiles) do
-	      os.copyfile("maratis/3rdparty/libsndfile/win32/" .. file, "build/" .. file) 
+	      os.copyfile("3rdparty/libsndfile/win32/" .. file, "build/" .. file) 
 	   end
 	end
 -- END OF LIBSNDFILE BUILD
@@ -115,18 +115,18 @@ end
 		kind "StaticLib"
 		language "C++"
 
-		includedirs { "maratis/3rdparty/devil/src-IL/include",
-			      "maratis/3rdparty/devil/src-ILU/include" ,
-			      "maratis/3rdparty/devil/" }
-		files { "maratis/3rdparty/devil/**.h", 
-				"maratis/3rdparty/devil/**.c", 
-				"maratis/3rdparty/devil/**.cpp" }
+		includedirs { "3rdparty/devil/src-IL/include",
+			      "3rdparty/devil/src-ILU/include" ,
+			      "3rdparty/devil/" }
+		files { "3rdparty/devil/**.h", 
+				"3rdparty/devil/**.c", 
+				"3rdparty/devil/**.cpp" }
 		if os.is("windows") then
 			defines { "WIN32", "_WIN32" }
 			-- these should probably be searched for anyway
-			includedirs { "maratis/3rdparty/libpng/",
-						  "maratis/3rdparty/libjpeg/" ,
-						  "maratis/3rdparty/zlib/" }
+			includedirs { "3rdparty/libpng/",
+						  "3rdparty/libjpeg/" ,
+						  "3rdparty/zlib/" }
 		end
 		
 		defines { "IL_STATIC_LIB" }
@@ -147,9 +147,9 @@ if os.is("windows") then
 		kind "StaticLib"
 		language "C++"
 
-		includedirs { "maratis/3rdparty/zlib" }
-		files { "maratis/3rdparty/libpng/**.h", 
-				"maratis/3rdparty/libpng/**.c" }
+		includedirs { "3rdparty/zlib" }
+		files { "3rdparty/libpng/**.h", 
+				"3rdparty/libpng/**.c" }
 
 		configuration "Release"
 			defines { "NDEBUG" }
@@ -168,8 +168,8 @@ if os.is("windows") then
 		kind "StaticLib"
 		language "C++"
 
-		files { "maratis/3rdparty/libjpeg/**.h", 
-				"maratis/3rdparty/libjpeg/**.c" }
+		files { "3rdparty/libjpeg/**.h", 
+				"3rdparty/libjpeg/**.c" }
 
 		configuration "Release"
 			defines { "NDEBUG" }
@@ -187,8 +187,8 @@ end
 		kind "StaticLib"
 		language "C++"
 
-		files { "maratis/3rdparty/zlib/**.h", 
-				"maratis/3rdparty/zlib/**.c" }
+		files { "3rdparty/zlib/**.h", 
+			"3rdparty/zlib/**.c" }
 
 		configuration "Release"
 			defines { "NDEBUG" }
@@ -204,8 +204,8 @@ end
 		kind "StaticLib"
 		language "C++"
 
-		files { "maratis/3rdparty/lua/**.h", 
-				"maratis/3rdparty/lua/**.c" }
+		files { "3rdparty/lua/**.h", 
+			"3rdparty/lua/**.c" }
 
 		configuration "Release"
 			defines { "NDEBUG" }
@@ -222,11 +222,11 @@ end
 		kind "StaticLib"
 		language "C++"
 
-		files { "maratis/3rdparty/npk/**.h", 
-				"maratis/3rdparty/npk/**.c" }
-
-		includedirs { "maratis/3rdparty/npk/include",
-						"maratis/3rdparty/zlib" }
+			files { "3rdparty/npk/**.h", 
+				"3rdparty/npk/**.c" }
+			
+			includedirs { "3rdparty/npk/include",
+				      "3rdparty/zlib" }
 
 		defines { "M_PACKAGE_WRITABLE", "NPK_DEV"  }
 
@@ -242,8 +242,8 @@ end
 -- END OF NPK BUILD
 	
 	if os.is("windows") then
-		libdirs { "maratis/3rdparty/openal/win32" }
-		includedirs { "maratis/3rdparty/openal/include" }
+		libdirs { "3rdparty/openal/win32" }
+		includedirs { "3rdparty/openal/include" }
 	     end
 
 

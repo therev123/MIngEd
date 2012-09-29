@@ -9,19 +9,21 @@ solution "maratis-minged"
 	
 -- lua interpreter to build tools
 -- this should be built first
+-- ideally this should be a bootstrap
+-- version of Maratis...
 	project "MTool"
 		kind "ConsoleApp"
 		language "C++"
 			
-		files { "MTool/**.cpp",
-		        "MTool/**.h",
-		        "maratis/trunk/dev/MSDK/MEngine/Includes/MPlugin.h",
-		        "maratis/trunk/dev/MSDK/MEngine/Sources/MPlugin.cpp" }
-		includedirs { "MTool",
-			      "maratis/trunk/dev/Maratis/Common/",
-			      "maratis/trunk/dev/MSDK/MEngine/Includes/",
-			      "maratis/3rdparty/lua",
-			      "maratis/3rdparty/npk/include" }
+		files { "src/tool/**.cpp",
+		        "src/tool/**.h",
+		        "src/engine/Includes/MPlugin.h",
+		        "src/engine/Sources/MPlugin.cpp" }
+		includedirs { "src/tool",
+			      "src/common/",
+			      "src/engine/Includes/",
+			      "3rdparty/lua",
+			      "3rdparty/npk/include" }
 
 		defines { "MPLUGIN_DYNAMIC" }
 
@@ -45,23 +47,23 @@ solution "maratis-minged"
 
 	-- forked version of Maratis player
 	project "Maratis"
-		files { "player/src/**.cpp", "player/include/**.h" }
+		files { "src/player/src/**.cpp", "src/player/include/**.h" }
 
-		includedirs {   "maratis/trunk/dev/MSDK/MCore/Includes/",
-				"maratis/trunk/dev/MSDK/MEngine/Includes/",
-				"maratis/trunk/dev/MSDK/MGui/Includes/",
-				"maratis/trunk/dev/Maratis/Common/",
-				"maratis/3rdparty/bullet/",
-				"maratis/3rdparty/lua/",
+		includedirs {   "src/core/Includes/",
+				"src/engine/Includes/",
+				"src/gui/Includes/",
+				"src/common/",
+				"3rdparty/bullet/",
+				"3rdparty/lua/",
 				"3rdparty/minidom/",
 				"3rdparty/c_tokenizer/",
-				"player/include" }
+				"src/player/include" }
 						
 		if os.is("windows") then
 		   defines { "WIN32" }
-			includedirs { "maratis/3rdparty/openal/include/" }
+			includedirs { "3rdparty/openal/include/" }
 			links { "OpenAL32", "Opengl32", "libsndfile-1", "Winmm" }
-			libdirs { "maratis/3rdparty/openal/win32/" }
+			libdirs { "3rdparty/openal/win32/" }
 		elseif os.is("linux") then
 			links { "GL", "openal", "dl", "X11", "Xxf86vm", "sndfile"}
 			linkoptions { "-Wl,-rpath=." }
@@ -103,17 +105,16 @@ solution "maratis-minged"
 		kind "SharedLib"
 		language "C++"
 
-		files { "minged/**.cpp", "minged/**.h" }
-		includedirs {   "maratis/trunk/dev/MSDK/MCore/Includes/",
-				"maratis/trunk/dev/MSDK/MEngine/Includes/",
-				"maratis/trunk/dev/MSDK/MGui/Includes/",
-				"maratis/trunk/dev/Maratis/Common/MPlugin",
-				"minged/include" }
+		files { "src/minged/**.cpp", "src/minged/**.h" }
+		includedirs {   "src/core/Includes/",
+				"src/engine/Includes/",
+				"src/gui/Includes/",
+				"src/minged/include" }
 		targetprefix ""
 		defines { "MPLUGIN_DYNAMIC" }
 
-		prebuildcommands("build/MTool scripts/Mnpk.lua minged/minged.npk minged/data")
-		prebuildcommands("build/MTool scripts/MEmbedder.lua minged/minged.npk minged/include/minged_npk.h minged_npk")
+		prebuildcommands("build/MTool scripts/Mnpk.lua src/minged/minged.npk src/minged/data")
+		prebuildcommands("build/MTool scripts/MEmbedder.lua src/minged/minged.npk src/minged/include/minged_npk.h minged_npk")
 
 		postbuildcommands("build/MTool scripts/MPackager.lua")
 		
@@ -141,9 +142,9 @@ solution "maratis-minged"
 			
 		files { "examples/plugin/*" }
 		includedirs { "examples/plugin",
-			      "maratis/trunk/dev/MSDK/MCore/Includes",
-			      "maratis/trunk/dev/MSDK/MEngine/Includes",
-			      "minged/include/" }
+			      "src/core/Includes",
+			      "src/engine/Includes",
+			      "src/minged/include/" }
 		targetprefix "" -- Maratis plugins don't have lib*.so		
 
 		prebuildcommands("Mnpk examples/plugin/Example.npk examples/plugin/data")
