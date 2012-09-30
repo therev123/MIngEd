@@ -18,6 +18,13 @@
 
 namespace minged
 {
+    class EditorPluginHook : public MIPluginLoadHook
+    {
+	virtual void Load(MPlugin* plugin) { plugin->callFunction("StartEditor"); }
+	virtual void Unload(MPlugin* plugin) { plugin->callFunction("EndEditor"); }
+    };
+    EditorPluginHook s_Hook;
+
     Editor::Editor()
     {
 	m_Initialised = false;
@@ -35,6 +42,23 @@ namespace minged
     void Editor::Init()
     {
 	MEngine* engine = MEngine::getInstance();
+	
+	char pluginDir[0xff];
+	getGlobalFilename(pluginDir,
+			  engine->getSystemContext()->getSystemDirectory(),
+			  "Plugins");
+	std::vector<std::string> files;
+	readDirectory(pluginDir, &files);
+	for(std::vector<std::string>::iterator iFile = files.begin();
+	    iFile != files.end(); iFile++)
+	{
+	    char file[0xff];
+	    snprintf(file, 0xff, iFile->c_str());
+	    for(int i=iFile->size() - 1; i >= 0; --i)
+		if(file[i] == '.') file[i] = 0;
+	    printf("trying to load %s\n", file);
+	    engine->loadPlugin(file);
+	}
 
 	engine->getEmbedFileManager()->AddEmbeddedFile(PACKAGE_NAME, minged_npk, minged_npkSize());
 	

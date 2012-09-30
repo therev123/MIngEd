@@ -35,6 +35,9 @@
 
 #include <stdio.h>
 
+#include <set>
+std::set<MIPluginLoadHook*> s_Hooks;
+
 #ifndef MPLUGIN_DYNAMIC
 #include <map>
 typedef struct _plugin
@@ -73,6 +76,11 @@ MPlugin::~MPlugin(void)
 #ifdef MPLUGIN_DYNAMIC
     if(m_library)
     {
+
+	for(std::set<MIPluginLoadHook*>::iterator iHook = s_Hooks.begin();
+	    iHook != s_Hooks.end(); iHook++)
+	    (*iHook)->Unload(this);
+
 #    ifdef WIN32
 	
 	FunctionPtr function = reinterpret_cast<FunctionPtr>(GetProcAddress(m_library, "EndPlugin"));
@@ -144,7 +152,11 @@ void MPlugin::load(const char * filename)
 	printf("%s\n", dlerror());
 	return;
     }
-    
+
+    for(std::set<MIPluginLoadHook*>::iterator iHook = s_Hooks.begin();
+	iHook != s_Hooks.end(); iHook++)
+	(*iHook)->Load(this);
+
     FunctionPtr function = (FunctionPtr)dlsym(m_library, "StartPlugin");
     if(! function)
     {
@@ -171,4 +183,39 @@ void MPlugin::load(const char * filename)
 	m_loaded = true;
     }
 #endif
+}
+
+void MPlugin::callFunction(const char* fn, bool addSuffix)
+{
+    char fnName[0xff];
+#ifndef M_PLUGIN_DYNAMIC
+    if(addSuffix)
+	snprintf(fnName, 0xff, "%s%s", fn, m_filename.c_str());
+    else
+#endif
+	snprintf(fnName, 0xff, "%s", fn);
+    
+#ifdef M_PLUGIN_DYNAMIC
+# ifdef WIN32
+    FunctionPtr function = reinterpret_cast<FunctionPtr>(GetProcAddress(m_library, fnName));
+# else
+    FunctionPtr function = (FunctionPtr)dlsym(m_library, fnName);
+# endif
+    if(! function)
+	return;
+    
+    function();	
+#else
+    // currently no automatic mapping of statically linked plugins
+#endif
+}
+
+MIPluginLoadHook::MIPluginLoadHook()
+{
+    s_Hooks.insert(this);
+}
+
+MIPluginLoadHook::~MIPluginLoadHook()
+{
+    s_Hooks.erase(this);
 }

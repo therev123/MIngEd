@@ -94,6 +94,7 @@ class MMaterialsAnimRef;
 class MIFileLoader;
 
 class MEmbedFileOpenHook;
+class MPlugin;
 
 #include <MCore.h>
 
@@ -152,6 +153,8 @@ class MEmbedFileOpenHook;
 #include "MLevel.h"
 #include "MGame.h"
 
+#include <list>
+
 class M_ENGINE_EXPORT MEngine
 {
 public:
@@ -163,6 +166,7 @@ public:
 	static MEngine * getInstance(void);
 
 private:
+	std::list<MPlugin*> m_Plugins;
 	
 	// active
 	bool m_isActive;
@@ -287,6 +291,8 @@ public:
 	// renderer
 	void setRenderer(MRenderer * renderer);
 	inline MRenderer * getRenderer(void){ return m_renderer; }
+
+	void loadPlugin(const char* name);
 };
 
 

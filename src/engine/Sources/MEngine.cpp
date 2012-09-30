@@ -30,6 +30,7 @@
 
 #include "../Includes/MEngine.h"
 #include "../Includes/MEmbedFile.h"
+#include "MPlugin.h"
 
 #include "MCore.h"
 #include "MConfigFile.h"
@@ -51,6 +52,11 @@ m_requestedLevelToLoad(NULL)
 
 MEngine::~MEngine(void)
 {
+    for(std::list<MPlugin*>::iterator iPlugin = m_Plugins.begin();
+	iPlugin != m_Plugins.end(); iPlugin++)
+	delete *iPlugin;
+    m_Plugins.clear();
+
 	SAFE_FREE(m_requestedLevelToLoad);
 }
 
@@ -203,4 +209,14 @@ void MEngine::loadLevelIfRequested()
 
 	loadLevel(m_requestedLevelToLoad);
 	SAFE_FREE(m_requestedLevelToLoad);
+}
+
+void MEngine::loadPlugin(const char* name)
+{
+    MPlugin* plugin = new MPlugin;
+    plugin->load(name);
+    if(plugin->isLoaded())
+	m_Plugins.push_back(plugin);
+    else
+	delete plugin;
 }

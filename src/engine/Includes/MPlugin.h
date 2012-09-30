@@ -72,6 +72,7 @@ public:
 	void load(const char * filename);
 	inline const char * getFilename(void){ return m_filename.c_str(); }
 	inline bool isLoaded(void) { return m_loaded; }
+	void callFunction(const char* fn, bool addSuffix = true);
 };
 
 // Some nasty macros to help making plugins for both systems that can dynamically
@@ -122,6 +123,7 @@ public:
   extern Plugin##name##AutoStart s_##name##AutoStarter;
 
 #   define MPLUGIN_START_IMPLEMENT(name)				\
+    void AddPluginFunctions(const char* pluginName, FunctionPtr start, FunctionPtr end); \
   Plugin##name##AutoStart s_##name##AutoStarter;			\
   Plugin##name##AutoStart::Plugin##name##AutoStart()			\
   {									\
@@ -133,9 +135,14 @@ public:
   void EndPlugin##name()
 #endif/*MPLUGIN_DYNAMIC*/
 
-// don't worry about this:
-#ifndef MPLUGIN_DYNAMIC
-void AddPluginFunctions(const char* pluginName, FunctionPtr start, FunctionPtr end);
-#endif
+class MIPluginLoadHook
+{
+public:
+    MIPluginLoadHook();
+    ~MIPluginLoadHook();
+
+    virtual void Load(MPlugin* plugin) {}
+    virtual void Unload(MPlugin* plugin) {}
+};
 
 #endif

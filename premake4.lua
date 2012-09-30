@@ -134,7 +134,9 @@ solution "maratis-minged"
 		configuration "Debug"
 			defines { "DEBUG" }
 			flags { "Symbols" }
-
+-- plugins
+dofile("plugins.lua")
+			
 -- example plugin extension, built in the Maratis/MIngEd source tree
 	project "Example"
 		kind "SharedLib"

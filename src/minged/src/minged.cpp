@@ -48,6 +48,8 @@ void* RunPlugin(void* data)
 
 uint32 tick;
 
+#include "MFileTools.h"
+
 MPLUGIN_START_IMPLEMENT(minged)
 {
     instance = new minged::Editor;
