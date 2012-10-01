@@ -5,16 +5,11 @@ require("MIngEd")
 function mingedInit()
    MIngEd.init()
    MIngEd.Modes.set("Main")
+   MIngEd.Modes.setShortcut("Main", "F2")
+   MIngEd.Modes.setShortcut("Atlas", "F3")
 end
 
 function mingedUpdate()
-   if getMKeyboard():isKeyPressed("F2")then 
-      print("Switching to main mode")
-      MIngEd.Modes.set("Main")
-   elseif getMKeyboard():isKeyPressed("F3") then
-      print("Switching to atlas mode")
-      MIngEd.Modes.set("Atlas")
-   end
    MIngEd.update()
 end
 

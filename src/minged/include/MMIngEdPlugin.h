@@ -14,7 +14,7 @@
 #ifdef MPLUGIN_DYNAMIC
 #include "MEmbedFile.h"
 #  define MINGED_PLUGIN_DECLARE(x)		\
-    MPLUGIN_DECLARE(x);				\
+    MPLUGIN_DECLARE(x)				\
     extern "C" {				\
     MPLUGIN_EXPORT void StartEditor();		\
     MPLUGIN_EXPORT void EndEditor();		\

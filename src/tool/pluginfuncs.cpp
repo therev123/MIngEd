@@ -59,3 +59,11 @@ int mtool_pluginDir(lua_State* L)
 	return 1;
 }
 
+int mtool_sysPluginDir(lua_State* L)
+{
+    static char dir[255];
+    snprintf(dir, 255, "%s/Plugins", getenv("MSDKDIR"));
+    lua_pushstring(L, dir);
+    return 1;
+}
+

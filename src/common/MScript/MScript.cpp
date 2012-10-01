@@ -2574,6 +2574,11 @@ bool MScript::addScript(const char* filename)
 
     g_loadPath.push_back(g_currentDirectory);
     char * text = readTextFile(globalFilename);
+    if(!text)
+    {
+	g_loadPath.pop_back();
+	return false;
+    }
     bool rtn = luaL_dostring(m_state, text) == 0;
 
     if(!rtn)

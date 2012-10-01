@@ -188,23 +188,21 @@ void MPlugin::load(const char * filename)
 void MPlugin::callFunction(const char* fn, bool addSuffix)
 {
     char fnName[0xff];
-#ifndef M_PLUGIN_DYNAMIC
+#ifndef MPLUGIN_DYNAMIC
     if(addSuffix)
 	snprintf(fnName, 0xff, "%s%s", fn, m_filename.c_str());
     else
 #endif
 	snprintf(fnName, 0xff, "%s", fn);
     
-#ifdef M_PLUGIN_DYNAMIC
+#ifdef MPLUGIN_DYNAMIC
 # ifdef WIN32
     FunctionPtr function = reinterpret_cast<FunctionPtr>(GetProcAddress(m_library, fnName));
 # else
     FunctionPtr function = (FunctionPtr)dlsym(m_library, fnName);
 # endif
-    if(! function)
-	return;
-    
-    function();	
+    if(function != 0)
+	function();
 #else
     // currently no automatic mapping of statically linked plugins
 #endif

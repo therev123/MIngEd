@@ -13,6 +13,7 @@ static const luaL_Reg mtool_functions[] = {
   { "load_plugin", mtool_loadPlugin },
   { "plugin_ext",  mtool_pluginExt },
   { "plugin_dir",  mtool_pluginDir },
+  { "plugin_dir_sys",  mtool_sysPluginDir },
   { NULL, NULL }
 };
 
@@ -67,9 +68,18 @@ int main(int argc, char** argv)
   luaL_register(L, "npk", npk_functions);
   luaL_register(L, "file", file_functions);
 
-  luaL_loadfile(L, argv[1]);
+  if(luaL_loadfile(L, argv[1]) != 0)
+  {
+      printf("ERROR: \n%s\n", lua_tostring(L, -1));
+      return 1;
+  }
   
-  lua_pcall(L, 0, LUA_MULTRET, 0);
+  if(lua_pcall(L, 0, LUA_MULTRET, 0) != 0)
+  {
+      printf("ERROR: \n%s\n", lua_tostring(L, -1));
+      lua_close(L);
+      return 1;
+  }
   
   lua_getglobal(L, "main");
   lua_newtable(L);
@@ -79,7 +89,13 @@ int main(int argc, char** argv)
     lua_rawseti(L, -2, i+1);
   }
 
-  lua_pcall(L, 1, LUA_MULTRET, 0);
+  if(lua_pcall(L, 1, LUA_MULTRET, 0) != 0)
+  {
+      printf("ERROR: \n%s\n", lua_tostring(L, -1));
+      lua_close(L);
+      return 1;
+  }
 
   lua_close(L);
+  return 0;
 }

@@ -13,6 +13,8 @@
 		prebuildcommands("Mnpk src/movie/Movie.npk src/movie/data")
 		prebuildcommands("MEmbedder src/movie/Movie.npk src/movie/Movie_npk.h Movie_npk")
 
+		targetdir "build/plugins"
+
 		defines { "MPLUGIN_DYNAMIC" }
 
 		links { "MCore", "MEngine" }

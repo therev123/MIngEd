@@ -45,6 +45,9 @@ solution "maratis-minged"
 			defines { "DEBUG" }
 			flags { "Symbols" }
 
+-- plugins
+dofile("plugins.lua")
+
 	-- forked version of Maratis player
 	project "Maratis"
 		files { "src/player/src/**.cpp", "src/player/include/**.h" }
@@ -134,8 +137,6 @@ solution "maratis-minged"
 		configuration "Debug"
 			defines { "DEBUG" }
 			flags { "Symbols" }
--- plugins
-dofile("plugins.lua")
 			
 -- example plugin extension, built in the Maratis/MIngEd source tree
 	project "Example"

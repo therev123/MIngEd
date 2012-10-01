@@ -13,4 +13,6 @@ int mtool_pluginExt(lua_State* L);
 
 int mtool_pluginDir(lua_State* L);
 
+int mtool_sysPluginDir(lua_State* L);
+
 #endif/*__MTOOL_PLUGIN_FUNCS_H__*/
