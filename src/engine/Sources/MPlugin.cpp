@@ -153,10 +153,6 @@ void MPlugin::load(const char * filename)
 	return;
     }
 
-    for(std::set<MIPluginLoadHook*>::iterator iHook = s_Hooks.begin();
-	iHook != s_Hooks.end(); iHook++)
-	(*iHook)->Load(this);
-
     FunctionPtr function = (FunctionPtr)dlsym(m_library, "StartPlugin");
     if(! function)
     {
@@ -183,6 +179,11 @@ void MPlugin::load(const char * filename)
 	m_loaded = true;
     }
 #endif
+
+    for(std::set<MIPluginLoadHook*>::iterator iHook = s_Hooks.begin();
+	iHook != s_Hooks.end(); iHook++)
+	(*iHook)->Load(this);
+
 }
 
 void MPlugin::callFunction(const char* fn, bool addSuffix)

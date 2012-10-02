@@ -52,6 +52,7 @@
 // for plugin compatability checking
 #define MPLUGIN_AVAILABLE
 #define MINGED_ENGINE
+#define MEMBED_AVAILABLE
 
 // object3d type
 #define M_OBJECT3D			0

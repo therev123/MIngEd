@@ -2324,7 +2324,7 @@ int require(lua_State* L)
     if(text == NULL)
 	text = getFile(file);
 
-    if(!text) return 0;
+    if(!text || strlen(text) == 0) return 0;
 
     if(luaL_dostring(L, text) != 0)
 	printf("ERROR lua script: \n %s\n", lua_tostring(L, -1));
