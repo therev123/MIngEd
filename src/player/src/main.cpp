@@ -115,7 +115,10 @@ void AddPreload(CommandParameters &params, char* libname)
     printf("Unable to load preload: %s: Not enough preload slots\n", libname);
     return;
   }
+  params.preloads[slot] = (Plugin*)libname;
+  return;
 
+  // not here any more
   Plugin* plugin = new Plugin();
   plugin->load(libname);
   if(strlen(plugin->getFilename()) == 0)
@@ -220,6 +223,19 @@ int main(int argc, char **argv)
 
 	// window pointer event
 	window->setPointerEvent(windowEvents);
+
+	// Start Maratis instance
+	maratis->restart();
+	// first update for preload plugins
+	for(int i=0; i<PRELOAD_MAX; ++i)
+	    if(params.preloads[i])
+	    {
+		const char* name = (const char*)params.preloads[i];
+		params.preloads[i] = new Plugin;
+		params.preloads[i]->load(name);
+	    }
+	
+
 
 	// load project
 	bool projectFound = false;

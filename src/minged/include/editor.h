@@ -32,6 +32,8 @@ namespace minged
 	bool m_Initialised;
         bool m_IsOpen;
         btnState m_ToggleButton;
+
+	MPackage m_Data;
     };
 };
 

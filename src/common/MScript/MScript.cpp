@@ -2343,7 +2343,9 @@ int require(lua_State* L)
 MScript::MScript(void):
 m_state(NULL),
 m_isRunning(false)
-{}
+{
+    init();
+}
 
 MScript::~MScript(void)
 {
@@ -2517,8 +2519,8 @@ int MScript::function(lua_State * L)
 
 void MScript::runScript(const char * filename)
 {
-	clear();
-	init();
+    //clear();
+    //init();
 
 	if(! filename)
 	{

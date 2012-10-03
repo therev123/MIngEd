@@ -30,6 +30,8 @@ namespace minged
 	m_Initialised = false;
 	m_IsOpen= false;
 	m_ToggleButton = eUp;
+	m_Data = 0;
+	Init();
     }
     
     Editor::~Editor()
@@ -37,6 +39,9 @@ namespace minged
 	MEngine* engine = MEngine::getInstance();
 	if(MScriptContext* script = engine->getScriptContext())
 	    script->callFunction("mingedCleanup");
+	if(m_Data && engine->getPackageManager())
+	    engine->getPackageManager()->unloadPackage(m_Data);
+	m_Data = 0;
     }
 
     void Editor::Init()
@@ -47,7 +52,7 @@ namespace minged
 	
 	char filename[255];
 	getGlobalFilename(filename, engine->getSystemContext()->getWorkingDirectory(), PACKAGE_NAME);
-	engine->getPackageManager()->loadPackage(filename);
+	m_Data = engine->getPackageManager()->loadPackage(filename);
 
 	MScriptContext* script = engine->getScriptContext();
 	
@@ -82,8 +87,6 @@ namespace minged
 
     void Editor::Update(uint32 dt)
     {	
-	if(!m_Initialised)
-	    Init();
 	CheckToToggle();
 	
 	if(m_IsOpen)

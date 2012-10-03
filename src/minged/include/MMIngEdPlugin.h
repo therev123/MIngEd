@@ -21,19 +21,27 @@
     }
 
 #  define MINGED_PLUGIN_START_IMPLEMENT(x)				\
+    MPackage s_Data = 0;						\
     void StartEditor()							\
     {									\
 	MEngine* engine = MEngine::getInstance();			\
-	engine->getEmbedFileManager()->AddEmbeddedFile(#x".npk", x##_npk, x##_npkSize()); \
-	engine->getPackageManager()->loadPackage(#x".npk");		\
-	engine->getScriptContext()->addScript("editor/"#x"/__init__.lua"); \
+	if(engine->getEmbedFileManager())				\
+	    engine->getEmbedFileManager()->AddEmbeddedFile(#x".npk", x##_npk, x##_npkSize()); \
+	if(engine->getPackageManager())					\
+	    s_Data = engine->getPackageManager()->loadPackage(#x".npk"); \
+	if(engine->getScriptContext())					\
+	    engine->getScriptContext()->addScript("editor/"#x"/__init__.lua"); \
     }									\
     MPLUGIN_START_IMPLEMENT(x)
 
-#  define MINGED_PLUGIN_END_IMPLEMENT(x)	\
-    void EndEditor()				\
-    {						\
-    }						\
+#  define MINGED_PLUGIN_END_IMPLEMENT(x)				\
+    void EndEditor()							\
+    {									\
+        MEngine* engine = MEngine::getInstance();			\
+	if(s_Data && engine && engine->getPackageManager())		\
+	    engine->getPackageManager()->unloadPackage(s_Data);		\
+	s_Data = 0;							\
+    }									\
     MPLUGIN_END_IMPLEMENT(x)
 #endif/*MPLUGIN_DYNAMIC*/
 

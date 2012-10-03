@@ -268,7 +268,7 @@ void MaratisPlayer::loadProject(MProject* proj, const char * filename)
 	window->setWorkingDirectory(workingDir);
 	
 	// restart
-	restart();
+	//restart();
 	loadGamePlugin();
 	
 	// renderer

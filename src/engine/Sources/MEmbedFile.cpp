@@ -51,7 +51,7 @@ void MEmbedFile::open(const char* path, const char* mode)
     }
 }
 
-int	MEmbedFile::close()
+int MEmbedFile::close()
 {
     m_Open = false;
 }
