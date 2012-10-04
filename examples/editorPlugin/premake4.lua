@@ -1,5 +1,5 @@
 -- Maratis Game plugin tutorial
-solution "Example"
+solution "ExampleEditor"
 	configurations { "Debug", "Release" }
 	language "C++"
 
@@ -13,7 +13,7 @@ solution "Example"
 	end
  
 	-- Build the example plugin
-	project "Example"
+	project "ExampleEditor"
 		kind "SharedLib"
 		language "C++"
 		
@@ -42,9 +42,15 @@ solution "Example"
 			["MCore/*"] = os.getenv("MSDKDIR") .. "SDK/MCore/Includes/**.h",
 			["MEngine/*"] = os.getenv("MSDKDIR") .. "SDK/MEngine/Includes/**.h",
 			["MIngEd/*"] = os.getenv("MSDKDIR") .. "SDK/MIngEd/Includes/**.h",
-			["Game/*"] = { "**.h", "**.cpp" }
+			["Source/*"] = { "**.h", "**.cpp" },
+			["Editor/*"] = { "data/editor/**.lua"},
+			["Scripts/*"] = { "data/**.lua" }
 		}		
-				
+		
+		prebuildcommands("Mnpk ExampleEditor.npk data")
+		prebuildcommands("MEmbedder ExampleEditor.npk ExampleEditor_npk.h ExampleEditor_npk")
+
+		
 		-- link to Maratis
 		links { "MCore", "MEngine", "MGui" }
 		

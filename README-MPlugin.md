@@ -26,6 +26,44 @@ In the implementation file, the following will create the basis for the plugin.
  {
  }`
 
+-- See examples/plugin
+
+Setting up an editor plugin
+---------------------------
+
+To get a plugin loading into MIngEd automatically, a few changes have to be made to the above description. The header should be as follows:
+
+`#include <MMIngEdPlugin.h>
+
+MINGED_PLUGIN_DECLARE(ExampleEditor);`
+
+With the following in the source file:
+
+`#include "ExampleEditor.h"
+#include "ExampleEditor_npk.h"
+
+MINGED_PLUGIN_START_IMPLEMENT(ExampleEditor)
+{
+}
+
+MINGED_PLUGIN_END_IMPLEMENT(ExampleEditor)
+{
+}`
+
+The main difference here (apart from further wrapping in MINGED_PLUGIN_ rather than MPLUGIN_) is that we have to include another file. This file has to exist, and it contains all of the editor scripts and data. To create this file, the easiest way is to use Mnpk tool to package a directory into an npk package, then use MEmbedder to create an embedded file to compile.
+
+`$ Mnpk Example.npk data/`
+$ MEmbedder Example.npk Example_npk.h Example_npk`
+
+It is often useful to split editor and gameplay functionality into two separate plugins. In this case, the best option is to manually load the runtime plugin within the editor plugin. It will still have to be manually loaded from within a game, when not run through MIngEd, however this will ensure the correct loading of definitions for the editor functionality.
+
+`MINGED_PLUGIN_START_IMPLEMENT(ExampleEditor)
+{
+	MEngine::getInstance()->loadPlugin("Example");
+}`
+
+-- See examples/editorPlugin
+
 Compiling a plugin
 ------------------
 
@@ -48,6 +86,8 @@ And finally, on Mac OS X, to ~/.Maratis/Plugins
 
 `MPlugin install Example.dylib`
 
+For an editor plugin, it is recommended that they get installed to the Maratis system directory. This can simply be done by replacing `install` with `install-sys`
+
 Using a plugin
 --------------
 
@@ -59,13 +99,23 @@ This is a useful way to check that plugins are linking correctly, but isn't norm
 
 Instead, from within the game plugin (which is automatically loaded) you can do the following:
 
-`MPlugin examplePlugin;
- examplePlugin.load("Example");`
+`MEngine::getInstance()->loadPlugin("Example");`
 
 Publishing a plugin
 -------------------
 
 -- Really need to decide how to specify which plugins to pull in for publishing. Auto generated XML file?
+
+Notes
+-----
+
+A plugin support compatability header is provided at `examples/PluginCompatability.h`. This will allow the same plugin code to be compiled without MIngEd support in the engine.
+
+Plugin loading is done by performing a search of plugin path directories. This is as follows:
+`./Plugins/` (Usually within the game project root)
+`{HOME}/.Maratis/Plugins`
+`{MSDKDIR}/Plugins`
+This means that it is possible to have a standard plugin which is loaded at a higher level (eg from an editor plugin) and is then replaced within the project for a custom version.
 
 TODO
 ----

@@ -7,24 +7,13 @@ I'll start with a fairly unorganised list of goals. As I think of more things, I
 
 - 3D picking to choose entity in panel
 
-- Allow for multiple editor scripts to be running simultaneously
-
 - Add more editor functionality, such as behaviour adding/editing
-
-- Extend premake4. It's fine as it is right now, but it would be nice to not have to use
-        os.execute("svn checkout ...")
-
-    > things to add to premake: svn, git (hg? for kicks?), patch.
-
-    > this probably means having a crazy bootstrap build process.
 
 - Allow support for precompiled 3rd party libs and linking to stock Maratis core components.
 
     > This probably means more editing of premake, adding support for dialogue boxes and the like - maybe GUI ones?
 
 - Maybe add a console with direct lua interpretation?
-
-- Create another plugin and/or script to extend minged
 
 - While I'm making distant goals, why not create a plugin repository...
 
@@ -75,3 +64,16 @@ DONE
 - Add a maratis.npk to the build (partially complete)
 
     > Yep, see above about the embedded npk
+
+- Allow for multiple editor scripts to be running simultaneously
+
+    > Yep, can now have many many scripts
+
+- Create another plugin and/or script to extend minged
+
+    > Started (successfully) porting MParticle to MIngEd
+
+- Extend premake4. It's fine as it is right now, but it would be nice to not have to use
+        os.execute("svn checkout ...")
+
+    > I just did the "sensible" thing and fork all the code, rather than pulling it from svn

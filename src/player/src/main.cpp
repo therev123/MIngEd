@@ -226,6 +226,12 @@ int main(int argc, char **argv)
 
 	// Start Maratis instance
 	maratis->restart();
+	static const char* scriptName = "Maratis.cfg";
+	char filename[255];
+	getGlobalFilename(filename, 
+			  engine->getSystemContext()->getWorkingDirectory(), 
+			  scriptName);
+	engine->getScriptContext()->runScript(filename);
 	// first update for preload plugins
 	for(int i=0; i<PRELOAD_MAX; ++i)
 	    if(params.preloads[i])

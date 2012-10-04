@@ -98,6 +98,11 @@ function package_plugins(pkg)
    os.cp_of_type("build/plugins/", pkg["plugindir"], ext())
 end
 
+function package_config(pkg)
+   print("package_config")
+   os.cp("scripts/Maratis.cfg", pkg["bindir"])
+end
+
 function archive_package(pkg)
    print("archive_package")
 end
@@ -107,5 +112,6 @@ function main(Args)
    package_headers(pkg)
    package_libs(pkg)
    package_tools(pkg)
+   package_config(pkg)
    archive_package(pkg)
 end

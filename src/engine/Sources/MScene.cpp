@@ -681,7 +681,7 @@ void MScene::begin(void)
 
 	// run script
 	if(scriptContext)
-		scriptContext->runScript(getScriptFilename());
+		scriptContext->addScript(getScriptFilename());
 }
 
 void MScene::end(void)

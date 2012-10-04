@@ -2344,7 +2344,6 @@ MScript::MScript(void):
 m_state(NULL),
 m_isRunning(false)
 {
-    init();
 }
 
 MScript::~MScript(void)
@@ -2519,8 +2518,8 @@ int MScript::function(lua_State * L)
 
 void MScript::runScript(const char * filename)
 {
-    //clear();
-    //init();
+        clear();
+	init();
 
 	if(! filename)
 	{
@@ -2563,6 +2562,8 @@ void MScript::runScript(const char * filename)
 
 bool MScript::addScript(const char* filename)
 {
+    if(!filename || !strlen(filename))
+	return false;
     // save current directory
     char current[256];
     strcpy(current, g_currentDirectory);
