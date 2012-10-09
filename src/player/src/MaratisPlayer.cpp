@@ -56,6 +56,7 @@ MaratisPlayer::MaratisPlayer(void):
 m_gamePlugin(NULL),
 m_renderer(NULL)
 {
+    M_PROFILE_SCOPE(MaratisPlayer::MaratisPlayer);
 	// MEngine
 	{
 		m_soundContext = new MALContext();
@@ -78,11 +79,12 @@ m_renderer(NULL)
 	}
 
 	// start
-	start();
+	//start();
 }
 
 MaratisPlayer::~MaratisPlayer(void)
 {
+    M_PROFILE_SCOPE(MaratisPlayer::~MaratisPlayer);
 	clear();
 
 	SAFE_DELETE(m_embedFileManager);
@@ -101,12 +103,14 @@ MaratisPlayer::~MaratisPlayer(void)
 
 void MaratisPlayer::changeRenderer(const char * name)
 {
+    M_PROFILE_SCOPE(MaratisPlayer::changeRenderer);
 	MEngine * engine = MEngine::getInstance();
 	MRendererManager * rendererManager = engine->getRendererManager();
 	
 	MRendererCreator * renderer = rendererManager->getRendererByName(name);
 	if(renderer)
 	{
+	    printf("changeRenderer %s\n", name);
 		if(m_renderer)
 			m_renderer->destroy();
 		m_renderer = renderer->getNewRenderer();
@@ -116,6 +120,7 @@ void MaratisPlayer::changeRenderer(const char * name)
 
 void MaratisPlayer::start(void)
 {
+    M_PROFILE_SCOPE(MaratisPlayer::start);
 	// MEngine
 	{
 		MEngine * engine = MEngine::getInstance();
@@ -171,10 +176,11 @@ void MaratisPlayer::start(void)
 		// game
 		engine->setGame(m_game);
 		
+		changeRenderer("FixedRenderer");
 		// set default renderer (standard)
-		if(m_renderer == NULL)
-			m_renderer = new MStandardRenderer();
-		engine->setRenderer(m_renderer);
+		//if(m_renderer == NULL)
+		//	m_renderer = new MStandardRenderer();
+		//engine->setRenderer(m_renderer);
 
 	}
 	// embedded data
@@ -185,6 +191,7 @@ void MaratisPlayer::start(void)
 
 void MaratisPlayer::clear(void)
 {
+    M_PROFILE_SCOPE(MaratisPlayer::clear);
 	MEngine * engine = MEngine::getInstance();
 	
 	// level
@@ -229,12 +236,14 @@ void MaratisPlayer::clear(void)
 
 void MaratisPlayer::restart(void)
 {
+    M_PROFILE_SCOPE(MaratisPlayer::restart);
 	clear();
 	start();
 }
 
 void MaratisPlayer::loadGamePlugin(void)
 {
+    M_PROFILE_SCOPE(MaratisPlayer::loadGamePlugin);
 	SAFE_DELETE(m_gamePlugin);
 	m_gamePlugin = new MPlugin();
 	m_gamePlugin->load("Game");
@@ -242,6 +251,7 @@ void MaratisPlayer::loadGamePlugin(void)
 
 bool MaratisPlayer::loadProject(const char * filename)
 {
+    M_PROFILE_SCOPE(MaratisPlayer::loadProject);
 	if(! filename)
 		return false;
 	
@@ -258,6 +268,7 @@ bool MaratisPlayer::loadProject(const char * filename)
 
 void MaratisPlayer::loadProject(MProject* proj, const char * filename)
 {
+    M_PROFILE_SCOPE(MaratisPlayer::loadProject);
 	MWindow * window = MWindow::getInstance();
 	MEngine * engine = MEngine::getInstance();
 	
@@ -294,7 +305,7 @@ void MaratisPlayer::loadProject(MProject* proj, const char * filename)
 
 void MaratisPlayer::logicLoop(void)
 {
-        M_PROFILE_SCOPE("MaratisPlayer::logicLoop");
+        M_PROFILE_SCOPE(MaratisPlayer::logicLoop);
 	MEngine * engine = MEngine::getInstance();
 
 	// game
@@ -306,13 +317,13 @@ void MaratisPlayer::logicLoop(void)
 		}
 	}
 
-	if(MProfilerContext* profiler = engine->getProfilerContext())
-	  profiler->update();
+	//if(MProfilerContext* profiler = engine->getProfilerContext())
+	//  profiler->update();
 }
 
 void MaratisPlayer::graphicLoop(void)
 {
-        M_PROFILE_SCOPE("MaratisPlayer::graphicLoop");
+        M_PROFILE_SCOPE(MaratisPlayer::graphicLoop);
 	MWindow * window = MWindow::getInstance();
 	MEngine * engine = MEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();

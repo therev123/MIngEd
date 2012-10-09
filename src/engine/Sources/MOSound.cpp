@@ -37,6 +37,7 @@ MOSound::MOSound(MSoundRef * soundRef):
 	m_sourceId(0),
 	m_soundRef(soundRef)
 {
+    M_PROFILE_SCOPE(MOSound::MOSound);
 	unsigned int bufferId = 0;
 	if(m_soundRef)
 		bufferId = m_soundRef->getBufferId();
@@ -58,6 +59,7 @@ MOSound::MOSound(const MOSound & sound):
 	m_sourceId(0),
 	m_soundRef(sound.m_soundRef)
 {
+    M_PROFILE_SCOPE(MOSound::MOSound);
 	unsigned int bufferId = 0;
 	if(m_soundRef)
 		bufferId = m_soundRef->getBufferId();
@@ -76,12 +78,14 @@ MOSound::MOSound(const MOSound & sound):
 // destructor
 MOSound::~MOSound(void)
 {
+    M_PROFILE_SCOPE(MOSound::~MOSound);
 	MObject3d::clearObject3d();
 	MEngine::getInstance()->getSoundContext()->deleteSource(&m_sourceId);
 }
 
 void MOSound::setSoundRef(MSoundRef * soundRef)
 {
+    M_PROFILE_SCOPE(MOSound::setSoundRef);
 	m_soundRef = soundRef;
 
 	unsigned int bufferId = 0;
@@ -93,16 +97,19 @@ void MOSound::setSoundRef(MSoundRef * soundRef)
 
 bool MOSound::isPlaying(void)
 {
+    M_PROFILE_SCOPE(MOSound::isPlaying);
 	return MEngine::getInstance()->getSoundContext()->isSourcePlaying(m_sourceId);
 }
 
 float MOSound::getTimePos(void)
 {
+    M_PROFILE_SCOPE(MOSound::getTimePos);
 	return MEngine::getInstance()->getSoundContext()->getSourceTimePos(m_sourceId);
 }
 
 float MOSound::getSoundDuration(void)
 {
+    M_PROFILE_SCOPE(MOSound::getsoundDuration);
 	if(m_soundRef)
 		return MEngine::getInstance()->getSoundContext()->getBufferDuration(m_soundRef->getBufferId());
 	else
@@ -111,6 +118,7 @@ float MOSound::getSoundDuration(void)
 
 void MOSound::play(void)
 {
+    M_PROFILE_SCOPE(MOSound::play);
 	MSoundContext * soundContext = MEngine::getInstance()->getSoundContext();
 
 	if(m_soundRef)
@@ -123,16 +131,19 @@ void MOSound::play(void)
 
 void MOSound::pause(void)
 {
+    M_PROFILE_SCOPE(MOSound::pause);
 	MEngine::getInstance()->getSoundContext()->pauseSource(m_sourceId);
 }
 
 void MOSound::stop(void)
 {
+    M_PROFILE_SCOPE(MOSound::stop);
 	MEngine::getInstance()->getSoundContext()->stopSource(m_sourceId);
 }
 
 void MOSound::setLooping(bool loop)
 { 
+    M_PROFILE_SCOPE(MOSound::setLooping);
 	MSoundContext * soundContext = MEngine::getInstance()->getSoundContext();
 
 	if(loop != m_isLooping)
@@ -148,35 +159,41 @@ void MOSound::setLooping(bool loop)
 
 void MOSound::setRelative(bool relative)
 {
+    M_PROFILE_SCOPE(MOSound::setRelative);
 	m_isRelative = relative;
 	MEngine::getInstance()->getSoundContext()->setSourceRelative(m_sourceId, m_isRelative);
 }
 
 void MOSound::setPitch(float pitch)
 {
+    M_PROFILE_SCOPE(MOSound::setPitch);
 	m_pitch = pitch;
 	MEngine::getInstance()->getSoundContext()->setSourcePitch(m_sourceId, m_pitch);
 }
 
 void MOSound::setGain(float gain)
 {
+    M_PROFILE_SCOPE(MOSound::setGain);
 	m_gain = gain;
 	MEngine::getInstance()->getSoundContext()->setSourceGain(m_sourceId, m_gain);
 }
 
 void MOSound::setRadius(float radius)
 {
+    M_PROFILE_SCOPE(MOSound::setRadius);
 	m_radius = radius;
 	MEngine::getInstance()->getSoundContext()->setSourceRadius(m_sourceId, m_radius);
 }
 
 void MOSound::setRolloff(float rolloff)
 {
+    M_PROFILE_SCOPE(MOSound::setRolloff);
 	m_rolloff = rolloff;
 	MEngine::getInstance()->getSoundContext()->setSourceRolloff(m_sourceId, m_rolloff);
 }
 
 void MOSound::update(void)
 {
+    M_PROFILE_SCOPE(MOSound::update);
 	MEngine::getInstance()->getSoundContext()->setSourcePosition(m_sourceId, getTransformedPosition());
 }

@@ -38,11 +38,13 @@ m_data(NULL)
 
 MKey::~MKey(void)
 {
+    M_PROFILE_SCOPE(MKey::~MKey);
 	SAFE_FREE(m_data);
 }
 
 float * MKey::createFloatData(void)
 {
+    M_PROFILE_SCOPE(MKey::createFloatData);
 	SAFE_FREE(m_data);
 	float * value = new float;
 	m_data = value;
@@ -51,6 +53,7 @@ float * MKey::createFloatData(void)
 
 MVector2 * MKey::createVector2Data(void)
 {
+    M_PROFILE_SCOPE(MKey::createVector2Data);
 	SAFE_FREE(m_data);
 	MVector2 * vec2 = new MVector2();
 	m_data = vec2;
@@ -59,6 +62,7 @@ MVector2 * MKey::createVector2Data(void)
 
 MVector3 * MKey::createVector3Data(void)
 {
+    M_PROFILE_SCOPE(MKey::createVector3Data);
 	SAFE_FREE(m_data);
 	MVector3 * vec3 = new MVector3();
 	m_data = vec3;
@@ -67,6 +71,7 @@ MVector3 * MKey::createVector3Data(void)
 
 MVector4 * MKey::createVector4Data(void)
 {
+    M_PROFILE_SCOPE(MKey::createVector4Data);
 	SAFE_FREE(m_data);
 	MVector4 * vec4 = new MVector4();
 	m_data = vec4;
@@ -75,6 +80,7 @@ MVector4 * MKey::createVector4Data(void)
 
 MQuaternion * MKey::createQuaternionData(void)
 {
+    M_PROFILE_SCOPE(MKey::createQuaternionData);
 	SAFE_FREE(m_data);
 	MQuaternion * quat = new MQuaternion();
 	m_data = quat;

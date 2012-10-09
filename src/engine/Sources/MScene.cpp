@@ -40,6 +40,7 @@ m_gravity(0, 0, -0.981f)
 
 MScene::~MScene()
 {
+    M_PROFILE_SCOPE(MScene::~MScene);
 	stopAllSounds();
 
 	// delete objects
@@ -57,6 +58,7 @@ MScene::~MScene()
 
 MOCamera * MScene::addNewCamera(void)
 {
+    M_PROFILE_SCOPE(MScene::addNewCamera);
 	MOCamera * newCamera = new MOCamera();
 	m_cameras.push_back(newCamera);
 	m_objects.push_back(newCamera);
@@ -65,6 +67,7 @@ MOCamera * MScene::addNewCamera(void)
 
 MOCamera * MScene::addNewCamera(const MOCamera & camera)
 {
+    M_PROFILE_SCOPE(MScene::addNewCamera);
 	MOCamera * newCamera = new MOCamera(camera);
 	m_cameras.push_back(newCamera);
 	m_objects.push_back(newCamera);
@@ -73,6 +76,7 @@ MOCamera * MScene::addNewCamera(const MOCamera & camera)
 
 MOLight * MScene::addNewLight(void)
 {
+    M_PROFILE_SCOPE(MScene::addNewLight);
 	MOLight * newLight = new MOLight();
 	m_lights.push_back(newLight);
 	m_objects.push_back(newLight);
@@ -81,6 +85,7 @@ MOLight * MScene::addNewLight(void)
 
 MOLight * MScene::addNewLight(const MOLight & light)
 {
+    M_PROFILE_SCOPE(MScene::addNewLight);
 	MOLight * newLight = new MOLight(light);
 	m_lights.push_back(newLight);
 	m_objects.push_back(newLight);
@@ -89,6 +94,7 @@ MOLight * MScene::addNewLight(const MOLight & light)
 
 MOEntity * MScene::addNewEntity(MMeshRef * meshRef)
 {
+    M_PROFILE_SCOPE(MScene::addNewEntity);
 	MOEntity * newEntity = new MOEntity(meshRef);
 	m_entities.push_back(newEntity);
 	m_objects.push_back(newEntity);
@@ -97,6 +103,7 @@ MOEntity * MScene::addNewEntity(MMeshRef * meshRef)
 
 MOEntity * MScene::addNewEntity(const MOEntity & entity)
 {
+    M_PROFILE_SCOPE(MScene::addNewEntity);
 	MOEntity * newEntity = new MOEntity(entity);
 	m_entities.push_back(newEntity);
 	m_objects.push_back(newEntity);
@@ -105,6 +112,7 @@ MOEntity * MScene::addNewEntity(const MOEntity & entity)
 
 MOSound * MScene::addNewSound(MSoundRef * soundRef)
 {
+    M_PROFILE_SCOPE(MScene::addNewSound);
 	MOSound * newSoundSource = new MOSound(soundRef);
 	m_sounds.push_back(newSoundSource);
 	m_objects.push_back(newSoundSource);
@@ -113,6 +121,7 @@ MOSound * MScene::addNewSound(MSoundRef * soundRef)
 
 MOSound * MScene::addNewSound(const MOSound & sound)
 {
+    M_PROFILE_SCOPE(MScene::addNewSound);
 	MOSound * newSoundSource = new MOSound(sound);
 	m_sounds.push_back(newSoundSource);
 	m_objects.push_back(newSoundSource);
@@ -121,6 +130,7 @@ MOSound * MScene::addNewSound(const MOSound & sound)
 
 MOText * MScene::addNewText(MFontRef * fontRef)
 {
+    M_PROFILE_SCOPE(MScene::addNewText);
 	MOText * newText = new MOText(fontRef);
 	m_texts.push_back(newText);
 	m_objects.push_back(newText);
@@ -129,6 +139,7 @@ MOText * MScene::addNewText(MFontRef * fontRef)
 
 MOText * MScene::addNewText(const MOText & text)
 {
+    M_PROFILE_SCOPE(MScene::addNewText);
 	MOText * newText = new MOText(text);
 	m_texts.push_back(newText);
 	m_objects.push_back(newText);
@@ -137,16 +148,19 @@ MOText * MScene::addNewText(const MOText & text)
 
 void MScene::setName(const char * name)
 {
+    M_PROFILE_SCOPE(MScene::setName);
 	m_name.set(name);
 }
 
 void MScene::setScriptFilename(const char * scriptFilename)
 {
+    M_PROFILE_SCOPE(MScene::setScriptFilename);
 	m_scriptFilename.set(scriptFilename);
 }
 
 bool createShape(MOEntity * entity, MPhysicsProperties * phyProps, unsigned int * shapeId)
 {
+    M_PROFILE_SCOPE(MScene::createShape);
 	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
 
 	// get bounding box
@@ -284,6 +298,7 @@ bool createShape(MOEntity * entity, MPhysicsProperties * phyProps, unsigned int 
 
 void MScene::prepareCollisionShape(MOEntity * entity)
 {
+    M_PROFILE_SCOPE(MScene::prepareCollisionShape);
 	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
 	MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 	
@@ -329,6 +344,7 @@ void MScene::prepareCollisionShape(MOEntity * entity)
 
 void MScene::prepareCollisionObject(MOEntity * entity)
 {
+    M_PROFILE_SCOPE(MScene::prepareCollisionObject);
 	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
 	MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 	if(! phyProps)
@@ -408,6 +424,7 @@ void MScene::prepareCollisionObject(MOEntity * entity)
 
 void MScene::prepareConstraints(MOEntity * entity)
 {
+    M_PROFILE_SCOPE(MScene::prepareConstraints);
 	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
 	MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 	
@@ -449,7 +466,8 @@ void MScene::prepareConstraints(MOEntity * entity)
 }
 
 void MScene::preparePhysics(void)
-{	
+{
+    M_PROFILE_SCOPE(MScene::preparePhysics);	
 	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
 	if(! physics)
 		return;
@@ -483,6 +501,7 @@ void MScene::preparePhysics(void)
 
 void MScene::deleteObject(MObject3d * object)
 {
+    M_PROFILE_SCOPE(MScene::deleteObject);
 	if(! object)
 		return;
 
@@ -581,6 +600,7 @@ void MScene::deleteObject(MObject3d * object)
 
 bool MScene::getObjectIndex(const char * name, unsigned int * id)
 {
+    M_PROFILE_SCOPE(MScene::getObjectIndex);
 	unsigned int i;
 	unsigned int oSize = getObjectsNumber();
 	for(i=0; i<oSize; i++)
@@ -597,6 +617,7 @@ bool MScene::getObjectIndex(const char * name, unsigned int * id)
 
 MObject3d * MScene::getObjectByName(const char * name)
 {
+    M_PROFILE_SCOPE(MScene::getObjectByName);
 	unsigned int id;
 	if(getObjectIndex(name, &id)){
 		return m_objects[id];
@@ -607,6 +628,7 @@ MObject3d * MScene::getObjectByName(const char * name)
 
 MOLight * MScene::getLightByName(const char * name)
 {
+    M_PROFILE_SCOPE(MScene::getLightByName);
 	unsigned int i;
 	unsigned int size = getLightsNumber();
 	for(i=0; i<size; i++)
@@ -620,6 +642,7 @@ MOLight * MScene::getLightByName(const char * name)
 
 MOCamera * MScene::getCameraByName(const char * name)
 {
+    M_PROFILE_SCOPE(MScene::getCameraByName);
 	unsigned int i;
 	unsigned int size = getCamerasNumber();
 	for(i=0; i<size; i++)
@@ -633,6 +656,7 @@ MOCamera * MScene::getCameraByName(const char * name)
 
 MOEntity * MScene::getEntityByName(const char * name)
 {
+    M_PROFILE_SCOPE(MScene::getEntityByName);
 	unsigned int i;
 	unsigned int size = getEntitiesNumber();
 	for(i=0; i<size; i++)
@@ -646,6 +670,7 @@ MOEntity * MScene::getEntityByName(const char * name)
 
 MOSound * MScene::getSoundByName(const char * name)
 {
+    M_PROFILE_SCOPE(MScene::getSoundByName);
 	unsigned int i;
 	unsigned int size = getSoundsNumber();
 	for(i=0; i<size; i++)
@@ -659,6 +684,7 @@ MOSound * MScene::getSoundByName(const char * name)
 
 MOText * MScene::getTextByName(const char * name)
 {
+    M_PROFILE_SCOPE(MScene::getTextByName);
 	unsigned int i;
 	unsigned int size = getTextsNumber();
 	for(i=0; i<size; i++)
@@ -672,6 +698,7 @@ MOText * MScene::getTextByName(const char * name)
 
 void MScene::begin(void)
 {
+    M_PROFILE_SCOPE(MScene::begin);
 	MEngine * engine = MEngine::getInstance();
 	MScriptContext * scriptContext = engine->getScriptContext();
 
@@ -686,11 +713,13 @@ void MScene::begin(void)
 
 void MScene::end(void)
 {
+    M_PROFILE_SCOPE(MScene::end);
 	stopAllSounds();
 }
 
 void MScene::updatePhysics(void)
 {
+    M_PROFILE_SCOPE(MScene::updatePhysics);
 	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
 	if(! physics)
 		return;
@@ -758,6 +787,7 @@ void MScene::updatePhysics(void)
 
 void MScene::updateObjectsBehaviors(void)
 {
+    M_PROFILE_SCOPE(MScene::updateObjectsBehaviors);
 	unsigned int i;
 	unsigned int oSize = getObjectsNumber();
 	for(i=0; i<oSize; i++)
@@ -772,6 +802,7 @@ void MScene::updateObjectsBehaviors(void)
 
 void MScene::drawObjectsBehaviors(void)
 {
+    M_PROFILE_SCOPE(MScene::drawObjectsBehaviors);
 	unsigned int i;
 	unsigned int oSize = getObjectsNumber();
 	for(i=0; i<oSize; i++)
@@ -786,6 +817,7 @@ void MScene::drawObjectsBehaviors(void)
 
 void MScene::updateObjectsMatrices(void)
 {
+    M_PROFILE_SCOPE(MScene::updateObjectsMatrices);
 	unsigned int i;
 	unsigned int oSize = getObjectsNumber();
 	for(i=0; i<oSize; i++)
@@ -805,6 +837,7 @@ void MScene::updateObjectsMatrices(void)
 
 void MScene::update(void)
 {
+    M_PROFILE_SCOPE(MScene::update);
 	// update objects
 	unsigned int i;
 	unsigned int oSize = getObjectsNumber();
@@ -821,6 +854,7 @@ void MScene::update(void)
 
 void MScene::playLoopSounds()
 {
+    M_PROFILE_SCOPE(MScene::playLoopSounds);
 	unsigned int i;
 
 	// sound sources
@@ -834,6 +868,7 @@ void MScene::playLoopSounds()
 
 void MScene::stopAllSounds()
 {
+    M_PROFILE_SCOPE(MScene::stopAllSounds);
 	unsigned int i;
 
 	// sound sources
@@ -844,6 +879,7 @@ void MScene::stopAllSounds()
 
 void MScene::draw(MOCamera * camera)
 {
+    M_PROFILE_SCOPE(MScene::draw);
 	MEngine * engine = MEngine::getInstance();
 	MRenderer * renderer = engine->getRenderer();
 	if(renderer)

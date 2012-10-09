@@ -82,6 +82,7 @@ m_displays(NULL)
 
 MSubMesh::~MSubMesh(void)
 {
+    M_PROFILE_SCOPE(MSubMesh::~MSubMesh);
 	clearIndices();
 	clearVertices();
 	clearNormals();
@@ -97,22 +98,26 @@ MSubMesh::~MSubMesh(void)
 
 void MSubMesh::clearMapChannelOffset(void)
 {
+    M_PROFILE_SCOPE(MSubMesh::clearMapChannelOffset);
 	m_mapChannelsOffset.clear();
 }
 
 void MSubMesh::setMapChannelOffset(unsigned int channel, unsigned int offset)
 {
+    M_PROFILE_SCOPE(MSubMesh::setMapchannelOffset);
 	m_mapChannelsOffset[channel] = offset;
 }
 
 bool MSubMesh::isMapChannelExist(unsigned int channel)
 {
+    M_PROFILE_SCOPE(MSubMesh::isMapChannelExist);
 	map<unsigned int, unsigned int>::iterator iter = m_mapChannelsOffset.find(channel);
 	return (iter != m_mapChannelsOffset.end());
 }
 
 unsigned int MSubMesh::getMapChannelOffset(unsigned int channel)
 {
+    M_PROFILE_SCOPE(MSubMesh::getMapChannelOffset);
 	map<unsigned int, unsigned int>::iterator iter = m_mapChannelsOffset.find(channel);
 	if(iter != m_mapChannelsOffset.end())
 		return iter->second;
@@ -121,11 +126,13 @@ unsigned int MSubMesh::getMapChannelOffset(unsigned int channel)
 
 void MSubMesh::clearMorphingData(void)
 {
+    M_PROFILE_SCOPE(MSubMesh::clearMorphingData);
 	SAFE_DELETE(m_morphingData);
 }
 
 MMorphingData * MSubMesh::createMorphingData(void)
 {
+    M_PROFILE_SCOPE(MSubMesh::createMorphingData);
 	MMorphingData * morphingData = new MMorphingData();
 	clearMorphingData();
 	m_morphingData = morphingData;
@@ -134,11 +141,13 @@ MMorphingData * MSubMesh::createMorphingData(void)
 
 void MSubMesh::clearSkinData(void)
 {
+    M_PROFILE_SCOPE(MSubMesh::clearSkinData);
 	SAFE_DELETE(m_skinData);
 }
 
 MSkinData * MSubMesh::createSkinData(void)
 {
+    M_PROFILE_SCOPE(MSubMesh::createSkinData);
 	MSkinData * skinData = new MSkinData();
 	clearSkinData();
 	m_skinData = skinData;
@@ -147,42 +156,49 @@ MSkinData * MSubMesh::createSkinData(void)
 
 void MSubMesh::clearIndices(void)
 {
+    M_PROFILE_SCOPE(MSubMesh::clearIndices);
 	m_indicesSize = 0;
 	SAFE_FREE(m_indices);
 }
 
 void MSubMesh::clearVertices(void)
 {
+    M_PROFILE_SCOPE(MSubMesh::clearVertices);
 	m_verticesSize = 0;
 	SAFE_DELETE_ARRAY(m_vertices);
 }
 
 void MSubMesh::clearNormals(void)
 {
+    M_PROFILE_SCOPE(MSubMesh::clearNormals);
 	m_normalsSize = 0;
 	SAFE_DELETE_ARRAY(m_normals);
 }
 
 void MSubMesh::clearTangents(void)
 {
+    M_PROFILE_SCOPE(MSubMesh::clearTangents);
 	m_tangentsSize = 0;
 	SAFE_DELETE_ARRAY(m_tangents);
 }
 
 void MSubMesh::clearTexCoords(void)
 {
+    M_PROFILE_SCOPE(MSubMesh::clearTexCoords);
 	m_texCoordsSize = 0;
 	SAFE_DELETE_ARRAY(m_texCoords);
 }
 
 void MSubMesh::clearColors(void)
 {
+    M_PROFILE_SCOPE(MSubMesh::clearColors);
 	m_colorsSize = 0;
 	SAFE_DELETE_ARRAY(m_colors);
 }
 
 void * MSubMesh::allocIndices(unsigned int size, M_TYPES type)
 {
+    M_PROFILE_SCOPE(MSubMesh::allocIndices);
 	clearIndices();
 	if(size == 0)
 		return NULL;
@@ -207,6 +223,7 @@ void * MSubMesh::allocIndices(unsigned int size, M_TYPES type)
 
 MVector3 * MSubMesh::allocVertices(unsigned int size)
 {
+    M_PROFILE_SCOPE(MSubMesh::allocVertices);
 	clearVertices();
 	if(size == 0)
 		return NULL;
@@ -219,6 +236,7 @@ MVector3 * MSubMesh::allocVertices(unsigned int size)
 
 MVector3 * MSubMesh::allocNormals(unsigned int size)
 {
+    M_PROFILE_SCOPE(MSubMesh::allocNormals);
 	clearNormals();
 	if(size == 0)
 		return NULL;
@@ -231,6 +249,7 @@ MVector3 * MSubMesh::allocNormals(unsigned int size)
 
 MVector3 * MSubMesh::allocTangents(unsigned int size)
 {
+    M_PROFILE_SCOPE(MSubMesh::allocTangents);
 	clearTangents();
 	if(size == 0)
 		return NULL;
@@ -243,6 +262,7 @@ MVector3 * MSubMesh::allocTangents(unsigned int size)
 
 MVector2 * MSubMesh::allocTexCoords(unsigned int size)
 {
+    M_PROFILE_SCOPE(MSubMesh::allocTexCoords);
 	clearTexCoords();
 	if(size == 0)
 		return NULL;
@@ -255,6 +275,7 @@ MVector2 * MSubMesh::allocTexCoords(unsigned int size)
 
 MColor * MSubMesh::allocColors(unsigned int size)
 {
+    M_PROFILE_SCOPE(MSubMesh::allocColors);
 	clearColors();
 	if(size == 0)
 		return NULL;
@@ -267,6 +288,7 @@ MColor * MSubMesh::allocColors(unsigned int size)
 
 void MSubMesh::allocDisplays(unsigned int size)
 {
+    M_PROFILE_SCOPE(MSubMesh::allocDisplays);
 	clearDisplays();
 	if(size == 0)
 		return;
@@ -275,6 +297,7 @@ void MSubMesh::allocDisplays(unsigned int size)
 
 void MSubMesh::clearDisplays(void)
 {
+    M_PROFILE_SCOPE(MSubMesh::clearDisplays);
 	unsigned int i;
 	for(i=0; i<m_displaysNumber; i++)
 		SAFE_DELETE(m_displays[i]);
@@ -285,6 +308,7 @@ void MSubMesh::clearDisplays(void)
 
 MDisplay * MSubMesh::addNewDisplay(M_PRIMITIVE_TYPES primitiveType, unsigned int begin, unsigned int size)
 {
+    M_PROFILE_SCOPE(MSubMesh::addNewDisplay);
 	MDisplay * display = new MDisplay(primitiveType, begin, size);
 	m_displays[m_displaysNumber] = display;
 	m_displaysNumber++;
@@ -293,6 +317,7 @@ MDisplay * MSubMesh::addNewDisplay(M_PRIMITIVE_TYPES primitiveType, unsigned int
 
 bool MSubMesh::hasTransparency(void)
 {
+    M_PROFILE_SCOPE(MSubMesh::hasTransparency);
 	unsigned int i;
 	unsigned int displayNumber = getDisplaysNumber();
 	for(i=0; i<displayNumber; i++)
@@ -334,21 +359,25 @@ m_subMeshs(NULL)
 
 MMesh::~MMesh(void)
 {
+    M_PROFILE_SCOPE(MMesh::MMesh);
 	clear();
 }
 
 MMesh * MMesh::getNew(void)
 {
+    M_PROFILE_SCOPE(MMesh::getNew);
 	return new MMesh();
 }
 
 void MMesh::destroy(void)
 {
+    M_PROFILE_SCOPE(MMesh::destroy);
 	delete this;
 }
 
 void MMesh::clear(void)
 {
+    M_PROFILE_SCOPE(MMesh::clear);
 	clearArmature();
 	clearTextures();
 	clearMaterials();
@@ -362,12 +391,14 @@ void MMesh::clear(void)
 
 void MMesh::clearAnimsRanges(void)
 {
+    M_PROFILE_SCOPE(MMesh::clearAnimsRanges);
 	m_animsRangesNumber = 0;
 	SAFE_DELETE_ARRAY(m_animsRanges);
 }
 
 MAnimRange * MMesh::allocAnimsRanges(unsigned int size)
 {
+    M_PROFILE_SCOPE(MMesh::allocAnimsRanges);
 	clearAnimsRanges();
 	if(size == 0)
 		return NULL;
@@ -379,6 +410,7 @@ MAnimRange * MMesh::allocAnimsRanges(unsigned int size)
 
 MArmatureAnim * MMesh::getArmatureAnim(void)
 {
+    M_PROFILE_SCOPE(MMesh::getArmatureAnim);
 	if(! m_armatureAnimRef)
 		return NULL;
 
@@ -387,6 +419,7 @@ MArmatureAnim * MMesh::getArmatureAnim(void)
 
 MTexturesAnim * MMesh::getTexturesAnim(void)
 {
+    M_PROFILE_SCOPE(MMesh::getTexturesAnim);
 	if(! m_texturesAnimRef)
 		return NULL;
 
@@ -395,6 +428,7 @@ MTexturesAnim * MMesh::getTexturesAnim(void)
 
 MMaterialsAnim * MMesh::getMaterialsAnim(void)
 {
+    M_PROFILE_SCOPE(MMesh::getMaterialsAnim);
 	if(! m_materialsAnimRef)
 		return NULL;
 
@@ -403,11 +437,13 @@ MMaterialsAnim * MMesh::getMaterialsAnim(void)
 
 void MMesh::clearArmature(void)
 {
+    M_PROFILE_SCOPE(MMesh::clearArmature);
 	SAFE_DELETE(m_armature);
 }
 
 MArmature * MMesh::createArmature(void)
 {
+    M_PROFILE_SCOPE(MMesh::createArmature);
 	clearArmature();
 	m_armature = new MArmature();
 	return m_armature;
@@ -415,6 +451,7 @@ MArmature * MMesh::createArmature(void)
 
 void MMesh::allocTextures(unsigned int size)
 {
+    M_PROFILE_SCOPE(MMesh::allocTextures);
 	clearTextures();
 	if(size == 0)
 		return;
@@ -423,6 +460,7 @@ void MMesh::allocTextures(unsigned int size)
 
 void MMesh::clearTextures(void)
 {
+    M_PROFILE_SCOPE(MMesh::clearTextures);
 	unsigned int i;
 	for(i=0; i<m_texturesNumber; i++)
 		SAFE_DELETE(m_textures[i]);
@@ -433,6 +471,7 @@ void MMesh::clearTextures(void)
 
 MTexture * MMesh::addNewTexture(MTextureRef * texRef)
 {
+    M_PROFILE_SCOPE(MMesh::addNewTextures);
 	MTexture * texture = new MTexture(texRef);
 	m_textures[m_texturesNumber] = texture;
 	m_texturesNumber++;
@@ -441,6 +480,7 @@ MTexture * MMesh::addNewTexture(MTextureRef * texRef)
 
 void MMesh::allocMaterials(unsigned int size)
 {
+    M_PROFILE_SCOPE(MMesh::allocMaterials);
 	clearMaterials();
 	if(size == 0)
 		return;
@@ -449,6 +489,7 @@ void MMesh::allocMaterials(unsigned int size)
 
 void MMesh::clearMaterials(void)
 {
+    M_PROFILE_SCOPE(MMesh::clearMaterials);
 	unsigned int i;
 	for(i=0; i<m_materialsNumber; i++)
 		SAFE_DELETE(m_materials[i]);
@@ -459,6 +500,7 @@ void MMesh::clearMaterials(void)
 
 MMaterial * MMesh::addNewMaterial(void)
 {
+    M_PROFILE_SCOPE(MMesh::addNewMaterial);
 	MMaterial * material = new MMaterial();
 	m_materials[m_materialsNumber] = material;
 	m_materialsNumber++;
@@ -467,6 +509,7 @@ MMaterial * MMesh::addNewMaterial(void)
 
 MSubMesh * MMesh::allocSubMeshs(unsigned int size)
 {
+    M_PROFILE_SCOPE(MMesh::allocSubMeshs);
 	clearSubMeshs();
 	if(size == 0)
 		return NULL;
@@ -478,12 +521,14 @@ MSubMesh * MMesh::allocSubMeshs(unsigned int size)
 
 void MMesh::clearSubMeshs(void)
 {
+    M_PROFILE_SCOPE(MMesh::clearSubMeshs);
 	m_subMeshsNumber = 0;
 	SAFE_DELETE_ARRAY(m_subMeshs);
 }
 
 void MMesh::updateBoundingBox(void)
 {
+    M_PROFILE_SCOPE(MMesh::updateBoundingBox);
 	if(m_subMeshsNumber > 0)
 	{
 		MVector3 * min = m_boundingBox.getMin();

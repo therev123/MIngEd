@@ -38,6 +38,7 @@ m_align(M_ALIGN_LEFT),
 m_size(16),
 m_color(1, 1, 1, 1)
 {
+    M_PROFILE_SCOPE(MOText::MOText);
 	setFontRef(fontRef);
 }
 
@@ -56,17 +57,20 @@ m_boundingBox(text.m_boundingBox)
 // destructor
 MOText::~MOText(void)
 {
+    M_PROFILE_SCOPE(MOText::~MOText);
 	MObject3d::clearObject3d();
 }
 
 void MOText::setFontRef(MFontRef * fontRef)
 {
+    M_PROFILE_SCOPE(MOText::setFontRef);
 	m_fontRef = fontRef;
 	prepare();
 }
 
 MFont * MOText::getFont(void)
 {
+    M_PROFILE_SCOPE(MOText::getFont);
 	if(! m_fontRef)
 		return NULL;
 
@@ -75,24 +79,28 @@ MFont * MOText::getFont(void)
 
 void MOText::setText(const char * text)
 {
+    M_PROFILE_SCOPE(MOText::setText);
 	m_text.set(text);
 	prepare();
 }
 
 void MOText::setAlign(M_ALIGN_MODES align)
 {
+    M_PROFILE_SCOPE(MOText::setAlign);
 	m_align = align;
 	prepare();
 }
 
 void MOText::setSize(float size)
 { 
+    M_PROFILE_SCOPE(MOText::setSize);
 	m_size = size;
 	prepare();
 }
 
 void MOText::updateLinesOffset(void)
 {
+    M_PROFILE_SCOPE(MOText::updateLinesOffset);
 	MFont * font = getFont();
 	const char * text = m_text.getData();
 
@@ -200,6 +208,7 @@ void MOText::updateLinesOffset(void)
 
 void MOText::prepare(void)
 {
+    M_PROFILE_SCOPE(MOText::prepare);
 	MFont * font = getFont();
 	const char * text = m_text.getData();
 	if(! text)
@@ -276,6 +285,7 @@ void MOText::prepare(void)
 
 void MOText::draw(void)
 {
+    M_PROFILE_SCOPE(MOText::draw);
 	MFont * font = getFont();
 	const char * text = m_text.getData();
 	if(! text)
@@ -379,6 +389,7 @@ void MOText::draw(void)
 
 void MOText::updateVisibility(MOCamera * camera)
 {
+    M_PROFILE_SCOPE(MOText::updateVisibility);
 	MFrustum * frustum = camera->getFrustum();
 
 	MVector3 * min = m_boundingBox.getMin();

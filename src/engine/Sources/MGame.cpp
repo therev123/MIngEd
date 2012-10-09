@@ -39,6 +39,7 @@ m_isRunning(false)
 
 MGame::~MGame(void)
 {
+    M_PROFILE_SCOPE(MGame::~MGame);
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	
 	// delete frame buffer
@@ -62,6 +63,7 @@ MOCamera * MGame::getCurrentCamera(MScene * scene)
 
 void MGame::update(void)
 {
+    M_PROFILE_SCOPE(MGame::update);
 	MEngine * engine = MEngine::getInstance();
 	MScriptContext * scriptContext = engine->getScriptContext();
 
@@ -115,6 +117,7 @@ void MGame::update(void)
 
 void MGame::draw(void)
 {
+    M_PROFILE_SCOPE(MGame::draw);
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
 	// get level
@@ -236,6 +239,7 @@ void MGame::draw(void)
 
 void MGame::onBeginScene(void)
 {
+    M_PROFILE_SCOPE(MGame::onBeginScene);
 	// get level
 	MLevel * level = MEngine::getInstance()->getLevel();
 	if(! level)
@@ -252,6 +256,7 @@ void MGame::onBeginScene(void)
 
 void MGame::onEndScene(void)
 {
+    M_PROFILE_SCOPE(MGame::onEndScene);
 	MEngine * engine = MEngine::getInstance();
 	engine->getPhysicsContext()->clear();
 

@@ -33,16 +33,19 @@
 
 MFXRef::~MFXRef(void)
 {
+    M_PROFILE_SCOPE(MFXRef::~MFXRef);
 	MEngine::getInstance()->getRenderingContext()->deleteFX(&m_FXId);
 }
 
 MFXManager::~MFXManager(void)
 {
+    M_PROFILE_SCOPE(MFXManager::~MFXManager);
 	clear();
 }
 
 void MFXManager::clear(void)
 {
+    M_PROFILE_SCOPE(MFXManager::clear);
 	unsigned int i;
 	unsigned int size = m_FXRefs.size();
 	for(i=0; i<size; i++)
@@ -53,6 +56,7 @@ void MFXManager::clear(void)
 
 MFXRef * MFXManager::addFXRef(unsigned int FXId, MShaderRef * vertexShaderRef, MShaderRef * pixelShaderRef)
 {
+    M_PROFILE_SCOPE(MFXManager::addFXRef);
 	MFXRef * fxRef = new MFXRef(FXId, vertexShaderRef, pixelShaderRef);
 	m_FXRefs.push_back(fxRef);
 	return fxRef;

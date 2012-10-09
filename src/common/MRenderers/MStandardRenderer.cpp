@@ -48,6 +48,7 @@ m_normals(NULL),
 m_tangents(NULL),
 m_FXsNumber(0)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::MStandardRenderer);
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	
 	// default FXs
@@ -82,6 +83,7 @@ m_FXsNumber(0)
 
 MStandardRenderer::~MStandardRenderer(void)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::~MStandardRenderer);
 	unsigned int i;
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	
@@ -121,16 +123,19 @@ MStandardRenderer::~MStandardRenderer(void)
 
 void MStandardRenderer::destroy(void)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::destroy);
 	delete this;
 }
 
 MRenderer * MStandardRenderer::getNew(void)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::getNew);
 	return new MStandardRenderer();
 }
 
 void MStandardRenderer::addFX(const char * vert, const char * frag)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::addFX);
 	if(m_FXsNumber < MAX_DEFAULT_FXS)
 	{
 		MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
@@ -151,6 +156,7 @@ void MStandardRenderer::addFX(const char * vert, const char * frag)
 
 MVector3 * MStandardRenderer::getVertices(unsigned int size)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::getVertices);
 	if(size == 0)
 		return NULL;
 	
@@ -166,6 +172,7 @@ MVector3 * MStandardRenderer::getVertices(unsigned int size)
 
 MVector3 * MStandardRenderer::getNormals(unsigned int size)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::getNormals);
 	if(size == 0)
 		return NULL;
 	
@@ -181,6 +188,7 @@ MVector3 * MStandardRenderer::getNormals(unsigned int size)
 
 MVector3 * MStandardRenderer::getTangents(unsigned int size)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::getTangents);
 	if(size == 0)
 		return NULL;
 	
@@ -196,6 +204,7 @@ MVector3 * MStandardRenderer::getTangents(unsigned int size)
 
 void MStandardRenderer::updateSkinning(MMesh * mesh, MArmature * armature)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::updateSkinning);
 	unsigned int s;
 	unsigned int sSize = mesh->getSubMeshsNumber();
 	for(s=0; s<sSize; s++)
@@ -224,6 +233,7 @@ void MStandardRenderer::updateSkinning(MMesh * mesh, MArmature * armature)
 
 void MStandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices, MVector3 * normals, MVector3 * tangents, MColor * colors)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::drawDisplay);
 	MEngine * engine = MEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
 	
@@ -626,6 +636,7 @@ void MStandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVec
 
 void MStandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::drawOpaques);
 	// data
 	MVector3 * vertices = subMesh->getVertices();
 	MVector3 * normals = subMesh->getNormals();
@@ -673,6 +684,7 @@ void MStandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
 
 void MStandardRenderer::drawTransparents(MSubMesh * subMesh, MArmature * armature)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::drawTransparents);
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	
 	// data
@@ -747,6 +759,7 @@ void MStandardRenderer::drawTransparents(MSubMesh * subMesh, MArmature * armatur
 
 float MStandardRenderer::getDistanceToCam(MOCamera * camera, const MVector3 & pos)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::getDistanceToCam);
 	if(! camera->isOrtho())
 	{
 		return (pos - camera->getTransformedPosition()).getSquaredLength();
@@ -759,6 +772,7 @@ float MStandardRenderer::getDistanceToCam(MOCamera * camera, const MVector3 & po
 
 void MStandardRenderer::setShadowMatrix(MMatrix4x4 * matrix)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::setShadowMatrix);
 	MEngine * engine = MEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
 	
@@ -781,6 +795,7 @@ void MStandardRenderer::setShadowMatrix(MMatrix4x4 * matrix)
 
 void MStandardRenderer::updateVisibility(MScene * scene, MOCamera * camera)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::updateVisibility);
 	// make frustum
 	camera->getFrustum()->makeVolume(camera);
 	
@@ -797,6 +812,7 @@ void MStandardRenderer::updateVisibility(MScene * scene, MOCamera * camera)
 
 void MStandardRenderer::enableFog(MOCamera * camera)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::enableFog);
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	
 	float fogMin = camera->getClippingFar()*0.9999f;
@@ -817,6 +833,7 @@ void MStandardRenderer::enableFog(MOCamera * camera)
 
 MShadowLight * MStandardRenderer::createShadowLight(MOLight * light)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::createShadowLight);
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	unsigned int shadowQuality = light->getShadowQuality();
 	
@@ -858,6 +875,7 @@ MShadowLight * MStandardRenderer::createShadowLight(MOLight * light)
 
 void MStandardRenderer::destroyUnusedShadowLights(void)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::destroyUnusedShadowLights);
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	
 	// keys
@@ -882,6 +900,7 @@ void MStandardRenderer::destroyUnusedShadowLights(void)
 
 void MStandardRenderer::decreaseShadowLights(void)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::decreaseShadowLights);
 	// keys
 	map<unsigned long, MShadowLight>::iterator
 	mit (m_shadowLights.begin()),
@@ -896,6 +915,7 @@ void MStandardRenderer::decreaseShadowLights(void)
 
 void MStandardRenderer::drawText(MOText * textObj)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::drawText);
 	MRenderingContext * render = MEngine().getInstance()->getRenderingContext();
 	
 	
@@ -1044,6 +1064,7 @@ void MStandardRenderer::drawText(MOText * textObj)
 
 void MStandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEntity * entity, MSubMesh * subMesh)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::prepareSubMesh);
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	
 	MMesh * mesh = entity->getMesh();
@@ -1184,6 +1205,7 @@ void MStandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEnti
 
 void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 {
+    M_PROFILE_SCOPE(MStandardRenderer::drawScene);
 	// get render
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	

@@ -33,20 +33,24 @@
 
 MMeshRef::MMeshRef(MMesh * mesh, const char * filename):
 	m_mesh(mesh){
+    M_PROFILE_SCOPE(MMeshRef::MMeshRef);
 	m_filename.set(filename);
 }
 
 MMeshRef::~MMeshRef(void){
+    M_PROFILE_SCOPE(MMeshRef::~MMeshRef);
 	clear();
 }
 
 MMeshRef * MMeshRef::getNew(MMesh * mesh, const char * filename)
 {
+    M_PROFILE_SCOPE(MMeshRef::getNew);
 	return new MMeshRef(mesh, filename);
 }
 
 void MMeshRef::clear(void)
 {
+    M_PROFILE_SCOPE(MMeshRef::clear);
 	if(m_mesh)
 	{
 		m_mesh->destroy();
@@ -56,11 +60,13 @@ void MMeshRef::clear(void)
 
 void MMeshRef::destroy(void)
 {
+    M_PROFILE_SCOPE(MMeshRef::destroy);
 	delete this;
 }
 
 void MMeshRef::update(void)
 {
+    M_PROFILE_SCOPE(MMeshRef::update);
 	MEngine * engine = MEngine::getInstance();
 
 	if(! m_mesh)

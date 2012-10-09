@@ -42,6 +42,7 @@ m_rotationKeys(NULL)
 
 MObject3dAnim::~MObject3dAnim(void)
 {
+    M_PROFILE_SCOPE(MObject3dAnim::~MObject3dAnim);
 	clearPositionKeys();
 	clearScaleKeys();
 	clearRotationKeys();
@@ -49,6 +50,7 @@ MObject3dAnim::~MObject3dAnim(void)
 
 MKey * MObject3dAnim::allocPositionKeys(unsigned int size)
 {
+    M_PROFILE_SCOPE(MObject3dAnim::allocPositionKeys);
 	clearPositionKeys();
 	if(size == 0)
 		return NULL;
@@ -60,6 +62,7 @@ MKey * MObject3dAnim::allocPositionKeys(unsigned int size)
 
 MKey * MObject3dAnim::allocScaleKeys(unsigned int size)
 {
+    M_PROFILE_SCOPE(MObject3dAnim::allocScaleKeys);
 	clearScaleKeys();
 	if(size == 0)
 		return NULL;
@@ -71,6 +74,7 @@ MKey * MObject3dAnim::allocScaleKeys(unsigned int size)
 
 MKey * MObject3dAnim::allocRotationKeys(unsigned int size)
 {
+    M_PROFILE_SCOPE(MObject3dAnim::allocRotationKeys);
 	clearRotationKeys();
 	if(size == 0)
 		return NULL;
@@ -82,18 +86,21 @@ MKey * MObject3dAnim::allocRotationKeys(unsigned int size)
 
 void MObject3dAnim::clearPositionKeys(void)
 {
+    M_PROFILE_SCOPE(MObject3dAnim::clearPositionKeys);
 	SAFE_DELETE_ARRAY(m_positionKeys);
 	m_positionKeysNumber = 0;
 }
 
 void MObject3dAnim::clearScaleKeys(void)
 {
+    M_PROFILE_SCOPE(MObject3dAnim::clearScaleKeys)
 	SAFE_DELETE_ARRAY(m_scaleKeys);
 	m_scaleKeysNumber = 0;
 }
 
 void MObject3dAnim::clearRotationKeys(void)
 {
+    M_PROFILE_SCOPE(MObject3dAnim::clearRotationKeys);
 	SAFE_DELETE_ARRAY(m_rotationKeys);
 	m_rotationKeysNumber = 0;
 }

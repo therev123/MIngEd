@@ -33,19 +33,23 @@
 
 MArmatureAnimRef::MArmatureAnimRef(MArmatureAnim * armatureAnim, const char * filename):
 	m_armatureAnim(armatureAnim){
+    M_PROFILE_SCOPE(MArmatureAnimRef::MArmatureAnimRef);
 	m_filename = filename;
 }
 
 MArmatureAnimRef::~MArmatureAnimRef(void){
+    M_PROFILE_SCOPE(MArmatureAnimRef::~MArmatureAnimRef);
 	clear();
 }
 
 MArmatureAnimRef * MArmatureAnimRef::getNew(MArmatureAnim * armatureAnim, const char * filename){
+    M_PROFILE_SCOPE(MArmatureAnimRef::getNew);
 	return new MArmatureAnimRef(armatureAnim, filename);
 }
 
 void MArmatureAnimRef::clear(void)
 {
+    M_PROFILE_SCOPE(MArmatureAnimRef::clear);
 	if(m_armatureAnim)
 	{
 		m_armatureAnim->destroy();
@@ -54,11 +58,13 @@ void MArmatureAnimRef::clear(void)
 }
 
 void MArmatureAnimRef::destroy(void){
+    M_PROFILE_SCOPE(MArmatureAnimRef::destroy);
 	delete this;
 }
 
 void MArmatureAnimRef::update(void)
 {
+    M_PROFILE_SCOPE(MArmatureAnimRef::update);
 	MEngine * engine = MEngine::getInstance();
 
 	if(! m_armatureAnim)

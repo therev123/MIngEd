@@ -34,10 +34,12 @@
 MOBone::MOBone(void):
 MObject3d()
 {
+    M_PROFILE_SCOPE(MOBone::MOBone);
 }
 
 MOBone::~MOBone(void)
 {
+    M_PROFILE_SCOPE(MOBone::~MOBone);
 	MObject3d::clearObject3d();
 }
 
@@ -50,6 +52,7 @@ m_skinMatrix(bone.m_skinMatrix)
 
 void MOBone::processChildsLinking(void)
 {
+    M_PROFILE_SCOPE(MOBone::processChildsLinking);
 	unsigned int i;
 	unsigned int size = getChildsNumber();
 

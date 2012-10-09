@@ -40,12 +40,13 @@ m_bones(NULL)
 // destructor
 MArmature::~MArmature(void)
 {
+    M_PROFILE_SCOPE(MArmature::~MArmature);
 	clearBones();
 }
 
 void MArmature::clearBones(void)
 {
-        M_PROFILE_SCOPE("MArmature::clearBones");
+        M_PROFILE_SCOPE(MArmature::clearBones);
 	unsigned int i;
 	for(i=0; i<m_bonesNumber; i++)
 		SAFE_DELETE(m_bones[i]);
@@ -55,7 +56,7 @@ void MArmature::clearBones(void)
 
 void MArmature::allocBones(unsigned int size)
 {
-        M_PROFILE_SCOPE("MArmature::allocBones");
+        M_PROFILE_SCOPE(MArmature::allocBones);
 	clearBones();
 	if(size == 0)
 		return;
@@ -65,7 +66,7 @@ void MArmature::allocBones(unsigned int size)
 
 MOBone * MArmature::addNewBone(void)
 {
-        M_PROFILE_SCOPE("MArmature::addNewBone");
+        M_PROFILE_SCOPE(MArmature::addNewBone);
 	MOBone * bone = new MOBone();
 	m_bones[m_bonesNumber] = bone;
 	m_bonesNumber++;
@@ -74,7 +75,7 @@ MOBone * MArmature::addNewBone(void)
 
 MOBone * MArmature::getBoneByName(const char * name)
 {
-        M_PROFILE_SCOPE("MArmature::getBoneByName");
+        M_PROFILE_SCOPE(MArmature::getBoneByName);
 	unsigned int i;
 	for(i=0; i<m_bonesNumber; i++) // scan bones
 	{
@@ -88,7 +89,7 @@ MOBone * MArmature::getBoneByName(const char * name)
 
 bool MArmature::getBoneId(const char * boneName, unsigned int * bId)
 {
-        M_PROFILE_SCOPE("MArmature::getBoneId");
+        M_PROFILE_SCOPE(MArmature::getBoneId);
 	unsigned int i;
 
 	// return if there is no bones
@@ -111,6 +112,7 @@ bool MArmature::getBoneId(const char * boneName, unsigned int * bId)
 
 void MArmature::constructBonesInversePoseMatrix(void)
 {
+    M_PROFILE_SCOPE(MArmature::constructBonesInversePoseMatrix);
 	unsigned int i;
 	MOBone * bone = NULL;
 
@@ -126,6 +128,7 @@ void MArmature::constructBonesInversePoseMatrix(void)
 
 void MArmature::updateBonesSkinMatrix(void)
 {
+    M_PROFILE_SCOPE(MArmature::updateBonesSkinMatrix);
 	unsigned int i;
 	MOBone * bone = NULL;
 	for(i=0; i<m_bonesNumber; i++)
@@ -137,6 +140,7 @@ void MArmature::updateBonesSkinMatrix(void)
 
 void MArmature::processBonesLinking(void)
 {
+    M_PROFILE_SCOPE(MArmature::processBonesLinking);
 	unsigned int i;
 	MOBone * bone = NULL;
 

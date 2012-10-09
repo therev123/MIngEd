@@ -54,8 +54,8 @@ pluginmap g_plugindefs;
 
 void AddPluginFunctions(const char* pluginName, FunctionPtr start, FunctionPtr end)
 {
-  plugin p(start, end);
-  g_plugindefs[pluginName] = p;
+    plugin p(start, end);
+    g_plugindefs[pluginName] = p;
 }
 #endif
 

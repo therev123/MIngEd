@@ -47,11 +47,13 @@ m_points(NULL)
 
 MMorphingPose::~MMorphingPose(void)
 {
+    M_PROFILE_SCOPE(MMorphingPose::~MMorphingPose);
 	clearPoints();
 }
 
 MMorphingPoint * MMorphingPose::allocPoints(unsigned int size)
 {
+    M_PROFILE_SCOPE(MMorphingPose::allocPoints);
 	clearPoints();
 	if(size = 0)
 		return NULL;
@@ -62,6 +64,7 @@ MMorphingPoint * MMorphingPose::allocPoints(unsigned int size)
 
 void MMorphingPose::clearPoints(void)
 {
+    M_PROFILE_SCOPE(MMorphingPose::clearPoints);
 	m_pointsNumber = 0;
 	SAFE_DELETE_ARRAY(m_points);
 }
@@ -73,11 +76,13 @@ m_poses(NULL)
 
 MMorphingData::~MMorphingData(void)
 {
+    M_PROFILE_SCOPE(MMorphingData::~MMorphingData);
 	clearPoses();
 }
 
 void MMorphingData::allocPoses(unsigned int size)
 {
+    M_PROFILE_SCOPE(MMorphingData::allocPoses);
 	clearPoses();
 	if(size == 0)
 		return;
@@ -86,6 +91,7 @@ void MMorphingData::allocPoses(unsigned int size)
 
 void MMorphingData::clearPoses(void)
 {
+    M_PROFILE_SCOPE(MMorphingData::clearPoses);
 	unsigned int i;
 	for(i=0; i<m_posesNumber; i++)
 		SAFE_DELETE(m_poses[i]);
@@ -96,6 +102,7 @@ void MMorphingData::clearPoses(void)
 
 void MMorphingData::addPose(MMorphingPose * pose)
 {
+    M_PROFILE_SCOPE(MMorphingData::addPose);
 	m_poses[m_posesNumber] = pose;
 	m_posesNumber++;
 }

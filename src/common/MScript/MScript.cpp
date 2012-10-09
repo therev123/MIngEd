@@ -59,6 +59,7 @@ std::list<std::string> g_loadPath;
 
 bool isFunctionOk(lua_State * L, const char * name, unsigned int nbArgs)
 {
+    M_PROFILE_SCOPE(lua-c:isFunctionOk);
 	int nbArguments = lua_gettop(L);
 	if(nbArguments < (int)nbArgs)
 	{
@@ -70,6 +71,7 @@ bool isFunctionOk(lua_State * L, const char * name, unsigned int nbArgs)
 
 void pushFloatArray(lua_State* L, float * values, unsigned int nbValues)
 {
+    M_PROFILE_SCOPE(lua-c:pushFloatArray);
 	lua_newtable(L);
 
 	for(unsigned int i=0; i<nbValues; i++)
@@ -82,6 +84,7 @@ void pushFloatArray(lua_State* L, float * values, unsigned int nbValues)
 
 MObject3d * getObject3d(LUA_INTEGER object)
 {
+    M_PROFILE_SCOPE(lua-c:getObject3d);
 	if(object == 0)
 		return NULL;
 	
@@ -90,6 +93,7 @@ MObject3d * getObject3d(LUA_INTEGER object)
 
 bool getVector2(lua_State * L, int index, MVector2 * vector)
 {
+    M_PROFILE_SCOPE(lua-c:getVector2);
 	if(lua_istable(L, index) && (lua_objlen(L, index) >= 2))
 	{
 		lua_pushnil(L);
@@ -110,6 +114,7 @@ bool getVector2(lua_State * L, int index, MVector2 * vector)
 
 bool getVector3(lua_State * L, int index, MVector3 * vector)
 {
+    M_PROFILE_SCOPE(lua-c:getVector3);
 	if(lua_istable(L, index) && (lua_objlen(L, index) >= 3))
 	{
 		lua_pushnil(L);
@@ -134,6 +139,7 @@ bool getVector3(lua_State * L, int index, MVector3 * vector)
 
 bool getVector4(lua_State * L, int index, MVector4 * vector)
 {
+    M_PROFILE_SCOPE(lua-c:getVector4);
 	if(lua_istable(L, index) && (lua_objlen(L, index) >= 4))
 	{
 		lua_pushnil(L);
@@ -162,6 +168,7 @@ bool getVector4(lua_State * L, int index, MVector4 * vector)
 
 int getScene(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getScene);
 	MLevel * level = MEngine::getInstance()->getLevel();
 	
 	if(! isFunctionOk(L, "getScene", 1))
@@ -184,6 +191,7 @@ int getScene(lua_State * L)
 
 int getObject(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getObject);
 	MLevel * level = MEngine::getInstance()->getLevel();
 	MScene * scene = level->getCurrentScene();
 	
@@ -215,6 +223,7 @@ int getObject(lua_State * L)
 
 int getClone(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getClone);
 	MLevel * level = MEngine::getInstance()->getLevel();
 	MScene * scene = level->getCurrentScene();
 	
@@ -265,6 +274,7 @@ int getClone(lua_State * L)
 
 int rotate(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:rotate);
 	if(! isFunctionOk(L, "rotate", 3))
 		return 0;
 
@@ -303,6 +313,7 @@ int rotate(lua_State * L)
 
 int translate(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:translate);
 	if(! isFunctionOk(L, "translate", 2))
 		return 0;
 
@@ -341,6 +352,7 @@ int translate(lua_State * L)
 
 int getPosition(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getPosition);
 	if(! isFunctionOk(L, "getPosition", 1))
 		return 0;
 
@@ -358,6 +370,7 @@ int getPosition(lua_State * L)
 
 int getRotation(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getRotation);
 	if(! isFunctionOk(L, "getRotation", 1))
 		return 0;
 
@@ -375,6 +388,7 @@ int getRotation(lua_State * L)
 
 int getScale(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getScale);
 	if(! isFunctionOk(L, "getScale", 1))
 		return 0;
 
@@ -392,6 +406,7 @@ int getScale(lua_State * L)
 
 int setPosition(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setPosition);
 	if(! isFunctionOk(L, "setPosition", 2))
 		return 0;
 
@@ -412,6 +427,7 @@ int setPosition(lua_State * L)
 
 int setRotation(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setRotation);
 	if(! isFunctionOk(L, "setRotation", 2))
 		return 0;
 
@@ -432,6 +448,7 @@ int setRotation(lua_State * L)
 
 int setScale(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setScale);
 	if(! isFunctionOk(L, "setScale", 2))
 		return 0;
 
@@ -452,6 +469,7 @@ int setScale(lua_State * L)
 
 int isVisible(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:isVisible);
 	if(! isFunctionOk(L, "isVisible", 1))
 		return 0;
 
@@ -470,6 +488,7 @@ int isVisible(lua_State * L)
 
 int activate(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:activate);
 	if(! isFunctionOk(L, "activate", 1))
 		return 0;
 
@@ -487,6 +506,7 @@ int activate(lua_State * L)
 
 int deactivate(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:deactivate);
 	if(! isFunctionOk(L, "deactivate", 1))
 		return 0;
 
@@ -504,6 +524,7 @@ int deactivate(lua_State * L)
 
 int changeAnimation(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:changeAnimation);
 	if(! isFunctionOk(L, "changeAnimation", 2))
 		return 0;
 
@@ -527,6 +548,7 @@ int changeAnimation(lua_State * L)
 
 int isAnimationOver(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:isAnimationOver);
 	if(! isFunctionOk(L, "isAnimationOver", 1))
 		return 0;
 
@@ -549,6 +571,7 @@ int isAnimationOver(lua_State * L)
 
 int getCurrentAnimation(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getCurrentAnimation);
 	if(! isFunctionOk(L, "getCurrentAnimation", 1))
 		return 0;
 
@@ -571,6 +594,7 @@ int getCurrentAnimation(lua_State * L)
 
 int setAnimationSpeed(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setAnimationSpeed);
 	if(! isFunctionOk(L, "setAnimationSpeed", 2))
 		return 0;
 
@@ -584,6 +608,7 @@ int setAnimationSpeed(lua_State * L)
 
 int getAnimationSpeed(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getAnimationSpeed);
 	if(! isFunctionOk(L, "getAnimationSpeed", 1))
 		return 0;
 
@@ -597,6 +622,7 @@ int getAnimationSpeed(lua_State * L)
 
 int setCurrentFrame(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setCurrentFrame);
 	if(! isFunctionOk(L, "setCurrentFrame", 2))
 		return 0;
 
@@ -610,6 +636,7 @@ int setCurrentFrame(lua_State * L)
 
 int getCurrentFrame(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getCurrentFrame);
 	if(! isFunctionOk(L, "getCurrentFrame", 1))
 		return 0;
 
@@ -623,6 +650,7 @@ int getCurrentFrame(lua_State * L)
 
 int getGravity(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getGravity);
 	MLevel * level = MEngine::getInstance()->getLevel();
 	MScene * scene = level->getCurrentScene();
 	
@@ -640,6 +668,7 @@ int getGravity(lua_State * L)
 
 int setGravity(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setGravity);
 	MLevel * level = MEngine::getInstance()->getLevel();
 	MScene * scene = level->getCurrentScene();
 	
@@ -662,6 +691,7 @@ int setGravity(lua_State * L)
 
 int changeCurrentCamera(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:changeCurrentCamera);
 	MLevel * level = MEngine::getInstance()->getLevel();
 	MScene * scene = level->getCurrentScene();
 	
@@ -699,6 +729,7 @@ int changeCurrentCamera(lua_State * L)
 
 int addCentralForce(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:addCentralForce);
 	int nbArguments = lua_gettop(L);
 	if(! isFunctionOk(L, "addCentralForce", 2))
 		return 0;
@@ -741,6 +772,7 @@ int addCentralForce(lua_State * L)
 
 int clearForces(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:clearForces);
 	MObject3d * object;
 	lua_Integer id = lua_tointeger(L, 1);
 
@@ -763,6 +795,7 @@ int clearForces(lua_State * L)
 
 int addTorque(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:addTorque);
 	int nbArguments = lua_gettop(L);
 	if(! isFunctionOk(L, "addTorque", 2))
 		return 0;
@@ -805,6 +838,7 @@ int addTorque(lua_State * L)
 
 int getLinearDamping(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getLinearDamping);
 	if(! isFunctionOk(L, "getLinearDamping", 1))
 		return 0;
 
@@ -830,6 +864,7 @@ int getLinearDamping(lua_State * L)
 
 int setLinearDamping(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setLinearDamping);
 	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(L, "setLinearDamping", 2))
@@ -862,6 +897,7 @@ int setLinearDamping(lua_State * L)
 
 int getAngularDamping(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getAngularDamping);
 	if(! isFunctionOk(L, "getAngularDamping", 1))
 		return 0;
 
@@ -887,6 +923,7 @@ int getAngularDamping(lua_State * L)
 
 int setAngularDamping(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setAngularDamping);
 	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(L, "setAngularDamping", 2))
@@ -919,6 +956,7 @@ int setAngularDamping(lua_State * L)
 
 int getNumCollisions(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getNumCollisions);
 	if(! isFunctionOk(L, "getNumCollisions", 1))
 		return 0;
 	
@@ -945,6 +983,7 @@ int getNumCollisions(lua_State * L)
 
 int isCollisionTest(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:isCollisionTest);
 	if(! isFunctionOk(L, "isCollisionTest", 1))
 		return 0;
 
@@ -971,6 +1010,7 @@ int isCollisionTest(lua_State * L)
 
 int isCollisionBetween(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:isCollisionBetween);
 	if(! isFunctionOk(L, "isCollisionBetween", 2))
 		return 0;
 
@@ -1006,6 +1046,7 @@ int isCollisionBetween(lua_State * L)
 
 int rayHit(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:rayHit);
 	if(! isFunctionOk(L, "rayHit", 2))
 		return 0;
 	
@@ -1056,6 +1097,7 @@ int rayHit(lua_State * L)
 
 int getRayHitObject(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getRayHitObject);
 	if(! isFunctionOk(L, "rayHit", 2))
 		return 0;
 	
@@ -1080,6 +1122,7 @@ int getRayHitObject(lua_State * L)
 
 int isKeyPressed(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:isKeyPressed);
 	MInputContext * input = MEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(L, "isKeyPressed", 1))
@@ -1098,6 +1141,7 @@ int isKeyPressed(lua_State * L)
 
 int onKeyDown(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:onKeyDown);
 	MInputContext * input = MEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(L, "onKeyDown", 1))
@@ -1116,6 +1160,7 @@ int onKeyDown(lua_State * L)
 
 int onKeyUp(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:onKeyUp);
 	MInputContext * input = MEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(L, "onKeyUp", 1))
@@ -1134,6 +1179,7 @@ int onKeyUp(lua_State * L)
 
 int getAxis(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getAxis);
 	MInputContext * input = MEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(L, "getAxis", 1))
@@ -1152,6 +1198,7 @@ int getAxis(lua_State * L)
 
 int getProperty(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getProperty);
 	MInputContext * input = MEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(L, "getProperty", 1))
@@ -1170,6 +1217,7 @@ int getProperty(lua_State * L)
 
 int getVectorProperty(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getVectorProperty);
     MInputContext * input = MEngine::getInstance()->getInputContext();
     
     if (!isFunctionOk(L, "getVectorProperty", 1))
@@ -1187,6 +1235,7 @@ int getVectorProperty(lua_State * L)
 
 int getTouchPosition(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getTouchPosition);
     MInputContext * input = MEngine::getInstance()->getInputContext();
     
     if (!isFunctionOk(L, "getTouchPosition", 1))
@@ -1200,6 +1249,7 @@ int getTouchPosition(lua_State * L)
 
 int getLastTouchPosition(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getLastTouchPosition);
     MInputContext * input = MEngine::getInstance()->getInputContext();
     
     if (!isFunctionOk(L, "getLastTouchPosition", 1))
@@ -1213,6 +1263,7 @@ int getLastTouchPosition(lua_State * L)
 
 int getTouchPhase(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getTouchPhase);
     MInputContext * input = MEngine::getInstance()->getInputContext();
     
     if (!isFunctionOk(L, "getTouchPhase", 1))
@@ -1226,6 +1277,7 @@ int getTouchPhase(lua_State * L)
 
 int playSound(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:playSound);
 	if(! isFunctionOk(L, "playSound", 1))
 		return 0;
 
@@ -1246,6 +1298,7 @@ int playSound(lua_State * L)
 
 int pauseSound(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:pauseSound);
 	if(! isFunctionOk(L, "pauseSound", 1))
 		return 0;
 
@@ -1266,6 +1319,7 @@ int pauseSound(lua_State * L)
 
 int stopSound(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:stopSound);
 	if(! isFunctionOk(L, "stopSound", 1))
 		return 0;
 
@@ -1286,6 +1340,7 @@ int stopSound(lua_State * L)
 
 int changeScene(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:changeScene);
 	MEngine * engine = MEngine::getInstance();
 	MLevel * level = engine->getLevel();
 
@@ -1300,6 +1355,7 @@ int changeScene(lua_State * L)
 
 int getCurrentSceneId(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getCurrentSceneId);
 	MEngine * engine = MEngine::getInstance();
 	MLevel * level = engine->getLevel();
 
@@ -1309,6 +1365,7 @@ int getCurrentSceneId(lua_State * L)
 
 int getScenesNumber(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getScenesNumber);
 	MEngine * engine = MEngine::getInstance();
 	MLevel * level = engine->getLevel();
 
@@ -1318,6 +1375,7 @@ int getScenesNumber(lua_State * L)
 
 int loadLevel(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:loadLevel);
 	MEngine * engine = MEngine::getInstance();
 
 	if(! isFunctionOk(L, "loadLevel", 1))
@@ -1332,6 +1390,7 @@ int loadLevel(lua_State * L)
 
 int quit(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:quit);
 	MEngine * engine = MEngine::getInstance();
 	engine->setActive(false);
 	return 0;
@@ -1339,6 +1398,7 @@ int quit(lua_State * L)
 
 int doesLevelExist(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:doesLevelExist);
 	MEngine * engine = MEngine::getInstance();
 
 	if(! isFunctionOk(L, "doesLevelExist", 1))
@@ -1352,6 +1412,7 @@ int doesLevelExist(lua_State * L)
 
 int getLightColor(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getLightColor);
 	if(! isFunctionOk(L, "getLightColor", 1))
 		return 0;
 
@@ -1373,6 +1434,7 @@ int getLightColor(lua_State * L)
 
 int getLightRadius(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getLightRadius);
 	if(! isFunctionOk(L, "getLightRadius", 1))
 		return 0;
 
@@ -1394,6 +1456,7 @@ int getLightRadius(lua_State * L)
 
 int getLightIntensity(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getLightIntensity);
 	if(! isFunctionOk(L, "getLightIntensity", 1))
 		return 0;
 
@@ -1415,6 +1478,7 @@ int getLightIntensity(lua_State * L)
 
 int setLightColor(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setLightColor);
 	if(! isFunctionOk(L, "setLightColor", 2))
 		return 0;
 
@@ -1437,6 +1501,7 @@ int setLightColor(lua_State * L)
 
 int setLightRadius(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setLightRadius);
 	if(! isFunctionOk(L, "setLightRadius", 2))
 		return 0;
 
@@ -1460,6 +1525,7 @@ int setLightRadius(lua_State * L)
 
 int setLightIntensity(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setLightIntensity);
 	if(! isFunctionOk(L, "setLightIntensity", 2))
 		return 0;
 
@@ -1483,6 +1549,7 @@ int setLightIntensity(lua_State * L)
 
 int getSoundGain(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getSoundGain);
 	if(! isFunctionOk(L, "getSoundGain", 1))
 		return 0;
 
@@ -1504,6 +1571,7 @@ int getSoundGain(lua_State * L)
 
 int setSoundGain(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setSoundGain);
 	if(! isFunctionOk(L, "setSoundGain", 2))
 		return 0;
 
@@ -1526,6 +1594,7 @@ int setSoundGain(lua_State * L)
 
 int setCameraClearColor(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setCameraClearColor);
 	if(! isFunctionOk(L, "setCameraClearColor", 2))
 		return 0;
 
@@ -1548,6 +1617,7 @@ int setCameraClearColor(lua_State * L)
 
 int getCameraClearColor(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getCameraClearColor);
 	if(! isFunctionOk(L, "getCameraClearColor", 1))
 		return 0;
 
@@ -1569,6 +1639,7 @@ int getCameraClearColor(lua_State * L)
 
 int setCameraNear(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setCameraNear);
 	if(! isFunctionOk(L, "setCameraNear", 2))
 		return 0;
 
@@ -1591,6 +1662,7 @@ int setCameraNear(lua_State * L)
 
 int getCameraNear(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getCameraNear);
 	if(! isFunctionOk(L, "getCameraNear", 1))
 		return 0;
 
@@ -1612,6 +1684,7 @@ int getCameraNear(lua_State * L)
 
 int setCameraFar(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setCameraFar);
 	if(! isFunctionOk(L, "setCameraFar", 2))
 		return 0;
 
@@ -1634,6 +1707,7 @@ int setCameraFar(lua_State * L)
 
 int getCameraFar(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getCameraFar);
 	if(! isFunctionOk(L, "getCameraFar", 1))
 		return 0;
 
@@ -1655,6 +1729,7 @@ int getCameraFar(lua_State * L)
 
 int setCameraFov(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setCameraFov);
 	if(! isFunctionOk(L, "setCameraFov", 2))
 		return 0;
 
@@ -1677,6 +1752,7 @@ int setCameraFov(lua_State * L)
 
 int getCameraFov(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getCameraFov);
 	if(! isFunctionOk(L, "getCameraFov", 1))
 		return 0;
 
@@ -1698,6 +1774,7 @@ int getCameraFov(lua_State * L)
 
 int setCameraFogDistance(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setCameraFogDistance);
 	if(! isFunctionOk(L, "setCameraFogDistance", 2))
 		return 0;
 
@@ -1720,6 +1797,7 @@ int setCameraFogDistance(lua_State * L)
 
 int getCameraFogDistance(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getCameraFogDistance);
 	if(! isFunctionOk(L, "getCameraFogDistance", 1))
 		return 0;
 
@@ -1741,6 +1819,7 @@ int getCameraFogDistance(lua_State * L)
 
 int enableCameraOrtho(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:enableCameraOrtho);
 	if(! isFunctionOk(L, "enableCameraOrtho", 2))
 		return 0;
 
@@ -1763,6 +1842,7 @@ int enableCameraOrtho(lua_State * L)
 
 int isCameraOrtho(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:isCameraOrtho);
 	if(! isFunctionOk(L, "isCameraOrtho", 1))
 		return 0;
 
@@ -1784,6 +1864,7 @@ int isCameraOrtho(lua_State * L)
 
 int enableCameraFog(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:enableCameraFog);
 	if(! isFunctionOk(L, "enableCameraFog", 2))
 		return 0;
 
@@ -1806,6 +1887,7 @@ int enableCameraFog(lua_State * L)
 
 int isCameraFogEnabled(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:isCameraFogEnabled);
 	if(! isFunctionOk(L, "isCameraFogEnabled", 1))
 		return 0;
 
@@ -1827,6 +1909,7 @@ int isCameraFogEnabled(lua_State * L)
 
 int enableCameraLayer(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:enableCameraLayer);
 	if(! isFunctionOk(L, "enableCameraLayer", 2))
 		return 0;
 	
@@ -1849,6 +1932,7 @@ int enableCameraLayer(lua_State * L)
 
 int disableCameraLayer(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:disableCameraLayer);
 	if(! isFunctionOk(L, "disableCameraLayer", 1))
 		return 0;
 	
@@ -1870,6 +1954,7 @@ int disableCameraLayer(lua_State * L)
 
 int enableRenderToTexture(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:enableRenderToTexture);
 	MEngine * engine = MEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
 	MRenderingContext * render = engine->getRenderingContext();
@@ -1939,6 +2024,7 @@ int enableRenderToTexture(lua_State * L)
 
 int disableRenderToTexture(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:disableRenderToTexture);
 	if(! isFunctionOk(L, "disableRenderToTexture", 1))
 		return 0;
 	
@@ -1967,6 +2053,7 @@ int disableRenderToTexture(lua_State * L)
 
 int getScreenSize(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getScreenSize);
     if(! isFunctionOk(L, "getScreenSize", 0))
 	return 0;
 
@@ -1979,6 +2066,7 @@ int getScreenSize(lua_State * L)
 
 int getBehaviorVariable(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getBehaviorVariable);
 	if(! isFunctionOk(L, "getBehaviorVariable", 3))
 		return 0;
 
@@ -2053,6 +2141,7 @@ int getBehaviorVariable(lua_State * L)
 
 int setBehaviorVariable(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setBehaviorVariable);
 	if(! isFunctionOk(L, "setBehaviorVariable", 4))
 		return 0;
 
@@ -2138,6 +2227,7 @@ int setBehaviorVariable(lua_State * L)
 
 int centerCursor(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:centerCursor);
 	MEngine * engine = MEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
 	MInputContext * input = engine->getInputContext();
@@ -2157,6 +2247,7 @@ int centerCursor(lua_State * L)
 
 int hideCursor(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:hideCursor);
 	MEngine * engine = MEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
 	
@@ -2167,6 +2258,7 @@ int hideCursor(lua_State * L)
 
 int showCursor(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:showCursor);
 	MEngine * engine = MEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
 	
@@ -2177,6 +2269,7 @@ int showCursor(lua_State * L)
 
 int getText(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getText);
 	if(! isFunctionOk(L, "getText", 1))
 		return 0;
 
@@ -2200,6 +2293,7 @@ int getText(lua_State * L)
 
 int setText(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setText);
 	if(! isFunctionOk(L, "setText", 2))
 		return 0;
 
@@ -2220,6 +2314,7 @@ int setText(lua_State * L)
 
 int getTextColor(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:getTextColor);
 	MScript * script = (MScript *)MEngine::getInstance()->getScriptContext();
 
 	if(! isFunctionOk(L, "getTextColor", 1))
@@ -2243,6 +2338,7 @@ int getTextColor(lua_State * L)
 
 int setTextColor(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:setTextColor);
 	MScript * script = (MScript *)MEngine::getInstance()->getScriptContext();
 
 	if(! isFunctionOk(L, "setTextColor", 2))
@@ -2266,6 +2362,7 @@ int setTextColor(lua_State * L)
 
 char* getFile(const char* filename)
 {
+    M_PROFILE_SCOPE(lua-c:getFile);
     char* rtn = NULL;
     for(std::list<std::string>::iterator iPath = g_loadPath.begin(); iPath != g_loadPath.end(); ++iPath)
     {
@@ -2288,6 +2385,7 @@ char* getFile(const char* filename)
 
 int doFile(lua_State * L)
 {
+    M_PROFILE_SCOPE(lua-c:doFile);
 	if(! isFunctionOk(L, "doFile", 1))
 	    return 0;
 	    
@@ -2312,6 +2410,7 @@ int doFile(lua_State * L)
 // will first look for {param}/__init__.lua and then, failing that, {param}.lua
 int require(lua_State* L)
 {
+    M_PROFILE_SCOPE(lua-c:require);
     if(!isFunctionOk(L, "require", 1))
 	return 0;
 
@@ -2348,11 +2447,13 @@ m_isRunning(false)
 
 MScript::~MScript(void)
 {
+    M_PROFILE_SCOPE(MScript::~MScript);
 	clear();
 }
 
 void MScript::init(void)
 {
+    M_PROFILE_SCOPE(MScript::init);
 	// create context
 	m_state = lua_open();
 	g_loadPath.clear();
@@ -2493,6 +2594,7 @@ void MScript::init(void)
 
 void MScript::clear(void)
 {
+    M_PROFILE_SCOPE(MScript::clear);
 	if(m_state)
 	{
 		lua_close(m_state);
@@ -2503,6 +2605,7 @@ void MScript::clear(void)
 
 int MScript::function(lua_State * L)
 {
+    M_PROFILE_SCOPE(MScript::function)
 	MScript * script = (MScript *)MEngine::getInstance()->getScriptContext();
 
 	lua_Debug ar;
@@ -2518,6 +2621,7 @@ int MScript::function(lua_State * L)
 
 void MScript::runScript(const char * filename)
 {
+    M_PROFILE_SCOPE(MScript::runScript);
         clear();
 	init();
 
@@ -2562,6 +2666,7 @@ void MScript::runScript(const char * filename)
 
 bool MScript::addScript(const char* filename)
 {
+    M_PROFILE_SCOPE(MScript::addScript);
     if(!filename || !strlen(filename))
 	return false;
     // save current directory
@@ -2597,6 +2702,7 @@ bool MScript::addScript(const char* filename)
 
 bool MScript::startCallFunction(const char* name)
 {
+    M_PROFILE_SCOPE(MScript::startCallFunction)
 	if(m_isRunning)
 	{
 		lua_getglobal(m_state, name);
@@ -2612,6 +2718,7 @@ bool MScript::startCallFunction(const char* name)
 
 bool MScript::endCallFunction(int numArgs)
 {
+    M_PROFILE_SCOPE(MScript::endCallFunction);
 	if(lua_pcall(m_state, numArgs, 0, 0) != 0)
 	{
 		printf("ERROR lua script :\n %s\n", lua_tostring(m_state, -1));
@@ -2623,22 +2730,26 @@ bool MScript::endCallFunction(int numArgs)
 
 void MScript::callFunction(const char * name)
 {
+    M_PROFILE_SCOPE(MScript::callFunction);
 	if(startCallFunction(name))
 		endCallFunction();
 }
 
 void MScript::addFunction(const char * name, int (*_function)(void)){
+    M_PROFILE_SCOPE(MScript::addFunction);
 	m_functions[name] = _function;
 	if(m_isRunning)
 	    lua_register(m_state, name, function);
 }
 
 unsigned int MScript::getArgsNumber(void){
+    M_PROFILE_SCOPE(MScript::getArgsNumber);
 	return lua_gettop(m_state);
 }
 
 void MScript::getIntArray(unsigned int arg, int * values, unsigned int valuesNumber)
 {
+    M_PROFILE_SCOPE(MScript::getIntArray);
 	arg++;
 	if(lua_istable(m_state, arg) && (lua_objlen(m_state, arg) >= valuesNumber))
 	{
@@ -2654,6 +2765,7 @@ void MScript::getIntArray(unsigned int arg, int * values, unsigned int valuesNum
 
 void MScript::getFloatArray(unsigned int arg, float * values, unsigned int valuesNumber)
 {
+    M_PROFILE_SCOPE(MScript::getFloatArray);
 	arg++;
 	if(lua_istable(m_state, arg) && (lua_objlen(m_state, arg) >= valuesNumber))
 	{
@@ -2668,23 +2780,28 @@ void MScript::getFloatArray(unsigned int arg, float * values, unsigned int value
 }
 
 const char * MScript::getString(unsigned int arg){
+    M_PROFILE_SCOPE(MScript::getString);
 	return lua_tostring(m_state, arg+1);
 }
 
 int MScript::getInteger(unsigned int arg){
+    M_PROFILE_SCOPE(MScript::getInteger);
 	return (int)lua_tointeger(m_state, arg+1);
 }
 
 float MScript::getFloat(unsigned int arg){
+    M_PROFILE_SCOPE(MScript::getFloat);
 	return (float)lua_tonumber(m_state, arg+1);
 }
 
 void* MScript::getPointer(unsigned int arg){
+    M_PROFILE_SCOPE(MScript::getPointer);
 	return (void*)lua_tointeger(m_state, arg+1);
 }
 
 void MScript::pushIntArray(const int * values, unsigned int valuesNumber)
 {
+    M_PROFILE_SCOPE(MScript::pushIntArray);
 	lua_newtable(m_state);
 	for(unsigned int i=0; i<valuesNumber; i++)
 	{
@@ -2696,6 +2813,7 @@ void MScript::pushIntArray(const int * values, unsigned int valuesNumber)
 
 void MScript::pushFloatArray(const float * values, unsigned int valuesNumber)
 {
+    M_PROFILE_SCOPE(MScript::pushFloatArray);
 	lua_newtable(m_state);
 	for(unsigned int i=0; i<valuesNumber; i++)
 	{
@@ -2706,21 +2824,26 @@ void MScript::pushFloatArray(const float * values, unsigned int valuesNumber)
 }
 
 void MScript::pushBoolean(bool value){
+    M_PROFILE_SCOPE(MScript::pushBoolean);
 	lua_pushboolean(m_state, (int)value);
 }
 
 void MScript::pushString(const char * string){
+    M_PROFILE_SCOPE(MScript::pushString);
 	lua_pushstring(m_state, string);
 }
 
 void MScript::pushInteger(int value){
+    M_PROFILE_SCOPE(MScript::pushInteger);
 	lua_pushinteger(m_state, (lua_Integer)value);
 }
 
 void MScript::pushFloat(float value){
+    M_PROFILE_SCOPE(MScript::pushFloat);
 	lua_pushnumber(m_state, (lua_Number)value);
 }
 
 void MScript::pushPointer(void* value){
+    M_PROFILE_SCOPE(MScript::pushPointer);
 	lua_pushinteger(m_state, (lua_Integer)value);
 }

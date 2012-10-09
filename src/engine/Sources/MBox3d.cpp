@@ -46,6 +46,7 @@ m_max(max)
 
 bool MBox3d::isInCollisionWith(MBox3d * box)
 {
+    M_PROFILE_SCOPE(MBox3d::isInCollisionWith);
 	if(! isBoxToBoxCollision(m_min, m_max, *box->getMin(), *box->getMax()))
 		return false;
 
@@ -54,6 +55,7 @@ bool MBox3d::isInCollisionWith(MBox3d * box)
 
 void MBox3d::initFromPoints(const MVector3 * points, unsigned int pointsNumber)
 {
+    M_PROFILE_SCOPE(MBox3d::initFromPoints);
 	if(pointsNumber > 0)
 	{
 		MVector3 * min = getMin();

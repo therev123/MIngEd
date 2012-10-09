@@ -33,11 +33,13 @@
 
 MRendererManager::~MRendererManager(void)
 {
+    M_PROFILE_SCOPE(MRendererManager::~MRendererManager);
 	clear();
 }
 
 void MRendererManager::clear(void)
 {
+    M_PROFILE_SCOPE(MRendererManager::clear);
 	unsigned int i;
 	unsigned int bSize = m_renderers.size();
 	for(i=0; i<bSize; i++)
@@ -48,12 +50,14 @@ void MRendererManager::clear(void)
 
 void MRendererManager::addRenderer(const char * name, MRenderer * (*getNewRendererFunctionPointer)(void))
 {
+    M_PROFILE_SCOPE(MRendererManager::addRenderer);
 	MRendererCreator * newRCreator = new MRendererCreator(name, getNewRendererFunctionPointer);
 	m_renderers.push_back(newRCreator);
 }
 
 MRendererCreator * MRendererManager::getRendererByName(const char * name)
 {
+    M_PROFILE_SCOPE(MRendererManager::getRendererByName);
 	unsigned int i;
 	unsigned int rSize = getRenderersNumber();
 	for(i=0; i<rSize; i++)

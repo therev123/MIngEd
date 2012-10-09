@@ -33,6 +33,7 @@
 
 bool animateFloat(MKey * keys, unsigned int keysNumber, float t, float * value)
 {
+    M_PROFILE_SCOPE(animateFloat);
 	// no keys
 	if(keysNumber == 0)
 		return false;
@@ -89,6 +90,7 @@ bool animateFloat(MKey * keys, unsigned int keysNumber, float t, float * value)
 
 bool animateVector2(MKey * keys, unsigned int keysNumber, float t, MVector2 * vector2)
 {
+    M_PROFILE_SCOPE(animateVector2);
 	// no keys
 	if (keysNumber == 0)
 		return false;
@@ -146,6 +148,7 @@ bool animateVector2(MKey * keys, unsigned int keysNumber, float t, MVector2 * ve
 
 bool animateVector3(MKey * keys, unsigned int keysNumber, float t, MVector3 * vector3)
 {
+    M_PROFILE_SCOPE(animateVector3);
 	// no keys
 	if (keysNumber == 0)
 		return false;
@@ -203,6 +206,7 @@ bool animateVector3(MKey * keys, unsigned int keysNumber, float t, MVector3 * ve
 
 bool animateQuaternion(MKey * keys, unsigned int keysNumber, float t, MQuaternion * quaternion)
 {
+    M_PROFILE_SCOPE(animateQuaternion);
 	// no keys
 	if (keysNumber == 0)
 		return false;
@@ -272,6 +276,7 @@ bool animateQuaternion(MKey * keys, unsigned int keysNumber, float t, MQuaternio
 
 void animateArmature(MArmature * armature, MArmatureAnim * armatureAnim, float t)
 {
+    M_PROFILE_SCOPE(animateArmature);
 	MObject3dAnim * bonesAnim = armatureAnim->getBonesAnim();
 
 	MVector3 position;
@@ -305,6 +310,7 @@ void animateArmature(MArmature * armature, MArmatureAnim * armatureAnim, float t
 
 void animateTextures(MMesh * mesh, MTexturesAnim * texturesAnim, float t)
 {
+    M_PROFILE_SCOPE(animateTextures);
 	MTextureAnim * texAnim = texturesAnim->getTexturesAnim();
 
 	float rotation;
@@ -335,6 +341,7 @@ void animateTextures(MMesh * mesh, MTexturesAnim * texturesAnim, float t)
 
 void animateMaterials(MMesh * mesh, MMaterialsAnim * materialsAnim, float t)
 {
+    M_PROFILE_SCOPE(animateMaterials);
 	MMaterialAnim * matAnim = materialsAnim->getMaterialsAnim();
 
 	float opacity;
@@ -385,6 +392,7 @@ void animateMaterials(MMesh * mesh, MMaterialsAnim * materialsAnim, float t)
 
 void computeSkinning(MArmature * armature, MSkinData * skinData, const MVector3 * baseVertices, const MVector3 * baseNormals, const MVector3 * baseTangents, MVector3 * vertices, MVector3 * normals, MVector3 * tangents)
 {
+    M_PROFILE_SCOPE(computeSkinning);
 	unsigned int p;
 	unsigned int pSize = skinData->getPointsNumber();
 	if (baseTangents && baseNormals)
@@ -493,6 +501,7 @@ void computeSkinning(MArmature * armature, MSkinData * skinData, const MVector3 
 
 bool isRaytraced(const MVector3 & origin, const MVector3 & dest, const void * indices, M_TYPES indicesType, const MVector3 * vertices, unsigned int size)
 {
+    M_PROFILE_SCOPE(isRaytraced);
 	switch(indicesType)
 	{
 	case M_USHORT:
@@ -544,6 +553,7 @@ bool isRaytraced(const MVector3 & origin, const MVector3 & dest, const void * in
 
 bool getNearestRaytracedPosition(const MVector3 & origin, const MVector3 & dest, const void * indices, M_TYPES indicesType, const MVector3 * vertices, unsigned int size, MVector3 * intersection)
 {
+    M_PROFILE_SCOPE(getNearestRaytracedPosition);
 	bool isRaytraced = false;
 	float dist;
 	float nearDist;

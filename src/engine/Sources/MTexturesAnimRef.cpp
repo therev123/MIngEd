@@ -33,19 +33,23 @@
 
 MTexturesAnimRef::MTexturesAnimRef(MTexturesAnim * texturesAnim, const char * filename):
 	m_texturesAnim(texturesAnim){
+    M_PROFILE_SCOPE(MTexturesAnimRef::MTexturesAnimRef);
 	m_filename.set(filename);
 }
 
 MTexturesAnimRef::~MTexturesAnimRef(void){
+    M_PROFILE_SCOPE(MTexturesAnimRef::~MTexturesAnimRef);
 	clear();
 }
 
 MTexturesAnimRef * MTexturesAnimRef::getNew(MTexturesAnim * texturesAnim, const char * filename){
+    M_PROFILE_SCOPE(MTexturesAnimRef::getNew);
 	return new MTexturesAnimRef(texturesAnim, filename);
 }
 
 void MTexturesAnimRef::clear(void)
 {
+    M_PROFILE_SCOPE(MTexturesAnimRef::clear);
 	if(m_texturesAnim)
 	{
 		m_texturesAnim->destroy();
@@ -54,11 +58,13 @@ void MTexturesAnimRef::clear(void)
 }
 
 void MTexturesAnimRef::destroy(void){
+    M_PROFILE_SCOPE(MTexturesAnimRef::destroy);
 	delete this;
 }
 
 void MTexturesAnimRef::update(void)
 {
+    M_PROFILE_SCOPE(MTexturesAnimRef::update);
 	MEngine * engine = MEngine::getInstance();
 
 	if(! m_texturesAnim)

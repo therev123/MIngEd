@@ -33,6 +33,7 @@
 
 #include "MBulletContext.h"
 
+#include <MEngine.h>
 
 // constructor
 MBulletContext::MBulletContext(void):
@@ -47,12 +48,14 @@ MBulletContext::MBulletContext(void):
 // destructor
 MBulletContext::~MBulletContext(void)
 {
+    M_PROFILE_SCOPE(MBulletContext::~MBulletContext);
 	clear();
 }
 
 // init
 void MBulletContext::init(const MVector3 & worldMin, const MVector3 & worldMax)
 {
+    M_PROFILE_SCOPE(MBulletContext::init);
 	clear();
 
 	// create NULL id 0
@@ -78,6 +81,7 @@ void MBulletContext::init(const MVector3 & worldMin, const MVector3 & worldMax)
 // destroy
 void MBulletContext::clear(void)
 {
+    M_PROFILE_SCOPE(MBulletContext::clear);
 	unsigned int i;
 	unsigned int id;
 
@@ -119,6 +123,7 @@ void MBulletContext::clear(void)
 // update simulation
 void MBulletContext::updateSimulation(void)
 {
+    M_PROFILE_SCOPE(MBulletContext::updateSimulation);
 	//m_dynamicsWorld->stepSimulation(1.0f/6.0f, 1, 1.0f/6.0f); // simple quality
 	m_dynamicsWorld->stepSimulation(1.0f/6.0f, 2, 1.0f/12.0f); // double quality
 	//m_dynamicsWorld->stepSimulation(1.0f/6.0f, 4, 1.0f/24.0f); // etc
@@ -126,11 +131,13 @@ void MBulletContext::updateSimulation(void)
 
 // world
 void MBulletContext::setWorldGravity(const MVector3 & gravity){
+    M_PROFILE_SCOPE(MBulletContext::setWorldGravity);
 	m_dynamicsWorld->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
 }
 
 MVector3 MBulletContext::getWorldGravity()
 {
+    M_PROFILE_SCOPE(MBulletContext::getWorldGravity);
 	if(m_dynamicsWorld == NULL)
 		return MVector3(0.0f, 0.0f, 0.0f);
 	btVector3 gravity = m_dynamicsWorld->getGravity();
@@ -140,12 +147,14 @@ MVector3 MBulletContext::getWorldGravity()
 // create object
 void MBulletContext::createGhost(unsigned int * objectId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation)
 {
+    M_PROFILE_SCOPE(MBulletContext::createGhost);
 	createRigidBody(objectId, shapeId, position, rotation, 0.0000001f);
 	m_collisionObjects[*objectId]->setCollisionFlags(m_collisionObjects[*objectId]->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE | btCollisionObject::CF_KINEMATIC_OBJECT);
 }
 
 void MBulletContext::createRigidBody(unsigned int * objectId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation, float mass)
 {
+    M_PROFILE_SCOPE(MBulletContext::createRigidBody);
 	*objectId = m_collisionObjects.size();
 
 	btCollisionShape * shape = m_collisionShapes[shapeId];
@@ -182,6 +191,7 @@ void MBulletContext::createRigidBody(unsigned int * objectId, unsigned int shape
 // activate / deactivate
 void MBulletContext::activateObject(unsigned int objectId)
 {
+    M_PROFILE_SCOPE(MBulletContext::activateObject);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object)
 	{
@@ -198,6 +208,7 @@ void MBulletContext::activateObject(unsigned int objectId)
 
 void MBulletContext::deactivateObject(unsigned int objectId)
 {
+    M_PROFILE_SCOPE(MBulletContext::deactivateObject);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object)
 	{
@@ -208,6 +219,7 @@ void MBulletContext::deactivateObject(unsigned int objectId)
 // delete object
 void MBulletContext::deleteObject(unsigned int * objectId)
 {
+    M_PROFILE_SCOPE(MBulletContext::deleteObject);
 	btCollisionObject * object = m_collisionObjects[*objectId];
 	if(object)
 	{
@@ -229,6 +241,7 @@ void MBulletContext::deleteObject(unsigned int * objectId)
 // object properties
 void MBulletContext::enableObjectKinematic(unsigned int objectId)
 {
+    M_PROFILE_SCOPE(MBulletContext::enableObjectKinematic);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	object->setCollisionFlags(object->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 }
@@ -237,6 +250,7 @@ void MBulletContext::disableObjectKinematic(unsigned int objectId){}
 
 void MBulletContext::setObjectShape(unsigned int objectId, unsigned int shapeId)
 {
+    M_PROFILE_SCOPE(MBulletContext::setObjectShape);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	btCollisionShape * shape = m_collisionShapes[shapeId];
 	object->setCollisionShape(shape);
@@ -244,6 +258,7 @@ void MBulletContext::setObjectShape(unsigned int objectId, unsigned int shapeId)
 
 void MBulletContext::setObjectMass(unsigned int objectId, float mass)
 {
+    M_PROFILE_SCOPE(MBulletContext::setObjectMass);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
 	{
@@ -254,12 +269,14 @@ void MBulletContext::setObjectMass(unsigned int objectId, float mass)
 
 void MBulletContext::setObjectRestitution(unsigned int objectId, float restitution)
 {
+    M_PROFILE_SCOPE(MBulletContext::setObjectRestitution);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	object->setRestitution(btScalar(restitution));
 }
 
 void MBulletContext::setObjectFriction(unsigned int objectId, float friction)
 {
+    M_PROFILE_SCOPE(MBulletContext::setObjectFriction);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object){
 		object->setFriction(friction);
@@ -268,6 +285,7 @@ void MBulletContext::setObjectFriction(unsigned int objectId, float friction)
 
 void MBulletContext::setObjectLinearFactor(unsigned int objectId, const MVector3 & linearFactor)
 {
+    M_PROFILE_SCOPE(MBulletContext::setObjectLinearFactor);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
 	{
@@ -278,6 +296,7 @@ void MBulletContext::setObjectLinearFactor(unsigned int objectId, const MVector3
 
 void MBulletContext::setObjectAngularFactor(unsigned int objectId, float angularFactor)
 {
+    M_PROFILE_SCOPE(MBulletContext::setObjectAngularFactor);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
 	{
@@ -288,6 +307,7 @@ void MBulletContext::setObjectAngularFactor(unsigned int objectId, float angular
 
 void MBulletContext::setObjectDamping(unsigned int objectId, float linearDamping, float angularDamping)
 {
+    M_PROFILE_SCOPE(MBulletContext::setObjectDamping);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
 	{
@@ -298,6 +318,7 @@ void MBulletContext::setObjectDamping(unsigned int objectId, float linearDamping
 
 void MBulletContext::setObjectTransform(unsigned int objectId, const MVector3 & position, const MQuaternion & rotation)
 {
+    M_PROFILE_SCOPE(MBulletContext::setObjectTransform);
 	btTransform transform;
 	transform.setIdentity();
 	transform.setOrigin(btVector3(position.x, position.y, position.z));
@@ -348,6 +369,7 @@ void MBulletContext::setObjectTransform(unsigned int objectId, const MVector3 & 
 
 void MBulletContext::getObjectTransform(unsigned int objectId, MVector3 * position, MQuaternion * rotation)
 {
+    M_PROFILE_SCOPE(MBulletContext::getObjectTransform);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
 	{
@@ -375,6 +397,7 @@ void MBulletContext::getObjectTransform(unsigned int objectId, MVector3 * positi
 
 void MBulletContext::setObjectUserPointer(unsigned int objectId, void * userPointer)
 {
+    M_PROFILE_SCOPE(MBulletContext::setObjectUserPointer);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object)
 	{
@@ -385,6 +408,7 @@ void MBulletContext::setObjectUserPointer(unsigned int objectId, void * userPoin
 
 void * MBulletContext::getObjectUserPointer(unsigned int objectId)
 {
+    M_PROFILE_SCOPE(MBulletContext::getObjectUserPointer);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object)
 	{
@@ -399,6 +423,7 @@ void * MBulletContext::getObjectUserPointer(unsigned int objectId)
 // affectors
 void MBulletContext::addCentralForce(unsigned int objectId, const MVector3 & force)
 {
+    M_PROFILE_SCOPE(MBulletContext::addCentralForce);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
 	{
@@ -410,6 +435,7 @@ void MBulletContext::addCentralForce(unsigned int objectId, const MVector3 & for
 
 void MBulletContext::getCentralForce(unsigned int objectId, MVector3 * force)
 {
+    M_PROFILE_SCOPE(MBulletContext::getCentralForce);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
 	{
@@ -424,6 +450,7 @@ void MBulletContext::getCentralForce(unsigned int objectId, MVector3 * force)
 
 void MBulletContext::addTorque(unsigned int objectId, const MVector3 & torque)
 {
+    M_PROFILE_SCOPE(MBulletContext::addTorque);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
 	{
@@ -435,6 +462,7 @@ void MBulletContext::addTorque(unsigned int objectId, const MVector3 & torque)
 
 void MBulletContext::getTorque(unsigned int objectId, MVector3 * torque)
 {
+    M_PROFILE_SCOPE(MBulletContext::getTorque);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
 	{
@@ -449,6 +477,7 @@ void MBulletContext::getTorque(unsigned int objectId, MVector3 * torque)
 
 void MBulletContext::clearForces(unsigned int objectId)
 {
+    M_PROFILE_SCOPE(MBulletContext::clearForces);
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
 	{
@@ -462,6 +491,7 @@ void MBulletContext::clearForces(unsigned int objectId)
 // objects collision
 int MBulletContext::isObjectInCollision(unsigned int objectId, unsigned int * collisionList, unsigned int size)
 {
+    M_PROFILE_SCOPE(MBulletContext::isObjectInCollision);
 	int nbColl = 0;
 	btCollisionObject * object = m_collisionObjects[objectId];
 
@@ -504,6 +534,7 @@ int MBulletContext::isObjectInCollision(unsigned int objectId, unsigned int * co
 
 bool MBulletContext::isObjectsCollision(unsigned int object1Id, unsigned int object2Id)
 {
+    M_PROFILE_SCOPE(MBulletContext::isObjectsCollision);
 	btCollisionObject * object1 = m_collisionObjects[object1Id];
 	btCollisionObject * object2 = m_collisionObjects[object2Id];
 	
@@ -532,6 +563,7 @@ bool MBulletContext::isObjectsCollision(unsigned int object1Id, unsigned int obj
 
 bool MBulletContext::isRayHit(const MVector3 & start, const MVector3 & end, unsigned int * objectId, MVector3 * point, MVector3 * normal)
 {
+    M_PROFILE_SCOPE(MBulletContext::isRayHit);
 	btVector3 bstart(start.x, start.y, start.z);
 	btVector3 bend(end.x, end.y, end.z);
 	
@@ -569,6 +601,7 @@ bool MBulletContext::isRayHit(const MVector3 & start, const MVector3 & end, unsi
 // create shape
 void MBulletContext::createMultiShape(unsigned int * shapeId)
 {
+    M_PROFILE_SCOPE(MBulletContext::createMultiShape);
 	*shapeId = m_collisionShapes.size();
 	btCompoundShape * shape = new btCompoundShape();
 	m_collisionShapes.push_back(shape);
@@ -576,6 +609,7 @@ void MBulletContext::createMultiShape(unsigned int * shapeId)
 
 void MBulletContext::createBoxShape(unsigned int * shapeId, const MVector3 & scale)
 {
+    M_PROFILE_SCOPE(MBulletContext::createBoxShape);
 	*shapeId = m_collisionShapes.size();
 	btCollisionShape * shape = new btBoxShape(btVector3(scale.x, scale.y, scale.z));
 	m_collisionShapes.push_back(shape);
@@ -583,6 +617,7 @@ void MBulletContext::createBoxShape(unsigned int * shapeId, const MVector3 & sca
 
 void MBulletContext::createSphereShape(unsigned int * shapeId, float radius)
 {
+    M_PROFILE_SCOPE(MBulletContext::createSphereShape);
 	*shapeId = m_collisionShapes.size();
 	btCollisionShape * shape = new btSphereShape(btScalar(radius));
 	m_collisionShapes.push_back(shape);
@@ -590,6 +625,7 @@ void MBulletContext::createSphereShape(unsigned int * shapeId, float radius)
 
 void MBulletContext::createConeShape(unsigned int * shapeId, float radius, float height)
 {
+    M_PROFILE_SCOPE(MBulletContext::createConeShape);
 	*shapeId = m_collisionShapes.size();
 	btCollisionShape * shape = new btConeShape(btScalar(radius), btScalar(height));
 	m_collisionShapes.push_back(shape);
@@ -597,6 +633,7 @@ void MBulletContext::createConeShape(unsigned int * shapeId, float radius, float
 
 void MBulletContext::createCapsuleShape(unsigned int * shapeId, float radius, float height)
 {
+    M_PROFILE_SCOPE(MBulletContext::createCapsuleShape);
 	*shapeId = m_collisionShapes.size();
 	btCollisionShape * shape = new btCapsuleShape(btScalar(radius), btScalar(height));
 	m_collisionShapes.push_back(shape);
@@ -604,6 +641,7 @@ void MBulletContext::createCapsuleShape(unsigned int * shapeId, float radius, fl
 
 void MBulletContext::createCylinderShape(unsigned int * shapeId, float radius, float height)
 {
+    M_PROFILE_SCOPE(MBulletContext::createCylinderShape);
 	*shapeId = m_collisionShapes.size();
 	btCollisionShape * shape = new btCylinderShape(btVector3(radius, height*0.5f, radius));
 	m_collisionShapes.push_back(shape);
@@ -611,6 +649,7 @@ void MBulletContext::createCylinderShape(unsigned int * shapeId, float radius, f
 
 void MBulletContext::createConvexHullShape(unsigned int * shapeId, const MVector3 * vertices, unsigned int verticesNumber, const MVector3 scale)
 {
+    M_PROFILE_SCOPE(MBulletContext::createConvexHullShape);
 	*shapeId = m_collisionShapes.size();
 	btConvexHullShape * shape = new btConvexHullShape((btScalar*)vertices, verticesNumber, sizeof(MVector3));
 	shape->setLocalScaling(btVector3(scale.x, scale.y, scale.z));
@@ -619,6 +658,7 @@ void MBulletContext::createConvexHullShape(unsigned int * shapeId, const MVector
 
 void MBulletContext::createTriangleMeshShape(unsigned int * shapeId, const MVector3 * vertices, unsigned int verticesNumber, const void * indices, unsigned int indicesNumber, M_TYPES indicesType, const MVector3 scale)
 {
+    M_PROFILE_SCOPE(MBulletContext::createTriangleMeshShape);
 	*shapeId = m_collisionShapes.size();
 
 	PHY_ScalarType iType = PHY_INTEGER;
@@ -649,6 +689,7 @@ void MBulletContext::createTriangleMeshShape(unsigned int * shapeId, const MVect
 // delete shape
 void MBulletContext::deleteShape(unsigned int * shapeId)
 {
+    M_PROFILE_SCOPE(MBulletContext::deleteShape);
 	btCollisionShape * shape = m_collisionShapes[*shapeId];
 	if(shape)
 	{
@@ -660,6 +701,7 @@ void MBulletContext::deleteShape(unsigned int * shapeId)
 // add child shape to multishape
 void MBulletContext::addChildShape(unsigned int multiShapeId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation)
 {
+    M_PROFILE_SCOPE(MBulletContext::addChildShape);
 	btTransform transform;
 	transform.setIdentity();
 	transform.setOrigin(btVector3(position.x, position.y, position.z));
@@ -675,6 +717,7 @@ void MBulletContext::addChildShape(unsigned int multiShapeId, unsigned int shape
 // create constraint
 void MBulletContext::createConstraint(unsigned int * constraintId, unsigned int parentObjectId, unsigned int objectId, const MVector3 & pivot, bool disableParentCollision)
 {
+    M_PROFILE_SCOPE(MBulletContext::createConstraint);
 	btRigidBody * bA = btRigidBody::upcast(m_collisionObjects[parentObjectId]);
 	btRigidBody * bB = btRigidBody::upcast(m_collisionObjects[objectId]);
 		
@@ -726,6 +769,7 @@ void MBulletContext::createConstraint(unsigned int * constraintId, unsigned int 
 
 void MBulletContext::setLinearLimit(unsigned int constraintId, const MVector3 & lower, const MVector3 & upper)
 {
+    M_PROFILE_SCOPE(MBulletContext::setLinearLimit);
 	btGeneric6DofSpringConstraint * constraint = (btGeneric6DofSpringConstraint *)m_constraints[constraintId];
 	if(constraint)
 	{
@@ -736,6 +780,7 @@ void MBulletContext::setLinearLimit(unsigned int constraintId, const MVector3 & 
 
 void MBulletContext::setAngularLimit(unsigned int constraintId, const MVector3 & lower, const MVector3 & upper)
 {
+    M_PROFILE_SCOPE(MBulletContext::setAngularLimit);
 	btGeneric6DofSpringConstraint * constraint = (btGeneric6DofSpringConstraint *)m_constraints[constraintId];
 	if(constraint)
 	{
@@ -747,6 +792,7 @@ void MBulletContext::setAngularLimit(unsigned int constraintId, const MVector3 &
 // delete constraint
 void MBulletContext::deleteConstraint(unsigned int * constraintId)
 {
+    M_PROFILE_SCOPE(MBulletContext::deleteConstraint);
 	btTypedConstraint * constraint = m_constraints[*constraintId];
 	if(constraint)
 	{

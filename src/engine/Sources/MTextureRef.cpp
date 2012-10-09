@@ -38,31 +38,37 @@ MTextureRef::MTextureRef(unsigned int textureId, const char * filename, bool mip
 	m_width(0),
 	m_height(0)
 {
+    M_PROFILE_SCOPE(MTextureRef::MTextureRef);
 	m_filename.set(filename);
 }
 
 MTextureRef::~MTextureRef(void)
 {
+    M_PROFILE_SCOPE(MTextureRef::~MTextureRef);
 	clear();
 }
 
 MTextureRef * MTextureRef::getNew(unsigned int textureId, const char * filename, bool mipmap)
 {
+    M_PROFILE_SCOPE(MTextureRef::getNew);
 	return new MTextureRef(textureId, filename, mipmap);
 }
 
 void MTextureRef::clear(void)
 {
+    M_PROFILE_SCOPE(MTextureRef::clear);
 	MEngine::getInstance()->getRenderingContext()->deleteTexture(&m_textureId);
 }
 
 void MTextureRef::destroy(void)
 {
+    M_PROFILE_SCOPE(MTextureRef::destroy);
 	delete this;
 }
 
 void MTextureRef::update(void)
 {
+    M_PROFILE_SCOPE(MTextureRef::update);
 	MEngine * engine = MEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
 

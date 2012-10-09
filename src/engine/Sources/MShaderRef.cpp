@@ -34,27 +34,33 @@
 MShaderRef::MShaderRef(unsigned int shaderId, M_SHADER_TYPES type, const char * filename):
 	m_shaderId(shaderId),
 	m_type(type){
+    M_PROFILE_SCOPE(MShaderRef::MShaderRef);
 	m_filename.set(filename);
 }
 
 MShaderRef::~MShaderRef(void){
+    M_PROFILE_SCOPE(MShaderRef::~MShaderRef);
 	clear();
 }
 
 MShaderRef * MShaderRef::getNew(unsigned int shaderId, M_SHADER_TYPES type, const char * filename){
+    M_PROFILE_SCOPE(MShaderRef::getNew);
 	return new MShaderRef(shaderId, type, filename);
 }
 
 void MShaderRef::clear(void){
+    M_PROFILE_SCOPE(MShaderRef::clear);
 	MEngine::getInstance()->getRenderingContext()->deleteShader(&m_shaderId);
 }
 
 void MShaderRef::destroy(void){
+    M_PROFILE_SCOPE(MShaderRef::destroy);
 	delete this;
 }
 
 void MShaderRef::update(void)
 {
+    M_PROFILE_SCOPE(MShaderRef::update);
 	MEngine * engine = MEngine::getInstance();
 	MLevel * level = engine->getLevel();
 	MRenderingContext * render = engine->getRenderingContext();

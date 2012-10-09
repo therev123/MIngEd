@@ -33,20 +33,24 @@
 
 MMaterialsAnimRef::MMaterialsAnimRef(MMaterialsAnim * materialsAnim, const char * filename):
 	m_materialsAnim(materialsAnim){
+    M_PROFILE_SCOPE(MMaterialsAnimRef::MMaterialsAnimref);
 	m_filename.set(filename);
 }
 
 MMaterialsAnimRef::~MMaterialsAnimRef(void){
+    M_PROFILE_SCOPE(MMaterialsAnimRef::MMaterialsAnimRef);
 	clear();
 }
 
 MMaterialsAnimRef * MMaterialsAnimRef::getNew(MMaterialsAnim * materialsAnim, const char * filename)
 {
+    M_PROFILE_SCOPE(MMaterialsAnimRef::getNew);
 	return new MMaterialsAnimRef(materialsAnim, filename);
 }
 
 void MMaterialsAnimRef::clear(void)
 {
+    M_PROFILE_SCOPE(MMaterialsAnimRef::clear);
 	if(m_materialsAnim)
 	{
 		m_materialsAnim->destroy();
@@ -56,11 +60,13 @@ void MMaterialsAnimRef::clear(void)
 
 void MMaterialsAnimRef::destroy(void)
 {
+    M_PROFILE_SCOPE(MMaterialsAnimRef::destroy);
 	delete this;
 }
 
 void MMaterialsAnimRef::update(void)
 {
+    M_PROFILE_SCOPE(MMaterialsAnimRef::update);
 	MEngine * engine = MEngine::getInstance();
 
 	if(! m_materialsAnim)

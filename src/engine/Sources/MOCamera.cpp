@@ -45,6 +45,7 @@ m_sceneLayer(0),
 m_renderColorTexture(NULL),
 m_renderDepthTexture(NULL)
 {
+    M_PROFILE_SCOPE(MOCamera::MOCamera);
 	m_currentViewport[0] = 0;
 	m_currentViewport[1] = 0;
 	m_currentViewport[2] = 0;
@@ -54,6 +55,7 @@ m_renderDepthTexture(NULL)
 // destructor
 MOCamera::~MOCamera(void)
 {
+    M_PROFILE_SCOPE(MOCamera::~MOCamera);
 	MObject3d::clearObject3d();
 }
 
@@ -74,6 +76,7 @@ m_renderDepthTexture(NULL)
 
 MVector3 MOCamera::getProjectedPoint(const MVector3 & point) const
 {
+    M_PROFILE_SCOPE(MOCamera::getProjectedPoint);
 	MVector4 v = m_currentViewMatrix * MVector4(point);
 	v = m_currentProjMatrix * v;
 	v.x = v.x / v.w;
@@ -89,6 +92,7 @@ MVector3 MOCamera::getProjectedPoint(const MVector3 & point) const
 
 MVector3 MOCamera::getUnProjectedPoint(const MVector3 & point) const
 {
+    M_PROFILE_SCOPE(MOCamera::getUnprojectedPoint);
 	MVector3 nPoint;
 
 	nPoint.x = (2 * ((point.x - m_currentViewport[0]) / ((float)m_currentViewport[2]))) - 1;
@@ -103,6 +107,7 @@ MVector3 MOCamera::getUnProjectedPoint(const MVector3 & point) const
 
 void MOCamera::updateListener(void)
 {
+    M_PROFILE_SCOPE(MOCamera::updateListener);
 	MSoundContext * soundContext = MEngine::getInstance()->getSoundContext();
 	if(soundContext)
 	{
@@ -115,6 +120,7 @@ void MOCamera::updateListener(void)
 
 void MOCamera::enable(void)
 {
+    M_PROFILE_SCOPE(MOCamera::enable);
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	
 

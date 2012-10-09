@@ -38,21 +38,25 @@ m_materialsAnim(NULL)
 
 MMaterialsAnim::~MMaterialsAnim(void)
 {
+    M_PROFILE_SCOPE(MMaterialsAnim::~MMaterialsAnim);
 	clearMaterialsAnim();
 }
 
 MMaterialsAnim * MMaterialsAnim::getNew(void)
 {
+    M_PROFILE_SCOPE(MMaterialsAnim::getNew);
 	return new MMaterialsAnim();
 }
 
 void MMaterialsAnim::destroy(void)
 {
+    M_PROFILE_SCOPE(MMaterialsAnim::destroy);
 	delete this;
 }
 
 MMaterialAnim * MMaterialsAnim::allocMaterialsAnim(unsigned int size)
 {
+    M_PROFILE_SCOPE(MMaterialsAnim::allocMaterialsAnim);
 	clearMaterialsAnim();
 	if(size == 0)
 		return NULL;
@@ -64,6 +68,7 @@ MMaterialAnim * MMaterialsAnim::allocMaterialsAnim(unsigned int size)
 
 void MMaterialsAnim::clearMaterialsAnim(void)
 {
+    M_PROFILE_SCOPE(MMaterialsAnim::clearMaterialsAnim);
 	SAFE_DELETE_ARRAY(m_materialsAnim);
 	m_materialsAnimNumber = 0;
 }

@@ -33,12 +33,14 @@
 
 MRendererCreator::MRendererCreator(const char * name, MRenderer * (*getNewRendererFunctionPointer)(void))
 {
+    M_PROFILE_SCOPE(MRendererCreator::MRendererCreator);
 	m_name = name;
 	m_getNewRenderer = getNewRendererFunctionPointer;
 }
 
 MRenderer * MRendererCreator::getNewRenderer(void)
 {
+    M_PROFILE_SCOPE(MRendererCreator::getNewRenderer);
 	if(m_getNewRenderer)
 		return m_getNewRenderer();
 

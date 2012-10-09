@@ -33,19 +33,23 @@
 
 MSoundRef::MSoundRef(unsigned int bufferId, const char * filename):
 	m_bufferId(bufferId){
+    M_PROFILE_SCOPE(MSoundRef::MSoundRef);
 	m_filename.set(filename);
 }
 
 MSoundRef::~MSoundRef(void){
+    M_PROFILE_SCOPE(MSoundRef::~MSoundRef);
 	clear();
 }
 
 MSoundRef * MSoundRef::getNew(unsigned int bufferId, const char * filename){
+    M_PROFILE_SCOPE(MSoundRef::getNew);
 	return new MSoundRef(bufferId, filename);
 }
 
 void MSoundRef::clear(void)
 {
+    M_PROFILE_SCOPE(MSoundRef::clear);
 	MEngine * engine = MEngine::getInstance();
 	MSoundContext * soundContext = engine->getSoundContext();
 
@@ -53,11 +57,13 @@ void MSoundRef::clear(void)
 }
 
 void MSoundRef::destroy(void){
+    M_PROFILE_SCOPE(MSoundRef::destroy);
 	delete this;
 }
 
 void MSoundRef::update(void)
 {
+    M_PROFILE_SCOPE(MSoundRef::update);
 	MEngine * engine = MEngine::getInstance();
 	MSoundContext * soundContext = engine->getSoundContext();
 

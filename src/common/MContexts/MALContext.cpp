@@ -31,9 +31,11 @@
 #include <stdio.h>
 #include "MALContext.h"
 
+#include <MEngine.h>
 
 ALenum returnALFormat(M_SOUND_FORMAT format)
 {
+    M_PROFILE_SCOPE(returnALFormat);
 	switch(format)
 	{
 	default:
@@ -53,6 +55,7 @@ ALenum returnALFormat(M_SOUND_FORMAT format)
 
 MALContext::MALContext(void)
 {
+    M_PROFILE_SCOPE(MALContext::MALContext);
     // device
 	m_device = alcOpenDevice(NULL);
     if(! m_device)
@@ -75,6 +78,7 @@ MALContext::MALContext(void)
 
 MALContext::~MALContext(void)
 {
+    M_PROFILE_SCOPE(MALContext::~MALContext);
     ALCcontext * context = alcGetCurrentContext();
     ALCdevice * device = alcGetContextsDevice(context);
 
@@ -85,6 +89,7 @@ MALContext::~MALContext(void)
 
 void MALContext::initContext(void)
 {
+    M_PROFILE_SCOPE(MALContext::initContext);
 	// make current context
     if(! alcMakeContextCurrent(m_context))
 	{
@@ -95,11 +100,13 @@ void MALContext::initContext(void)
 
 void MALContext::createBuffer(unsigned int * bufferId)
 {
+    M_PROFILE_SCOPE(MALContext::createBuffer);
 	alGenBuffers(1, bufferId);
 }
 
 void MALContext::deleteBuffer(unsigned int * bufferId)
 {
+    M_PROFILE_SCOPE(MALContext::deleteBuffer);
 	if(*bufferId > 0)
 	{
 		// unlink sources
@@ -123,6 +130,7 @@ void MALContext::deleteBuffer(unsigned int * bufferId)
 
 void MALContext::sendBufferSound(unsigned int bufferId, MSound * sound)
 {
+    M_PROFILE_SCOPE(MALContext::sendBufferSound);
 	if(! sound)
 		return;
 
@@ -142,6 +150,7 @@ void MALContext::sendBufferSound(unsigned int bufferId, MSound * sound)
 
 void MALContext::sendBufferData(unsigned int bufferId, M_SOUND_FORMAT format, void * data, unsigned int size, unsigned int freq)
 {
+    M_PROFILE_SCOPE(MALContext::sendBufferData);
 	// properties
 	ALenum alFormat = returnALFormat(format);
 
@@ -158,6 +167,7 @@ void MALContext::sendBufferData(unsigned int bufferId, M_SOUND_FORMAT format, vo
 
 float MALContext::getBufferDuration(unsigned int bufferId)
 {
+    M_PROFILE_SCOPE(MALContext::getBufferDuration);
 	int size;
 	int bits;
 	int freq;
@@ -173,6 +183,7 @@ float MALContext::getBufferDuration(unsigned int bufferId)
 // source
 void MALContext::createSource(unsigned int * sourceId, unsigned int bufferId)
 {
+    M_PROFILE_SCOPE(MALContext::createSource);
 	alGenSources(1, sourceId);
 	setSourceBufferId(*sourceId, bufferId);
 
@@ -185,6 +196,7 @@ void MALContext::createSource(unsigned int * sourceId, unsigned int bufferId)
 
 void MALContext::deleteSource(unsigned int * sourceId)
 {
+    M_PROFILE_SCOPE(MALContext::deleteSource);
 	if(*sourceId > 0)
 	{
 		map<unsigned int, unsigned int>::iterator iter = m_sources.find(*sourceId);
@@ -197,58 +209,69 @@ void MALContext::deleteSource(unsigned int * sourceId)
 
 void MALContext::enableSourceLoop(unsigned int sourceId)
 {
+    M_PROFILE_SCOPE(MALContext::enableSourceLoop);
 	alSourcei(sourceId, AL_LOOPING, 1);
 }
 
 void MALContext::disableSourceLoop(unsigned int sourceId)
 {
+    M_PROFILE_SCOPE(MALContext::disableSourceLoop);
 	alSourcei(sourceId, AL_LOOPING, 0);
 }
 
 void MALContext::setSourceRelative(unsigned int sourceId, bool relative)
 {
+    M_PROFILE_SCOPE(MALContext::setSourceRelative);
 	alSourcei(sourceId, AL_SOURCE_RELATIVE, (ALint)relative);
 }
 
 void MALContext::setSourceBufferId(unsigned int sourceId, unsigned int bufferId)
 {
+    M_PROFILE_SCOPE(MALContext::setSourceBufferId);
 	alSourcei(sourceId, AL_BUFFER, bufferId);
 	m_sources[sourceId] = bufferId;
 }
 
 void MALContext::setSourcePosition(unsigned int sourceId, const MVector3 & position)
 {
+    M_PROFILE_SCOPE(MALContext::setSourcePosition);
 	alSourcefv(sourceId, AL_POSITION, position);
 }
 
 void MALContext::setSourceRadius(unsigned int sourceId, float radius)
 {
+    M_PROFILE_SCOPE(MALContext::setSourceRadius);
 	// the distance under which the volume for the source would normally drop by half
 	alSourcef(sourceId, AL_REFERENCE_DISTANCE, radius);
 }
 
 void MALContext::setSourcePitch(unsigned int sourceId, float pitch)
 {
+    M_PROFILE_SCOPE(MALContext::setSourcePitch);
 	alSourcef(sourceId, AL_PITCH, pitch);
 }
 
 void MALContext::setSourceGain(unsigned int sourceId, float gain)
 {
+    M_PROFILE_SCOPE(MALContext::setSourceGain);
 	alSourcef(sourceId, AL_GAIN, gain);
 }
 
 void MALContext::setSourceRolloff(unsigned int sourceId, float rolloff)
 {
+    M_PROFILE_SCOPE(MALContext::setSourceRolloff);
 	alSourcef(sourceId, AL_ROLLOFF_FACTOR, rolloff);
 }
 
 void MALContext::setSourceOffset(unsigned int sourceId, float offset)
 {
+    M_PROFILE_SCOPE(MALContext::setSourceOffset);
 	alSourcef(sourceId, AL_SEC_OFFSET, offset);
 }
 
 float MALContext::getSourceOffset(unsigned int sourceId)
 {
+    M_PROFILE_SCOPE(MALContext::getsourceOffset);
 	float time;
 	alGetSourcef(sourceId, AL_SEC_OFFSET, &time);
 	return time;
@@ -256,21 +279,25 @@ float MALContext::getSourceOffset(unsigned int sourceId)
 
 void MALContext::playSource(unsigned int sourceId)
 {
+    M_PROFILE_SCOPE(MALContext::playSource);
 	alSourcePlay(sourceId);
 }
 
 void MALContext::pauseSource(unsigned int sourceId)
 {
+    M_PROFILE_SCOPE(MALContext::pauseSource);
 	alSourcePause(sourceId);
 }
 
 void MALContext::stopSource(unsigned int sourceId)
 {
+    M_PROFILE_SCOPE(MALContext::stopSource);
 	alSourceStop(sourceId);
 }
 
 bool MALContext::isSourcePaused(unsigned int sourceId)
 {
+    M_PROFILE_SCOPE(MALContext::isSourcePaused);
 	ALint state;
 	alGetSourcei(sourceId, AL_SOURCE_STATE, &state);
 
@@ -282,6 +309,7 @@ bool MALContext::isSourcePaused(unsigned int sourceId)
 
 bool MALContext::isSourcePlaying(unsigned int sourceId)
 {
+    M_PROFILE_SCOPE(MALContext::isSourcePlaying);
 	ALint state;
 	alGetSourcei(sourceId, AL_SOURCE_STATE, &state);
 
@@ -293,6 +321,7 @@ bool MALContext::isSourcePlaying(unsigned int sourceId)
 
 float MALContext::getSourceTimePos(unsigned int sourceId)
 {
+    M_PROFILE_SCOPE(MALContext::getSourceTimePos);
 	int bits;
 	int freq;
 	int bOffset;
@@ -310,16 +339,19 @@ float MALContext::getSourceTimePos(unsigned int sourceId)
 
 void MALContext::queueSourceBuffer(unsigned int sourceId, unsigned int * buffers, unsigned int bufferSize)
 {
+    M_PROFILE_SCOPE(MALContext::queueSourceBuffer);
 	alSourceQueueBuffers(sourceId, bufferSize, buffers);
 }
 
 void MALContext::unqueueSourceBuffer(unsigned int sourceId, unsigned int * buffers, unsigned int bufferSize)
 {
+    M_PROFILE_SCOPE(MALContext::unqueueSourceBuffer);
 	alSourceUnqueueBuffers(sourceId, bufferSize, buffers);
 }
 
 unsigned int MALContext::getSourceBuffersQueued(unsigned int sourceId)
 {
+    M_PROFILE_SCOPE(MALContext::getSourceBuffersQueued);
 	ALint queued = 0;
     alGetSourcei(sourceId, AL_BUFFERS_QUEUED, &queued);
 	return (unsigned int)queued;
@@ -327,6 +359,7 @@ unsigned int MALContext::getSourceBuffersQueued(unsigned int sourceId)
 
 unsigned int MALContext::getSourceBuffersProcessed(unsigned int sourceId)
 {
+    M_PROFILE_SCOPE(MALContext::getSourceBuffersProcessed);
 	ALint processed = 0;
     alGetSourcei(sourceId, AL_BUFFERS_PROCESSED, &processed);
 	return (unsigned int)processed;
@@ -335,6 +368,7 @@ unsigned int MALContext::getSourceBuffersProcessed(unsigned int sourceId)
 // listener
 void MALContext::updateListenerPosition(const MVector3 & position, const MVector3 & direction, const MVector3 & up)
 {
+    M_PROFILE_SCOPE(MALContext::updateListenerPosition);
 	ALfloat ListenerPos[] = { position.x, position.y, position.z };
 	ALfloat ListenerVel[] = { 0.0, 0.0, 0.0 };
 	ALfloat ListenerOri[] = { 

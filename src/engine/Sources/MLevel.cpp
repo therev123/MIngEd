@@ -40,11 +40,13 @@ m_requestedSceneId(0xFFFFFFFF)
 
 MLevel::~MLevel(void)
 {
+    M_PROFILE_SCOPE(MLevel::~MLevel);
 	clear();
 }
 
 void MLevel::incrDataRefScore(MDataRef * ref)
 {
+    M_PROFILE_SCOPE(MLevel::incrDataRefScore);
 	if(! ref)
 		return;
 
@@ -56,6 +58,7 @@ void MLevel::incrDataRefScore(MDataRef * ref)
 
 void MLevel::decrDataRefScore(MDataRef * ref)
 {
+    M_PROFILE_SCOPE(MLevel::decrDataRefScore);
 	if(! ref)
 		return;
 
@@ -67,6 +70,7 @@ void MLevel::decrDataRefScore(MDataRef * ref)
 
 MFontRef * MLevel::loadFont(const char * filename)
 {
+    M_PROFILE_SCOPE(MLevel::loadFont);
 	unsigned int i;
 	unsigned int size = m_fontManager.getRefsNumber();
 	for(i=0; i<size; i++)
@@ -92,6 +96,7 @@ MFontRef * MLevel::loadFont(const char * filename)
 
 MMeshRef * MLevel::loadMesh(const char * filename, const bool preload)
 {
+    M_PROFILE_SCOPE(MLevel::loadMesh);
 	unsigned int i;
 	unsigned int size = m_meshManager.getRefsNumber();
 	for(i=0; i<size; i++)
@@ -126,6 +131,7 @@ MMeshRef * MLevel::loadMesh(const char * filename, const bool preload)
 
 MArmatureAnimRef * MLevel::loadArmatureAnim(const char * filename, const bool preload)
 {
+    M_PROFILE_SCOPE(MLevel::loadArmatureAnim);
 	unsigned int i;
 	unsigned int size = m_armatureAnimManager.getRefsNumber();
 	for(i=0; i<size; i++)
@@ -160,6 +166,7 @@ MArmatureAnimRef * MLevel::loadArmatureAnim(const char * filename, const bool pr
 
 MTexturesAnimRef * MLevel::loadTexturesAnim(const char * filename, const bool preload)
 {
+    M_PROFILE_SCOPE(MLevel::loadTexturesAnim);
 	unsigned int i;
 	unsigned int size = m_texturesAnimManager.getRefsNumber();
 	for(i=0; i<size; i++)
@@ -194,6 +201,7 @@ MTexturesAnimRef * MLevel::loadTexturesAnim(const char * filename, const bool pr
 
 MMaterialsAnimRef * MLevel::loadMaterialsAnim(const char * filename, const bool preload)
 {
+    M_PROFILE_SCOPE(MLevel::loadMaterialsAnim);
 	unsigned int i;
 	unsigned int size = m_materialsAnimManager.getRefsNumber();
 	for(i=0; i<size; i++)
@@ -228,6 +236,7 @@ MMaterialsAnimRef * MLevel::loadMaterialsAnim(const char * filename, const bool 
 
 MSoundRef * MLevel::loadSound(const char * filename, const bool preload)
 {
+    M_PROFILE_SCOPE(MLevel::loadSound);
 	unsigned int i;
 	unsigned int size = m_soundManager.getRefsNumber();
 	for(i=0; i<size; i++)
@@ -262,6 +271,7 @@ MSoundRef * MLevel::loadSound(const char * filename, const bool preload)
 
 MTextureRef * MLevel::loadTexture(const char * filename, const bool mipmap, const bool preload)
 {
+    M_PROFILE_SCOPE(MLevel::loadTexture);
 	unsigned int i;
 	unsigned int size = m_textureManager.getRefsNumber();
 	for(i=0; i<size; i++)
@@ -296,6 +306,7 @@ MTextureRef * MLevel::loadTexture(const char * filename, const bool mipmap, cons
 
 MShaderRef * MLevel::loadShader(const char * filename, M_SHADER_TYPES type)
 {
+    M_PROFILE_SCOPE(MLevel::loadShader);
 	unsigned int i;
 	unsigned int size = m_shaderManager.getRefsNumber();
 	for(i=0; i<size; i++)
@@ -320,6 +331,7 @@ MShaderRef * MLevel::loadShader(const char * filename, M_SHADER_TYPES type)
 
 MFXRef * MLevel::createFX(MShaderRef * vertexShaderRef, MShaderRef * pixelShaderRef)
 {
+    M_PROFILE_SCOPE(MLevel::createFX);
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	
 	unsigned int i;
@@ -338,16 +350,19 @@ MFXRef * MLevel::createFX(MShaderRef * vertexShaderRef, MShaderRef * pixelShader
 
 void MLevel::sendToUpdateQueue(MDataRef * ref)
 {
+    M_PROFILE_SCOPE(MLevel::sendToUpdateQueue);
 	m_updateQueue.push_back(ref);
 }
 
 void MLevel::sendToClearQueue(MDataRef * ref)
 {
+    M_PROFILE_SCOPE(MLevel::sendToClearQueue);
 	m_clearQueue.push_back(ref);
 }
 
 void MLevel::updateQueueDatas(void)
 {
+    M_PROFILE_SCOPE(MLevel::updateQueueDatas);
 	unsigned int i;
 	for(i=0; i<m_updateQueue.size(); i++)
 	{
@@ -360,6 +375,7 @@ void MLevel::updateQueueDatas(void)
 
 void MLevel::clearQueueDatas(void)
 {
+    M_PROFILE_SCOPE(MLevel::clearQueueDatas);
 	unsigned int i;
 	for(i=0; i<m_clearQueue.size(); i++)
 	{
@@ -372,6 +388,7 @@ void MLevel::clearQueueDatas(void)
 
 MScene * MLevel::addNewScene(void)
 {
+    M_PROFILE_SCOPE(MLevel::addNewScene);
 	MScene * scene = new MScene();
 	m_scenes.push_back(scene);
 	return scene;
@@ -379,6 +396,7 @@ MScene * MLevel::addNewScene(void)
 
 void MLevel::clear(void)
 {
+    M_PROFILE_SCOPE(MLevel::clear);
 	clearScenes();
 
 	m_updateQueue.clear();
@@ -398,6 +416,7 @@ void MLevel::clear(void)
 
 void MLevel::clearScenes(void)
 {
+    M_PROFILE_SCOPE(MLevel::clearScenes);
 	unsigned int i;
 	unsigned int sSize = getScenesNumber();
 	for(i=0; i<sSize; i++)
@@ -409,6 +428,7 @@ void MLevel::clearScenes(void)
 
 void MLevel::setCurrentSceneId(unsigned int id)
 {
+    M_PROFILE_SCOPE(MLevel::setCurrentSceneId);
 	if(id == m_currentSceneId)
 	{
 		updateQueueDatas();
@@ -542,11 +562,13 @@ void MLevel::setCurrentSceneId(unsigned int id)
 
 void MLevel::changeCurrentScene(unsigned int id)
 {
+    M_PROFILE_SCOPE(MLevel::changeCurrentScene);
 	m_requestedSceneId = id;
 }
 
 void MLevel::changeCurrentSceneIfRequested()
 {
+    M_PROFILE_SCOPE(MLevel::changeCurrentSceneIfRequested);
 	if(m_requestedSceneId == 0xFFFFFFFF)
 		return;
 
@@ -578,6 +600,7 @@ void MLevel::changeCurrentSceneIfRequested()
 
 void MLevel::deleteScene(unsigned int id)
 {
+    M_PROFILE_SCOPE(MLevel::deleteScene);
 	SAFE_DELETE(m_scenes[id]);
 	m_scenes.erase(m_scenes.begin() + id);
 
@@ -595,6 +618,7 @@ void MLevel::deleteScene(unsigned int id)
 
 MScene * MLevel::getCurrentScene(void)
 {
+    M_PROFILE_SCOPE(MLevel::getCurrentScene);
 	unsigned int sSize = getScenesNumber();
 	if(m_currentSceneId < sSize)
 		return m_scenes[m_currentSceneId];
@@ -603,7 +627,8 @@ MScene * MLevel::getCurrentScene(void)
 }
 
 MScene * MLevel::getSceneByName(const char * name)
-{	
+{
+    M_PROFILE_SCOPE(MLevel::getSceneByName);	
 	unsigned int i;
 	unsigned int sSize = getScenesNumber();
 	for(i=0; i<sSize; i++)
@@ -617,6 +642,7 @@ MScene * MLevel::getSceneByName(const char * name)
 
 bool MLevel::getSceneIndexByName(const char * name, unsigned int * index)
 {
+    M_PROFILE_SCOPE(MLevel::getSceneIndexByName);
 	unsigned int i;
 	unsigned int sSize = getScenesNumber();
 	for(i=0; i<sSize; i++)

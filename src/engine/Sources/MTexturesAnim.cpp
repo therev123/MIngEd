@@ -38,21 +38,25 @@ m_texturesAnim(NULL)
 
 MTexturesAnim::~MTexturesAnim(void)
 {
+    M_PROFILE_SCOPE(MTexturesAnim::~MTexturesAnin);
 	clearTexturesAnim();
 }
 
 MTexturesAnim * MTexturesAnim::getNew(void)
 {
+    M_PROFILE_SCOPE(MTexturesAnim::getNew);
 	return new MTexturesAnim();
 }
 
 void MTexturesAnim::destroy(void)
 {
+    M_PROFILE_SCOPE(MTexturesAnim::destroy);
 	delete this;
 }
 
 MTextureAnim * MTexturesAnim::allocTexturesAnim(unsigned int size)
 {
+    M_PROFILE_SCOPE(MTexturesAnim::allocTexturesAnim);
 	clearTexturesAnim();
 	if(size == 0)
 		return NULL;
@@ -64,6 +68,7 @@ MTextureAnim * MTexturesAnim::allocTexturesAnim(unsigned int size)
 
 void MTexturesAnim::clearTexturesAnim(void)
 {
+    M_PROFILE_SCOPE(MTexturesAnim::clearTexturesAnim);
 	SAFE_DELETE_ARRAY(m_texturesAnim);
 	m_texturesAnimNumber = 0;
 }

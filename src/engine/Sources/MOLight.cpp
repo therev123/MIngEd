@@ -47,6 +47,7 @@ m_shadowQuality(512)
 
 MOLight::~MOLight(void)
 {
+    M_PROFILE_SCOPE(MOLight::~MOLight);
 	MObject3d::clearObject3d();
 }
 
@@ -67,6 +68,7 @@ m_shadowQuality(light.m_shadowQuality)
 
 void MOLight::updateVisibility(MOCamera * camera)
 {
+    M_PROFILE_SCOPE(MOLight::updateVisibility);
 	MFrustum * frustum = camera->getFrustum();
 
 	// TODO: use different test for spot and directional

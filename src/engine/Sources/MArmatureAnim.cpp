@@ -38,21 +38,25 @@ m_bonesAnim(NULL)
 
 MArmatureAnim::~MArmatureAnim(void)
 {
+    M_PROFILE_SCOPE(MArmatureAnim::~ArmatureAnim);
 	clearBonesAnim();
 }
 
 MArmatureAnim * MArmatureAnim::getNew(void)
 {
+    M_PROFILE_SCOPE(MArmatureAnim::getNew);
 	return new MArmatureAnim();
 }
 
 void MArmatureAnim::destroy(void)
 {
+    M_PROFILE_SCOPE(MArmatureAnim::destroy);
 	delete this;
 }
 
 MObject3dAnim * MArmatureAnim::allocBonesAnim(unsigned int size)
 {
+    M_PROFILE_SCOPE(MArmatureAnim::allocBonesAnim);
 	clearBonesAnim();
 	if(size == 0)
 		return NULL;
@@ -64,6 +68,7 @@ MObject3dAnim * MArmatureAnim::allocBonesAnim(unsigned int size)
 
 void MArmatureAnim::clearBonesAnim(void)
 {
+    M_PROFILE_SCOPE(MArmatureAnim::clearBonesAnim);
 	SAFE_DELETE_ARRAY(m_bonesAnim);
 	m_bonesAnimNumber = 0;
 }

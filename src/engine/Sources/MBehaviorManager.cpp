@@ -33,11 +33,13 @@
 
 MBehaviorManager::~MBehaviorManager(void)
 {
+    M_PROFILE_SCOPE(MBehaviorManager::MBehaviorManager);
 	clear();
 }
 
 void MBehaviorManager::clear(void)
 {
+    M_PROFILE_SCOPE(MBehaviorManager::clear);
 	unsigned int i;
 	unsigned int bSize = m_behaviors.size();
 	for(i=0; i<bSize; i++)
@@ -48,12 +50,14 @@ void MBehaviorManager::clear(void)
 
 void MBehaviorManager::addBehavior(const char * name, int objectFilter, MBehavior * (*getNewBehaviorFunctionPointer)(MObject3d * parentObject))
 {
+    M_PROFILE_SCOPE(MBehaviorManager::addBehavior);
 	MBehaviorCreator * newBCreator = new MBehaviorCreator(name, objectFilter, getNewBehaviorFunctionPointer);
 	m_behaviors.push_back(newBCreator);
 }
 
 MBehaviorCreator * MBehaviorManager::getBehaviorByName(const char * name)
 {
+    M_PROFILE_SCOPE(MBehaviorManager::getBehaviorByName);
 	unsigned int i;
 	unsigned int bSize = getBehaviorsNumber();
 	for(i=0; i<bSize; i++)

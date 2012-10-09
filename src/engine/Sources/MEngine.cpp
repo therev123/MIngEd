@@ -52,6 +52,8 @@ m_requestedLevelToLoad(NULL)
 
 MEngine::~MEngine(void)
 {
+    M_PROFILE_SCOPE(MEngine::MEngine);
+
     for(std::list<MPlugin*>::iterator iPlugin = m_Plugins.begin();
 	iPlugin != m_Plugins.end(); iPlugin++)
 	delete *iPlugin;
@@ -62,57 +64,73 @@ MEngine::~MEngine(void)
 
 MEngine * MEngine::getInstance(void)
 {
+    // we don't want to profile this, because it
+    // just leads to calling this again...
+    // returning a static instance should be
+    // quick enough to not bother us
+    // M_PROFILE_SCOPE(MEngine::getInstance);
 	static MEngine m_instance;
 	return &m_instance;
 }
 
 void MEngine::setRenderingContext(MRenderingContext * renderingContext)
 {
+    M_PROFILE_SCOPE(MEngine::setRenderingContext);
 	m_renderingContext = renderingContext;
 }
 
 void MEngine::setSoundContext(MSoundContext * soundContext)
 {
+    M_PROFILE_SCOPE(MEngine::setSoundContext)
 	m_soundContext = soundContext;
 }
 
 void MEngine::setPhysicsContext(MPhysicsContext * physicsContext)
 {
+    M_PROFILE_SCOPE(MEngine::setPhysicsContext);
 	m_physicsContext = physicsContext;
 }
 
 void MEngine::setScriptContext(MScriptContext * scriptContext)
 {
+    M_PROFILE_SCOPE(MEngine::setScriptContext);
 	m_scriptContext = scriptContext;
 }
 
 void MEngine::setInputContext(MInputContext * inputContext)
 {
+    M_PROFILE_SCOPE(MEngine::setInputContext);
 	m_inputContext = inputContext;
 }
 
 void MEngine::setSystemContext(MSystemContext * systemContext)
 {
+    M_PROFILE_SCOPE(MEngine::setSystemContext);
 	m_systemContext = systemContext;
 }
 
 void MEngine::setProfilerContext(MProfilerContext * profilerContext)
 {
+    // we probably don't care about profiling this either
+    // M_PROFILE_SCOPE(MEngine::setProfilerContext);
 	m_profilerContext = profilerContext; 
 }
 
 void MEngine::setPackageManager(MPackageManager * packageManager)
 {
+    M_PROFILE_SCOPE(MEngine::setPackageManager);
 	m_packageManager = packageManager;
 }
 
 void MEngine::addFileLoader(const char* ext, MIFileLoader* loader)
 {
+    M_PROFILE_SCOPE(MEngine::addFileLoader);
     m_fileLoaders[ext] = loader;
 }
 
 void* MEngine::loadFile(const char* file, void* data)
 {
+    M_PROFILE_SCOPE(MEngine::loadFile);
     std::map<std::string, MIFileLoader*>::iterator iFL;
     for(iFL = m_fileLoaders.begin(); iFL != m_fileLoaders.end(); iFL++)
 	if(strstr(file, iFL->first.c_str()) != 0)
@@ -122,11 +140,13 @@ void* MEngine::loadFile(const char* file, void* data)
 
 void MEngine::setLevel(MLevel * level)
 {
+    M_PROFILE_SCOPE(MEngine::setLevel);
 	m_level = level;
 }
 
 void MEngine::updateRequests(void)
 {
+    M_PROFILE_SCOPE(MEngine::updateRequests);
 	// see if we should load requested scene or level
 	loadLevelIfRequested();
 	if(m_level)
@@ -135,6 +155,7 @@ void MEngine::updateRequests(void)
 
 bool MEngine::loadLevel(const char * filename)
 {
+    M_PROFILE_SCOPE(MEngine::loadLevel);
 	if(! filename)
 		return false;
 
@@ -174,6 +195,7 @@ bool MEngine::loadLevel(const char * filename)
 
 void MEngine::requestLoadLevel(const char * filename)
 {
+    M_PROFILE_SCOPE(MEngine::requestLoadLevel);
 	SAFE_FREE(m_requestedLevelToLoad);
 
 	unsigned int len = strlen(filename);
@@ -183,6 +205,7 @@ void MEngine::requestLoadLevel(const char * filename)
 
 bool MEngine::doesLevelExist(const char * filename)
 {
+    M_PROFILE_SCOPE(MEngine::doesLevelExist);
 	if(! filename)
 		return false;
 
@@ -193,16 +216,23 @@ bool MEngine::doesLevelExist(const char * filename)
 
 void MEngine::setGame(MGame * game)
 {
+    M_PROFILE_SCOPE(MEngine::setGame);
 	m_game = game;
 }
 
 void MEngine::setRenderer(MRenderer * renderer)
 {
+    M_PROFILE_SCOPE(MEngine::setRenderer);
+
+    static int test = 0;
+    test++;
+    printf("setRenderer called %d time(s)\n", test);
 	m_renderer = renderer;
 }
 
 void MEngine::loadLevelIfRequested()
 {
+    M_PROFILE_SCOPE(MEngine::loadLevelIfRequested);
 	if(m_requestedLevelToLoad == NULL)
 		return;
 
@@ -212,6 +242,7 @@ void MEngine::loadLevelIfRequested()
 
 void MEngine::loadPlugin(const char* name)
 {
+    M_PROFILE_SCOPE(MEngine::loadPlugin);
     MPlugin* plugin = new MPlugin;
     plugin->load(name);
     if(plugin->isLoaded())

@@ -40,11 +40,13 @@ m_vertexId(0)
 
 MSkinPoint::~MSkinPoint(void)
 {
+    M_PROFILE_SCOPE(MSkinPoint::~MSkinPoint);
 	clearBonesLinks();
 }
 
 void MSkinPoint::clearBonesLinks(void)
 {
+    M_PROFILE_SCOPE(MSkinPoint::clearBonesLinks);
 	m_bonesNumber = 0;
 	SAFE_DELETE_ARRAY(m_bonesIds);
 	SAFE_DELETE_ARRAY(m_bonesWeights);
@@ -52,6 +54,7 @@ void MSkinPoint::clearBonesLinks(void)
 
 bool MSkinPoint::allocateBonesLinks(unsigned int size)
 {
+    M_PROFILE_SCOPE(MSkinPoint::allocateBonesLinks);
 	clearBonesLinks();
 	if(size == 0)
 		return false;
@@ -70,11 +73,13 @@ m_points(NULL)
 
 MSkinData::~MSkinData(void)
 {
+    M_PROFILE_SCOPE(MSkinData::~MSkinData);
 	clearPoints();
 }
 
 MSkinPoint * MSkinData::allocPoints(unsigned int size)
 {
+    M_PROFILE_SCOPE(MSkinData::allocPoints);
 	clearPoints();
 	m_pointsNumber = size;
 	m_points = new MSkinPoint[m_pointsNumber];
@@ -83,6 +88,7 @@ MSkinPoint * MSkinData::allocPoints(unsigned int size)
 
 void MSkinData::clearPoints(void)
 {
+    M_PROFILE_SCOPE(MSkinData::clearPoints);
 	m_pointsNumber = 0;
 	SAFE_DELETE_ARRAY(m_points);
 }

@@ -42,7 +42,7 @@ solution "maratis-minged"
 			flags { "Optimize" }
 
 		configuration "Debug"
-			defines { "DEBUG" }
+			defines { "DEBUG", "M_SHOULD_PROFILE" }
 			flags { "Symbols" }
 
 -- plugins
@@ -98,7 +98,7 @@ dofile("plugins.lua")
 			flags { "Optimize" }
 
 		configuration "Debug"
-			defines { "DEBUG" }
+			defines { "DEBUG", "M_SHOULD_PROFILE" }
 			flags { "Symbols" }
 
 	-- load up Maratis into the build
@@ -135,5 +135,5 @@ dofile("plugins.lua")
 			flags { "Optimize" }
 
 		configuration "Debug"
-			defines { "DEBUG" }
+			defines { "DEBUG", "M_SHOULD_PROFILE" }
 			flags { "Symbols" }

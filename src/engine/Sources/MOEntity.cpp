@@ -88,16 +88,19 @@ MPhysicsProperties::MPhysicsProperties(const MPhysicsProperties & physicsPropert
 
 MPhysicsProperties::~MPhysicsProperties(void)
 {
+    M_PROFILE_SCOPE(MPhysicsProperties::~MPhysicsProperties);
 	deleteConstraint();
 }
 
 void MPhysicsProperties::deleteConstraint(void)
 {
+    M_PROFILE_SCOPE(MPhysicsProperties::deleteConstraint);
 	SAFE_DELETE(m_constraint);
 }
 
 MPhysicsConstraint * MPhysicsProperties::createConstraint(void)
 {
+    M_PROFILE_SCOPE(MPhysicsProperties::createConstraint);
 	deleteConstraint();
 	m_constraint = new MPhysicsConstraint();
 	return m_constraint;
@@ -113,6 +116,7 @@ m_currentLoop(0),
 m_animationId(0),
 m_physicsProperties(NULL)
 {
+    M_PROFILE_SCOPE(MOEntity::MOEntity);
 	setMeshRef(meshRef);
 }
 
@@ -125,6 +129,7 @@ m_currentFrame(entity.m_currentFrame),
 m_currentLoop(entity.m_currentLoop),
 m_animationId(entity.m_animationId)
 {
+    M_PROFILE_SCOPE(MOEntity::MOEntity);
 	setMeshRef(entity.m_meshRef);
 	if(entity.m_physicsProperties)
 		m_physicsProperties = new MPhysicsProperties(*entity.m_physicsProperties);
@@ -132,12 +137,14 @@ m_animationId(entity.m_animationId)
 
 MOEntity::~MOEntity(void)
 {
+    M_PROFILE_SCOPE(MOEntity::~MOEntity);
 	deletePhysicsProperties();
 	MObject3d::clearObject3d();
 }
 
 void MOEntity::changeAnimation(unsigned int animationId)
 {
+    M_PROFILE_SCOPE(MOEntity::changeAnimation);
 	MMesh * mesh = getMesh();
 	if(! mesh)
 	{
@@ -179,11 +186,13 @@ void MOEntity::changeAnimation(unsigned int animationId)
 
 void MOEntity::deletePhysicsProperties(void)
 {
+    M_PROFILE_SCOPE(MOEntity::deletePhysicsProperties);
 	SAFE_DELETE(m_physicsProperties);
 }
 
 MPhysicsProperties * MOEntity::createPhysicsProperties(void)
 {
+    M_PROFILE_SCOPE(MOEntity::createPhysicsProperties);
 	deletePhysicsProperties();
 	MPhysicsProperties * physicsProperties = new MPhysicsProperties();
 	m_physicsProperties = physicsProperties;
@@ -192,6 +201,7 @@ MPhysicsProperties * MOEntity::createPhysicsProperties(void)
 
 void MOEntity::setActive(bool active)
 {
+    M_PROFILE_SCOPE(MOEntity::setActive);
 	if(active == m_isActive)
 		return;
 	
@@ -210,6 +220,7 @@ void MOEntity::setActive(bool active)
 
 void MOEntity::setMeshRef(MMeshRef * meshRef)
 {
+    M_PROFILE_SCOPE(MOEntity::setMeshRef);
 	// set mesh ref
 	m_meshRef = meshRef;
 	if(meshRef)
@@ -225,6 +236,7 @@ void MOEntity::setMeshRef(MMeshRef * meshRef)
 
 MMesh * MOEntity::getMesh(void)
 {
+    M_PROFILE_SCOPE(MOEntity::getMesh);
 	if(! m_meshRef)
 		return NULL;
 
@@ -233,6 +245,7 @@ MMesh * MOEntity::getMesh(void)
 
 void MOEntity::updateVisibility(MOCamera * camera)
 {
+    M_PROFILE_SCOPE(MOEntity::updateVisibility);
 	if(m_isInvisible){
 		setVisible(false);
 		return;
@@ -260,6 +273,7 @@ void MOEntity::updateVisibility(MOCamera * camera)
 
 bool MOEntity::isAnimationOver(void)
 {
+    M_PROFILE_SCOPE(MOEntity::isAnimationOver);
 	MMesh * mesh = getMesh();
 	if(mesh)
 	{
@@ -290,6 +304,7 @@ bool MOEntity::isAnimationOver(void)
 
 void MOEntity::update(void)
 {
+    M_PROFILE_SCOPE(MOEntity::update);
 	MMesh * mesh = getMesh();
 	if(mesh)
 	{

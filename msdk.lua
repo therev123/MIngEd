@@ -22,7 +22,7 @@ defines { "NDEBUG" }
 flags { "Optimize" }
 
 configuration "Debug"
-defines { "DEBUG" }
+defines { "DEBUG", "M_SHOULD_PROFILE" }
 flags { "Symbols" }
 -- END OF MCORE BUILD
 
@@ -51,7 +51,7 @@ defines { "NDEBUG" }
 flags { "Optimize" }
 
 configuration "Debug"
-defines { "DEBUG" }
+defines { "DEBUG", "M_SHOULD_PROFILE" }
 flags { "Symbols" }
 -- END OF MENGINE BUILD
 
@@ -91,7 +91,7 @@ defines { "NDEBUG" }
 flags { "Optimize" }
 
 configuration "Debug"
-defines { "DEBUG" }
+defines { "DEBUG", "M_SHOULD_PROFILE" }
 flags { "Symbols" }
 -- END OF MGUI BUILD
 
@@ -136,6 +136,6 @@ defines { "NDEBUG" }
 flags { "Optimize" }
 
 configuration "Debug"
-defines { "DEBUG" }
+defines { "DEBUG", "M_SHOULD_PROFILE" }
 flags { "Symbols" }
 -- END OF COMMON BUILD

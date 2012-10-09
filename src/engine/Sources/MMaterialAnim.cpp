@@ -50,6 +50,7 @@ m_customColorKeys(NULL)
 
 MMaterialAnim::~MMaterialAnim(void)
 {
+    M_PROFILE_SCOPE(MMaterialAnim::~MMaterialAnim);
 	clearOpacityKeys();
 	clearShininessKeys();
 	clearCustomValueKeys();
@@ -61,6 +62,7 @@ MMaterialAnim::~MMaterialAnim(void)
 
 MKey * MMaterialAnim::allocOpacityKeys(unsigned int size)
 {
+    M_PROFILE_SCOPE(MMaterialAnim::allocOpacityKeys);
 	clearOpacityKeys();
 	if(size == 0)
 		return NULL;
@@ -72,6 +74,7 @@ MKey * MMaterialAnim::allocOpacityKeys(unsigned int size)
 
 MKey * MMaterialAnim::allocShininessKeys(unsigned int size)
 {
+    M_PROFILE_SCOPE(MMaterialAnim::allocShininessKeys);
 	clearShininessKeys();
 	if(size == 0)
 		return NULL;
@@ -83,6 +86,7 @@ MKey * MMaterialAnim::allocShininessKeys(unsigned int size)
 
 MKey * MMaterialAnim::allocCustomValueKeys(unsigned int size)
 {
+    M_PROFILE_SCOPE(MMaterialAnim::allocCustomValueKeys);
 	clearCustomValueKeys();
 	if(size == 0)
 		return NULL;
@@ -94,6 +98,7 @@ MKey * MMaterialAnim::allocCustomValueKeys(unsigned int size)
 
 MKey * MMaterialAnim::allocDiffuseKeys(unsigned int size)
 {
+    M_PROFILE_SCOPE(MMaterialAnim::allocDiffuseKeys);
 	clearDiffuseKeys();
 	if(size == 0)
 		return NULL;
@@ -105,6 +110,7 @@ MKey * MMaterialAnim::allocDiffuseKeys(unsigned int size)
 
 MKey * MMaterialAnim::allocSpecularKeys(unsigned int size)
 {
+    M_PROFILE_SCOPE(MMaterialAnim::allocSpecularKeys);
 	clearSpecularKeys();
 	if(size == 0)
 		return NULL;
@@ -116,6 +122,7 @@ MKey * MMaterialAnim::allocSpecularKeys(unsigned int size)
 
 MKey * MMaterialAnim::allocEmitKeys(unsigned int size)
 {
+    M_PROFILE_SCOPE(MMaterialAnim::allocEmitKeys);
 	clearEmitKeys();
 	if(size == 0)
 		return NULL;
@@ -127,6 +134,7 @@ MKey * MMaterialAnim::allocEmitKeys(unsigned int size)
 
 MKey * MMaterialAnim::allocCustomColorKeys(unsigned int size)
 {
+    M_PROFILE_SCOPE(MMaterialAnim::allocCustomColorKeys);
 	clearCustomColorKeys();
 	if(size == 0)
 		return NULL;
@@ -138,42 +146,49 @@ MKey * MMaterialAnim::allocCustomColorKeys(unsigned int size)
 
 void MMaterialAnim::clearOpacityKeys(void)
 {
+    M_PROFILE_SCOPE(MMaterialAnim::clearOpacityKeys);
 	SAFE_DELETE_ARRAY(m_opacityKeys);
 	m_opacityKeysNumber = 0;
 }
 
 void MMaterialAnim::clearShininessKeys(void)
 {
+    M_PROFILE_SCOPE(MMaterialAnim::clearShininessKeys);
 	SAFE_DELETE_ARRAY(m_shininessKeys);
 	m_shininessKeysNumber = 0;
 }
 
 void MMaterialAnim::clearCustomValueKeys(void)
 {
+    M_PROFILE_SCOPE(MMaterialAnim::clearCustomValueKeys)
 	SAFE_DELETE_ARRAY(m_customValueKeys);
 	m_customValueKeysNumber = 0;
 }
 
 void MMaterialAnim::clearDiffuseKeys(void)
 {
+    M_PROFILE_SCOPE(MMaterialAnim::clearDiffuseKeys);
 	SAFE_DELETE_ARRAY(m_diffuseKeys);
 	m_diffuseKeysNumber = 0;
 }
 
 void MMaterialAnim::clearSpecularKeys(void)
 {
+    M_PROFILE_SCOPE(MMaterialAnim::clearSpecularKeys);
 	SAFE_DELETE_ARRAY(m_specularKeys);
 	m_specularKeysNumber = 0;
 }
 
 void MMaterialAnim::clearEmitKeys(void)
 {
+    M_PROFILE_SCOPE(MMaterialAnim::clearEmitKeys);
 	SAFE_DELETE_ARRAY(m_emitKeys);
 	m_emitKeysNumber = 0;
 }
 
 void MMaterialAnim::clearCustomColorKeys(void)
 {
+    M_PROFILE_SCOPE(MMaterialAnim::clearCustomColorKeys);
 	SAFE_DELETE_ARRAY(m_customColorKeys);
 	m_customColorKeysNumber = 0;
 }

@@ -37,6 +37,7 @@ static int pointsId[4][2] = {
 
 void MFrustum::makeVolume(MOCamera * camera)
 {
+    M_PROFILE_SCOPE(MFrustum::makeVolume);
 	// get viewport
 	int * viewport = camera->getCurrentViewport();
 
@@ -101,6 +102,7 @@ void MFrustum::makeVolume(MOCamera * camera)
 
 bool MFrustum::isVolumePointsVisible(MVector3 * points, unsigned int pointsNumber)
 {
+    M_PROFILE_SCOPE(MFrustum::isVolumePointsVisible);
 	bool out = true;
 	unsigned int p;
 

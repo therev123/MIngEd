@@ -45,6 +45,7 @@ m_normals(NULL)
 
 MFixedRenderer::~MFixedRenderer(void)
 {
+    M_PROFILE_SCOPE(MFixedRenderer::~MFixedRenderer);
 	// delete skin cache
 	SAFE_DELETE_ARRAY(m_vertices);
 	SAFE_DELETE_ARRAY(m_normals);
@@ -52,11 +53,13 @@ MFixedRenderer::~MFixedRenderer(void)
 
 void MFixedRenderer::destroy(void)
 {
+    M_PROFILE_SCOPE(MFixedRenderer::destroy);
 	delete this;
 }
 
 MRenderer * MFixedRenderer::getNew(void)
 {
+    M_PROFILE_SCOPE(MFixedRenderer::getNew);
 	return new MFixedRenderer();
 }
 
@@ -67,6 +70,7 @@ MRenderer * MFixedRenderer::getNew(void)
 
 MVector3 * MFixedRenderer::getVertices(unsigned int size)
 {
+    M_PROFILE_SCOPE(MFixedRenderer::getVertices);
 	if(size == 0)
 		return NULL;
 	
@@ -82,6 +86,7 @@ MVector3 * MFixedRenderer::getVertices(unsigned int size)
 
 MVector3 * MFixedRenderer::getNormals(unsigned int size)
 {
+    M_PROFILE_SCOPE(MFixedRenderer::getNormals);
 	if(size == 0)
 		return NULL;
 	
@@ -97,6 +102,7 @@ MVector3 * MFixedRenderer::getNormals(unsigned int size)
 
 void MFixedRenderer::updateSkinning(MMesh * mesh, MArmature * armature)
 {
+    M_PROFILE_SCOPE(MFixedRenderer::updateSkinning);
 	unsigned int s;
 	unsigned int sSize = mesh->getSubMeshsNumber();
 	for(s=0; s<sSize; s++)
@@ -125,6 +131,7 @@ void MFixedRenderer::updateSkinning(MMesh * mesh, MArmature * armature)
 
 void MFixedRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices, MVector3 * normals, MColor * colors)
 {
+    M_PROFILE_SCOPE(MFixedRenderer::drawDisplay);
 	MEngine * engine = MEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
 	
@@ -339,6 +346,7 @@ void MFixedRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVector
 
 void MFixedRenderer::drawDisplayTriangles(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices)
 {
+    M_PROFILE_SCOPE(MFixedRenderer::drawDisplayTriangles);
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	
 	// begin / size
@@ -394,6 +402,7 @@ void MFixedRenderer::drawDisplayTriangles(MSubMesh * subMesh, MDisplay * display
 
 void MFixedRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
 {
+    M_PROFILE_SCOPE(MFixedRenderer::drawOpaques);
 	// data
 	MVector3 * vertices = subMesh->getVertices();
 	MVector3 * normals = subMesh->getNormals();
@@ -437,6 +446,7 @@ void MFixedRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
 
 void MFixedRenderer::drawTransparents(MSubMesh * subMesh, MArmature * armature)
 {
+    M_PROFILE_SCOPE(MFixedRenderer::drawTransparents);
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	
 	// data
@@ -499,6 +509,7 @@ void MFixedRenderer::drawTransparents(MSubMesh * subMesh, MArmature * armature)
 
 float MFixedRenderer::getDistanceToCam(MOCamera * camera, const MVector3 & pos)
 {
+    M_PROFILE_SCOPE(MFixedRenderer::getDistancetoCam);
 	if(! camera->isOrtho())
 	{
 		return (pos - camera->getTransformedPosition()).getSquaredLength();
@@ -511,6 +522,7 @@ float MFixedRenderer::getDistanceToCam(MOCamera * camera, const MVector3 & pos)
 
 void MFixedRenderer::updateVisibility(MScene * scene, MOCamera * camera)
 {
+    M_PROFILE_SCOPE(MFixedRenderer::updateVisibility);
 	// make frustum
 	camera->getFrustum()->makeVolume(camera);
 	
@@ -527,6 +539,7 @@ void MFixedRenderer::updateVisibility(MScene * scene, MOCamera * camera)
 
 void MFixedRenderer::enableFog(MOCamera * camera)
 {
+    M_PROFILE_SCOPE(MFixedRenderer::enableFog);
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	
 	float fogMin = camera->getClippingFar()*0.9999f;
@@ -547,6 +560,7 @@ void MFixedRenderer::enableFog(MOCamera * camera)
 
 void MFixedRenderer::drawText(MOText * textObj)
 {
+    M_PROFILE_SCOPE(MFixedRenderer::drawText);
 	MFont * font = textObj->getFont();
 	const char * text = textObj->getText();
 	vector <float> * linesOffset = textObj->getLinesOffset();
@@ -650,6 +664,7 @@ void MFixedRenderer::drawText(MOText * textObj)
 
 void MFixedRenderer::drawScene(MScene * scene, MOCamera * camera)
 {
+    M_PROFILE_SCOPE(MFixedRenderer::drawScene);
 	struct MEntityLight
 	{
 		MBox3d lightBox;

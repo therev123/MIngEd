@@ -31,10 +31,12 @@
 #include <MWindow.h>
 #include "MWinContext.h"
 
+#include <MEngine.h>
 
 // screen
 void MWinContext::getScreenSize(unsigned int * width, unsigned int * height)
 {
+    M_PROFILE_SCOPE(MWinContext::getScreenSize);
 	MWindow * window = MWindow::getInstance();
 	*width = window->getWidth();
 	*height = window->getHeight();
@@ -43,18 +45,21 @@ void MWinContext::getScreenSize(unsigned int * width, unsigned int * height)
 // cursor
 void MWinContext::setCursorPosition(int x, int y)
 {
+    M_PROFILE_SCOPE(MWinContext::setCursorPosition);
 	MWindow * window = MWindow::getInstance();
 	window->setCursorPos(window->getXPosition() + x, window->getYPosition() + y);
 }
 
 void MWinContext::hideCursor(void)
 {
+    M_PROFILE_SCOPE(MWinContext::hideCursor);
 	MWindow * window = MWindow::getInstance();
 	window->hideCursor();
 }
 
 void MWinContext::showCursor(void)
 {
+    M_PROFILE_SCOPE(MWinContext::showCursor);
 	MWindow * window = MWindow::getInstance();
 	window->showCursor();
 }
@@ -62,6 +67,7 @@ void MWinContext::showCursor(void)
 // working directory
 const char * MWinContext::getWorkingDirectory(void)
 {
+    M_PROFILE_SCOPE(MWinContext::getWorkingDirectory);
 	MWindow * window = MWindow::getInstance();
 	return window->getWorkingDirectory();
 }
@@ -69,6 +75,7 @@ const char * MWinContext::getWorkingDirectory(void)
 // system tick
 unsigned long MWinContext::getSystemTick(void)
 {
+    M_PROFILE_SCOPE(MWinContext::getSystemTick);
 	MWindow * window = MWindow::getInstance();
 	return window->getSystemTick();
 }
@@ -76,12 +83,14 @@ unsigned long MWinContext::getSystemTick(void)
 // plugin directories
 const char* MWinContext::getUserDirectory(void)
 {
+    M_PROFILE_SCOPE(MWinContext::getUserDirectory);
   MWindow * window = MWindow::getInstance();
   return window->getUserDirectory();
 }
 
 const char* MWinContext::getSystemDirectory(void)
 {
+    M_PROFILE_SCOPE(MWinContext::getSystemDirectory);
   MWindow * window = MWindow::getInstance();
   return window->getSystemDirectory();
 }

@@ -42,6 +42,7 @@ m_rotationKeys(NULL)
 
 MTextureAnim::~MTextureAnim(void)
 {
+    M_PROFILE_SCOPE(MTextureAnim::~MTextureAnim);
 	clearTranslateKeys();
 	clearScaleKeys();
 	clearRotationKeys();
@@ -49,6 +50,7 @@ MTextureAnim::~MTextureAnim(void)
 
 MKey * MTextureAnim::allocTranslateKeys(unsigned int size)
 {
+    M_PROFILE_SCOPE(MTextureAnim::allocTranslateKeys);
 	clearTranslateKeys();
 	if(size == 0)
 		return NULL;
@@ -60,6 +62,7 @@ MKey * MTextureAnim::allocTranslateKeys(unsigned int size)
 
 MKey * MTextureAnim::allocScaleKeys(unsigned int size)
 {
+    M_PROFILE_SCOPE(MTextureAnim::allocScaleKeys);
 	clearScaleKeys();
 	if(size == 0)
 		return NULL;
@@ -71,6 +74,7 @@ MKey * MTextureAnim::allocScaleKeys(unsigned int size)
 
 MKey * MTextureAnim::allocRotationKeys(unsigned int size)
 {
+    M_PROFILE_SCOPE(MTextureAnim::allocRotationKeys);
 	clearRotationKeys();
 	if(size == 0)
 		return NULL;
@@ -82,18 +86,21 @@ MKey * MTextureAnim::allocRotationKeys(unsigned int size)
 
 void MTextureAnim::clearTranslateKeys(void)
 {
+    M_PROFILE_SCOPE(MTextureAnim::clearTranslationKeys);
 	SAFE_DELETE_ARRAY(m_translateKeys);
 	m_translateKeysNumber = 0;
 }
 
 void MTextureAnim::clearScaleKeys(void)
 {
+    M_PROFILE_SCOPE(MTextureAnim::clearScaleKeys);
 	SAFE_DELETE_ARRAY(m_scaleKeys);
 	m_scaleKeysNumber = 0;
 }
 
 void MTextureAnim::clearRotationKeys(void)
 {
+    M_PROFILE_SCOPE(MTextureAnim::clearRotationKeys);
 	SAFE_DELETE_ARRAY(m_rotationKeys);
 	m_rotationKeysNumber = 0;
 }

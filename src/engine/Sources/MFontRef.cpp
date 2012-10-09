@@ -33,20 +33,24 @@
 
 MFontRef::MFontRef(MFont * font, const char * filename):
 	m_font(font){
+    M_PROFILE_SCOPE(MFontRef::MFontRef);
 	m_filename.set(filename);
 }
 
 MFontRef::~MFontRef(void){
+    M_PROFILE_SCOPE(MFontRef::~MFontRef);
 	clear();
 }
 
 MFontRef * MFontRef::getNew(MFont * font, const char * filename)
 {
+    M_PROFILE_SCOPE(MFontRef::getNew);
 	return new MFontRef(font, filename);
 }
 
 void MFontRef::clear(void)
 {
+    M_PROFILE_SCOPE(MFontRef::clear);
 	if(m_font)
 	{
 		m_font->destroy();
@@ -55,11 +59,13 @@ void MFontRef::clear(void)
 }
 
 void MFontRef::destroy(void){
+    M_PROFILE_SCOPE(MFontRef::destroy);
 	delete this;
 }
 
 void MFontRef::update(void)
 {
+    M_PROFILE_SCOPE(MFontRef::update);
 	MEngine * engine = MEngine::getInstance();
 
 	if(! m_font)

@@ -33,6 +33,7 @@
 
 MBehaviorCreator::MBehaviorCreator(const char * name, int objectFilter, MBehavior * (*getNewBehaviorFunctionPointer)(MObject3d * parentObject))
 {
+    M_PROFILE_SCOPE(MBehaviorCreator::MBehaviorCreator);
 	m_name = name;
 	m_objectFilter = objectFilter;
 	m_getNewBehavior = getNewBehaviorFunctionPointer;
@@ -40,6 +41,7 @@ MBehaviorCreator::MBehaviorCreator(const char * name, int objectFilter, MBehavio
 
 MBehavior * MBehaviorCreator::getNewBehavior(MObject3d * parentObject)
 {
+    M_PROFILE_SCOPE(MBehaviorCreator::getNewBehavior);
 	if(m_getNewBehavior)
 		return m_getNewBehavior(parentObject);
 

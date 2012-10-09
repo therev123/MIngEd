@@ -12,17 +12,16 @@ public:
     virtual void cleanup() = 0;
 };
 
-#define M_SHOULD_PROFILE
-
-#ifdef M_SHOULD_PROFILE
 class M_ENGINE_EXPORT MProfileScope
 {
 public:
     MProfileScope(const char* name);
     ~MProfileScope();
 };
+
+#ifdef M_SHOULD_PROFILE
 #   define M_PROFILE_SCOPE(name) \
-    MProfileScope(#name);
+    MProfileScope((#name));
 #else
 #   define M_PROFILE_SCOPE(name) {}
 #endif

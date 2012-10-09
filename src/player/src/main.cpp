@@ -327,6 +327,7 @@ int main(int argc, char **argv)
 				// don't wait too much
 				if(steps >= (frequency/2))
 				{
+				    M_PROFILE_SCOPE(UpdateDraw);
 					update();
 					draw();
 					previousFrame += steps;
@@ -340,21 +341,26 @@ int main(int argc, char **argv)
 				// update
 				for(i=0; i<steps; i++)
 				{
+				    M_PROFILE_SCOPE(Update);
 					update();
 					previousFrame++;
 				}
 
 				// draw
 				if(steps > 0){
+				    M_PROFILE_SCOPE(Draw);
 					draw();
 				}
 			}
 			else
 			{
+			    M_PROFILE_SCOPE(SwapBuffer);
 				previousFrame = frame;
 				window->swapBuffer();
 			}
 		}
+		if(MProfilerContext* profiler = engine->getProfilerContext())
+		    profiler->update();
 	}
 
 	maratis->clear();

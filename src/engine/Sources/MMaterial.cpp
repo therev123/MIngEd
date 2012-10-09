@@ -62,6 +62,7 @@ m_customColor(material.m_customColor),
 m_texturesPassNumber(0),
 m_texturesPass(NULL)
 {
+    M_PROFILE_SCOPE(MMaterial::MMaterial);
 	allocTexturesPass(m_texturesPassNumber);
 
 	unsigned int i;
@@ -75,11 +76,13 @@ m_texturesPass(NULL)
 
 MMaterial::~MMaterial(void)
 {
+    M_PROFILE_SCOPE(MMaterial::~MMaterial);
 	clearTexturesPass();
 }
 
 void MMaterial::allocTexturesPass(unsigned int size)
 {
+    M_PROFILE_SCOPE(MMaterial::allocTexturesPass);
 	clearTexturesPass();
 	if(size == 0)
 		return;
@@ -88,6 +91,7 @@ void MMaterial::allocTexturesPass(unsigned int size)
 
 void MMaterial::clearTexturesPass(void)
 {
+    M_PROFILE_SCOPE(MMaterial::clearTexturesPass);
 	unsigned int i;
 	for(i=0; i<m_texturesPassNumber; i++)
 		SAFE_DELETE(m_texturesPass[i]);
@@ -98,6 +102,7 @@ void MMaterial::clearTexturesPass(void)
 
 void MMaterial::addTexturePass(MTexture * texture, M_TEX_COMBINE_MODES combineMode, unsigned int mapChannel)
 {
+    M_PROFILE_SCOPE(MMaterial::addTexturesPass);
 	m_texturesPass[m_texturesPassNumber] = new MTexturePass(texture, combineMode, mapChannel);
 	m_texturesPassNumber++;
 }

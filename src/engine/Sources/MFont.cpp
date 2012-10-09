@@ -48,27 +48,32 @@ m_textureHeight(0)
 
 MFont::~MFont(void)
 {
+    M_PROFILE_SCOPE(MFont::~MFont);
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	render->deleteTexture(&m_textureId);
 }
 
 MFont * MFont::getNew(void)
 {
+    M_PROFILE_SCOPE(MFont::getNew);
 	return new MFont();
 }
 
 void MFont::destroy(void)
 {
+    M_PROFILE_SCOPE(MFont::destroy);
 	delete this;
 }
 
 void MFont::setCharacter(unsigned int charCode, const MCharacter & character)
 {
+    M_PROFILE_SCOPE(MFont::setCharacter);
 	m_characters[charCode] = character;
 }
 
 MCharacter * MFont::getCharacter(unsigned int charCode)
 {
+    M_PROFILE_SCOPE(MFont::getCharacter);
 	map<unsigned int, MCharacter>::iterator iter = m_characters.find(charCode);
 	if(iter != m_characters.end())
 		return &iter->second;
@@ -78,11 +83,13 @@ MCharacter * MFont::getCharacter(unsigned int charCode)
 
 unsigned int MFont::getCharactersNumber(void)
 {
+    M_PROFILE_SCOPE(MFont::getCharactersNumber);
 	return (unsigned int)m_characters.size();
 }
 
 MCharacter * MFont::getCharacterByIndex(unsigned int id)
 {
+    M_PROFILE_SCOPE(MFont::getCharacterByIndex);
 	map<unsigned int, MCharacter>::iterator iter(m_characters.begin());
 
 	for(unsigned int i=0; i<id; i++)
