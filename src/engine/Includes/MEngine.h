@@ -294,7 +294,8 @@ public:
 	void setRenderer(MRenderer * renderer);
 	inline MRenderer * getRenderer(void){ return m_renderer; }
 
-	void loadPlugin(const char* name);
+	MPlugin* loadPlugin(const char* name);
+	void unloadPlugin(MPlugin* plugin);
 };
 
 

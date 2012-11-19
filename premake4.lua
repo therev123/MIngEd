@@ -59,7 +59,7 @@ dofile("plugins.lua")
 				"3rdparty/bullet/",
 				"3rdparty/lua/",
 				"3rdparty/minidom/",
-				"3rdparty/c_tokenizer/",
+				"3rdparty/tldr/include",
 				"src/player/include" }
 						
 		if os.is("windows") then
@@ -68,7 +68,7 @@ dofile("plugins.lua")
 			links { "OpenAL32", "Opengl32", "libsndfile-1", "Winmm" }
 			libdirs { "3rdparty/openal/win32/" }
 		elseif os.is("linux") then
-			links { "GL", "openal", "dl", "X11", "Xxf86vm", "sndfile"}
+			links { "GL", "openal", "dl", "X11", "Xxf86vm", "sndfile", "GLU" }
 			linkoptions { "-Wl,-rpath=." }
 		end
 		links { "MCore", 
@@ -86,7 +86,7 @@ dofile("plugins.lua")
 			"il", 
 			"freetype",
 		        "minidom",
-			"c_tokenizer"}
+			"tldr"}
 
 		defines { "MPLUGIN_DYNAMIC" }
 

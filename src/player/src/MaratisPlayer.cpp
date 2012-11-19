@@ -74,8 +74,6 @@ m_renderer(NULL)
 	{
 		m_embedFileManager = new MEmbedFileOpenHook;
 		m_embedFileManager->AddEmbeddedFile("maratis.npk", maratis_npk, maratis_npkSize());
-		char filename[255];
-		getGlobalFilename(filename, m_system->getWorkingDirectory(), "maratis.npk");
 	}
 
 	// start
@@ -85,8 +83,9 @@ m_renderer(NULL)
 MaratisPlayer::~MaratisPlayer(void)
 {
     M_PROFILE_SCOPE(MaratisPlayer::~MaratisPlayer);
-	clear();
+        clear();
 
+        m_packageManager->unloadPackage(m_package);
 	SAFE_DELETE(m_embedFileManager);
 
 	SAFE_DELETE(m_game);
@@ -145,9 +144,7 @@ void MaratisPlayer::start(void)
 		engine->getFontLoader()->addLoader(M_loadFont); // font loader
 		engine->getFontLoader()->addLoader(M_loadBinFont); // bin font loader
 		ConfigFileLoader* loader = new ConfigFileLoader;
-		engine->addFileLoader(".xml", loader);
-		engine->addFileLoader(".json", loader);
-		engine->addFileLoader(".ini", loader);
+		engine->addFileLoader(".atlas", loader);
 
 		// savers
 		engine->getImageSaver()->addLoader(M_saveImage);
@@ -185,7 +182,9 @@ void MaratisPlayer::start(void)
 	}
 	// embedded data
 	{
-		m_packageManager->loadPackage("maratis.npk");
+		char filename[255];
+		getGlobalFilename(filename, m_system->getWorkingDirectory(), "maratis.npk");
+		m_package = m_packageManager->loadPackage(filename);
 	}
 }
 

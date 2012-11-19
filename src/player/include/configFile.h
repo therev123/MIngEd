@@ -5,7 +5,7 @@
 #include "MConfigFile.h"
 
 #include <string>
-#include "minidom.h"
+#include <tldr.h>
 
 class ConfigFile : public MIConfigFile
 {
@@ -22,7 +22,7 @@ protected:
 
 private:
     std::string  m_Name;
-    minidom::doc m_State;
+    tldrContext* m_Context;
 };
 
 class ConfigFileLoader : public MIFileLoader

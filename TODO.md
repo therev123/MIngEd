@@ -21,6 +21,7 @@ I'll start with a fairly unorganised list of goals. As I think of more things, I
 
 - Extend the atlas system to be able to load atlas definitions (and images) from disk and create font generation script for offline font atlas generation
 
+- Reload functionality for plugins
 
 DONE
 ----

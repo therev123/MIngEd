@@ -37,6 +37,55 @@ solution "maratis-minged"
 			flags { "Symbols" }
 -- END OF TINYXML BUILD
 
+-- BEGINNING OF TLMM BUILD
+	project "tlmm"
+
+		kind "StaticLib"
+		language "C++"
+
+		files { "3rdparty/tlmm/include/tlmm.h", 
+			"3rdparty/tlmm/src/tlmm.cpp" }
+		includedirs { "3rdparty/tlmm/include/" }
+
+		defines{ "TLMM_HAS_IO", "TLMM_COMPILE" }
+
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "OptimizeSpeed",
+				"EnableSSE", 
+				"EnableSSE2",
+				"FloatFast",
+				"ExtraWarnings",
+				"FatalWarnings",
+				"NoFramePointer"}
+
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+-- END OF TLMM BUILD
+
+-- BEGINNING OF TLDR BUILD
+	project "tldr"
+
+		kind "StaticLib"
+		language "C++"
+
+		files { "3rdparty/tldr/include/tldr.h", 
+			"3rdparty/tldr/src/tldr.cpp" }
+		includedirs { "3rdparty/tldr/include/" }
+
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "OptimizeSpeed",
+				"ExtraWarnings",
+				"FatalWarnings",
+				"NoFramePointer"}
+
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+-- END OF TLDR BUILD
+
 -- BEGINNING OF GLEE BUILD
 	project "glee"
 

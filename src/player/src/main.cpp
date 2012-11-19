@@ -90,19 +90,23 @@ CommandParameters params;
 // update
 void update(void)
 {
+    M_PROFILE_SCOPE(update);
 	MaratisPlayer::getInstance()->logicLoop();
 }
 
 // draw
 void draw(void)
 {
+    M_PROFILE_SCOPE(draw);
     MaratisPlayer::getInstance()->graphicLoop();
-
+    
     for(int i=0; i<PRELOAD_MAX; ++i)
 	if(params.preloads[i])
 	    params.preloads[i]->Draw();
 
     MWindow::getInstance()->swapBuffer();
+    if(MProfilerContext* profiler = MEngine::getInstance()->getProfilerContext())
+	profiler->update();
 }
 
 void AddPreload(CommandParameters &params, char* libname)
@@ -195,14 +199,6 @@ int main(int argc, char **argv)
 	
 	// get engine (first time call onstructor)
 	MEngine * engine = MEngine::getInstance();
-
-	// this needs to be loaded after MEngine is initialised.
-	MPlugin* profiler = 0;
-	if(params.profile != 0)
-	{
-	    profiler = new MPlugin;
-	    profiler->load("MProfiler");
-	}
 
 	// get window (first time call onstructor)
 	MWindow * window = MWindow::getInstance();
@@ -305,10 +301,19 @@ int main(int argc, char **argv)
 	unsigned long previousFrame = 0;
 	unsigned long startTick = window->getSystemTick();
 	
+
+	// this needs to be loaded after MEngine is initialised.
+	MPlugin* profiler = 0;
+	if(params.profile != 0)
+	{
+	    profiler = new MPlugin;
+	    profiler->load("MProfiler");
+	}
 	
 	// on events
 	while(window->isActive())
 	{
+	    M_PROFILE_SCOPE(loop);
 		// on events
 		if(window->onEvents())
 		{
@@ -327,7 +332,6 @@ int main(int argc, char **argv)
 				// don't wait too much
 				if(steps >= (frequency/2))
 				{
-				    M_PROFILE_SCOPE(UpdateDraw);
 					update();
 					draw();
 					previousFrame += steps;
@@ -341,14 +345,12 @@ int main(int argc, char **argv)
 				// update
 				for(i=0; i<steps; i++)
 				{
-				    M_PROFILE_SCOPE(Update);
 					update();
 					previousFrame++;
 				}
 
 				// draw
 				if(steps > 0){
-				    M_PROFILE_SCOPE(Draw);
 					draw();
 				}
 			}
@@ -359,12 +361,13 @@ int main(int argc, char **argv)
 				window->swapBuffer();
 			}
 		}
-		if(MProfilerContext* profiler = engine->getProfilerContext())
-		    profiler->update();
 	}
 
+	for(int i=0; i<PRELOAD_MAX; ++i)
+	    if(params.preloads[i])
+		delete params.preloads[i];
+	if(profiler) delete profiler;
+
 	maratis->clear();
-	if(profiler)
-	  delete profiler;
 	return 0;
 }

@@ -65,6 +65,8 @@ private:
 	// game plugin
 	MPlugin * m_gamePlugin;
 
+
+	MPackage m_package;
 private:
 
 	// start

@@ -37,6 +37,7 @@
 #else
 	#include <GLee.h>
 #endif
+#include <GL/glut.h>
 
 #include "MGLContext.h"
 
@@ -223,9 +224,10 @@ m_currentFrameBuffer(0)
 
 	// anisotropic filtering
 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
-
+/*
 	glEnable(GL_POINT_SPRITE);
 	glTexEnvi(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);
+*/
 }
 
 MGLContext::~MGLContext(void)
@@ -470,18 +472,18 @@ void MGLContext::sendTextureImage(MImage * image, bool mipMap, bool filter, bool
 	}
 
 	glTexImage2D(glType, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, image->getData());
-	if(mipMap)
+/*	if(mipMap)
 	{
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy); // anisotropic filtering
 		glGenerateMipmapEXT(glType);
 	}
-
-	/*
+*/
+	///*
 	if(mipMap)
 		gluBuild2DMipmaps(glType, bytePerPix, width, height, format, GL_UNSIGNED_BYTE, image->getData());
 	else
 		glTexImage2D(glType, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, image->getData());
-	*/
+	//*/
 }
 
 void MGLContext::texImage(unsigned int level, unsigned int width, unsigned int height, M_TYPES type, M_TEX_MODES mode, const void * pixels)

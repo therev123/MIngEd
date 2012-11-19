@@ -176,7 +176,7 @@ namespace minged
     {
 	char deffile[0xff];
 	char* def = deffile;
-	util::ChangeExtension(m_Name.c_str(), "xml", &def);
+	util::ChangeExtension(m_Name.c_str(), "atlas", &def);
 	m_ConfigFile = (MIConfigFile*)MEngine::getInstance()->loadFile(deffile);
     }
 
@@ -367,13 +367,13 @@ namespace minged
 	engine->getImageSaver()->loadData(m_Name.c_str(), &m_Atlas);
 	if(m_ConfigFile)
 	{
-	    m_ConfigFile->Write("atlas/images", m_Images.size());
+	    m_ConfigFile->Write("atlas.images", m_Images.size());
 	    int i = 0;
 	    for(imageMapIter iImage = m_Images.begin(); iImage != m_Images.end(); iImage++)
 	    {
-		std::string root = "atlas/image";
+		std::string root = "atlas.image";
 		char num[32];
-		snprintf(num, 32, "%d/", i);
+		snprintf(num, 32, "%d.", i);
 		root += num;
 		++i;
 

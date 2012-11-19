@@ -40,18 +40,18 @@ template<>
 inline MVector3 MIConfigFile::Read<MVector3>(const char* key)
 {
     std::string root = key;
-    return MVector3(Read<float>((root+"/x").c_str()),
-		    Read<float>((root+"/y").c_str()),
-		    Read<float>((root+"/z").c_str()));
+    return MVector3(Read<float>((root+".x").c_str()),
+		    Read<float>((root+".y").c_str()),
+		    Read<float>((root+".z").c_str()));
 }
 
 template<>
 inline void MIConfigFile::Write<MVector3>(const char* key, MVector3 val)
 {
     std::string root = key;
-    Write((root + "/x").c_str(), val.x);
-    Write((root + "/y").c_str(), val.y);
-    Write((root + "/z").c_str(), val.z);
+    Write((root + ".x").c_str(), val.x);
+    Write((root + ".y").c_str(), val.y);
+    Write((root + ".z").c_str(), val.z);
 }
 
 // MVector2
@@ -59,16 +59,16 @@ template<>
 inline MVector2 MIConfigFile::Read<MVector2>(const char* key)
 {
     std::string root = key;
-    return MVector2(Read<float>((root+"/x").c_str()),
-		    Read<float>((root+"/y").c_str()));
+    return MVector2(Read<float>((root+".x").c_str()),
+		    Read<float>((root+".y").c_str()));
 }
 
 template<>
 inline void MIConfigFile::Write<MVector2>(const char* key, MVector2 val)
 {
     std::string root = key;
-    Write((root + "/x").c_str(), val.x);
-    Write((root + "/y").c_str(), val.y);
+    Write((root + ".x").c_str(), val.x);
+    Write((root + ".y").c_str(), val.y);
 }
 
 

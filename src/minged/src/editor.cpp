@@ -42,6 +42,12 @@ namespace minged
 	if(m_Data && engine->getPackageManager())
 	    engine->getPackageManager()->unloadPackage(m_Data);
 	m_Data = 0;
+
+	for(pluginList::iterator iPlugin = m_Plugins.begin();
+	    iPlugin != m_Plugins.end();
+	    iPlugin++)
+	    engine->unloadPlugin(*iPlugin);
+	m_Plugins.clear();
     }
 
     void Editor::Init()
@@ -79,7 +85,8 @@ namespace minged
 	    snprintf(file, 0xff, iFile->c_str());
 	    for(int i=iFile->size() - 1; i >= 0; --i)
 		if(file[i] == '.') file[i] = 0;
-	    engine->loadPlugin(file);
+	    if(MPlugin* plugin = engine->loadPlugin(file))
+		m_Plugins.push_back(plugin);
 	}
 
 	m_Initialised = true;

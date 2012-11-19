@@ -30,7 +30,7 @@ function make_package_dir()
    pkg["toolsdir"]   = pkg["dir"] .. "Tools/"
    pkg["bindir"]     = pkg["dir"] .. "Bin/"
    pkg["plugindir"]  = pkg["dir"] .. "Plugins/"
-   pkg["sdkmodules"] = { core="MCore", engine="MEngine", gui="MGui" }
+   pkg["sdkmodules"] = { core="MCore", engine="MEngine", gui="MGui", util="MUtil" }
    pkg["sdkdirs"]    = {"Includes", "Libs", "Doc"}
    pkg["editorfiles"] = { MIngEd = {"MMIngEdPlugin.h"} }
    

@@ -35,6 +35,8 @@
 #include "MCore.h"
 #include "MConfigFile.h"
 
+#include <algorithm>
+
 MEngine::MEngine(void):
 m_isActive(true),
 m_level(NULL),
@@ -240,13 +242,27 @@ void MEngine::loadLevelIfRequested()
 	SAFE_FREE(m_requestedLevelToLoad);
 }
 
-void MEngine::loadPlugin(const char* name)
+MPlugin* MEngine::loadPlugin(const char* name)
 {
     M_PROFILE_SCOPE(MEngine::loadPlugin);
     MPlugin* plugin = new MPlugin;
     plugin->load(name);
     if(plugin->isLoaded())
+    {
 	m_Plugins.push_back(plugin);
-    else
+	return plugin;
+    }
+    delete plugin;
+    return 0;
+}
+void MEngine::unloadPlugin(MPlugin* plugin)
+{
+    M_PROFILE_SCOPE(MEngine::unloadPlugin);
+
+    std::list<MPlugin*>::iterator iPlugin = std::find(m_Plugins.begin(), m_Plugins.end(), plugin);
+    if(iPlugin != m_Plugins.end())
+    {
+	m_Plugins.erase(iPlugin);
 	delete plugin;
+    }
 }

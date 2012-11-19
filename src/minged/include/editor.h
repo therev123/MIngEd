@@ -2,6 +2,8 @@
 #define __MINGED_EDITOR_H__
 
 #include "minged.h"
+#include <MPlugin.h>
+#include <list>
 
 namespace minged
 {
@@ -34,6 +36,9 @@ namespace minged
         btnState m_ToggleButton;
 
 	MPackage m_Data;
+
+	typedef std::list<MPlugin*> pluginList;
+	pluginList m_Plugins;
     };
 };
 

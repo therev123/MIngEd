@@ -55,6 +55,37 @@ defines { "DEBUG", "M_SHOULD_PROFILE" }
 flags { "Symbols" }
 -- END OF MENGINE BUILD
 
+-- BEGINNING OF MUTIL BUILD
+project "MUtil"
+
+kind "SharedLib"
+language "C++"
+
+files { "src/util/Includes/**.h",
+	"src/util/Sources/**.cpp" }
+
+includedirs { "src/engine/Includes",
+	      "src/core/Includes",
+	      "src/util/Includes",
+	      "src/gui/Includes",
+	      "3rdparty/tlmm/include" }
+defines { "MPLUGIN_DYNAMIC" }
+
+if os.is("windows") then
+   defines { "WIN32" }
+end
+links { "MCore", "MEngine", "tlmm" }
+defines { "MUTIL_DLL" }
+
+configuration "Release"
+defines { "NDEBUG" }
+flags { "Optimize" }
+
+configuration "Debug"
+defines { "DEBUG", "M_SHOULD_PROFILE" }
+flags { "Symbols" }
+-- END OF MENGINE BUILD
+
 -- BEGINNING OF MGUI BUILD
 project "MGui"
 
