@@ -45,10 +45,10 @@ class("MIngEd.Atlas")
       end
    ),
 
-   write = 
+  write = 
       document[[Write the atlas to file]](
       function(self)
-	 mingedAtlasWrite(self.id, "atlases/" .. self.name .. ".png")
+	 mingedAtlasWrite(self.id)
       end
    ),
 

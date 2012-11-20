@@ -6,6 +6,7 @@ ConfigFile::ConfigFile(const char* name)
     : m_Name(name)
 {
     m_Context = tldrInitContext();
+    // currently crashes :(
     //Load();
 }
 
@@ -58,7 +59,7 @@ void ConfigFile::_Write(const char* key, const char* val)
 const char* ConfigFile::_Read(const char* key)
 {
     static char val[TLDR_STRING_MAX];
-    if(tldrReadValue(m_Context, key, val) == TLDR_SUCCESS)
-	return val;
-    return 0;
+    *val = 0;
+    tldrReadValue(m_Context, key, val);
+    return val;
 }

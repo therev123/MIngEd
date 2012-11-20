@@ -49,6 +49,7 @@ private:
     MImage   m_Atlas;
 
     MIConfigFile* m_ConfigFile;
+    bool     m_Locked;
 };
 
 };

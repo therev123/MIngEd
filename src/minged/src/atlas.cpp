@@ -173,11 +173,22 @@ namespace minged
     , m_TextureID(0)
     , m_Layout(NULL)
     , m_Name(name)
+    , m_Locked(false)
     {
 	char deffile[0xff];
 	char* def = deffile;
 	util::ChangeExtension(m_Name.c_str(), "atlas", &def);
-	m_ConfigFile = (MIConfigFile*)MEngine::getInstance()->loadFile(deffile);
+	m_ConfigFile = (MIConfigFile*)MEngine::getInstance()->loadFile((std::string("atlases/") + deffile).c_str());
+
+	if(m_ConfigFile)
+	{
+	    std::string imgName = m_ConfigFile->Read<std::string>("atlas.filename");
+	    if(!imgName.empty())
+	    {
+		// load the atlas definition and lock it
+		printf("%s\n", imgName.c_str());
+	    }
+	}
     }
 
     void Atlas::RegisterScript(MScriptContext* script)
@@ -364,9 +375,11 @@ namespace minged
     {
 	MEngine* engine = MEngine::getInstance();
 
-	engine->getImageSaver()->loadData(m_Name.c_str(), &m_Atlas);
+	std::string imgName = (std::string("atlases/") + m_Name + ".png");
+	engine->getImageSaver()->loadData(imgName.c_str(), &m_Atlas);
 	if(m_ConfigFile)
 	{
+	    m_ConfigFile->Write("atlas.filename", imgName);
 	    m_ConfigFile->Write("atlas.images", m_Images.size());
 	    int i = 0;
 	    for(imageMapIter iImage = m_Images.begin(); iImage != m_Images.end(); iImage++)

@@ -21,6 +21,8 @@ I'll start with a fairly unorganised list of goals. As I think of more things, I
 
 - Extend the atlas system to be able to load atlas definitions (and images) from disk and create font generation script for offline font atlas generation
 
+    > Using tldr for config file I/O. Currently has a bug on reading, will need to fix this before I can get it to work properly
+
 - Reload functionality for plugins
 
 DONE

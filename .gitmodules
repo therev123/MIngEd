@@ -1,0 +1,6 @@
+[submodule "3rdparty/tldr"]
+	path = 3rdparty/tldr
+	url = https://github.com/nistur/tldr.git
+[submodule "3rdparty/tlmm"]
+	path = 3rdparty/tlmm
+	url = https://github.com/nistur/tlmm.git
