@@ -6,7 +6,6 @@
 class M_CORE_EXPORT MIConfigFile
 {
 public:
-    MIConfigFile() {}
     virtual void Save() = 0;
     virtual void Load() = 0;
 

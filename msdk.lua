@@ -150,7 +150,7 @@ if os.is("linux") then
    defines { "linux" }
    includedirs { "/usr/include/freetype2" } 
 else
-   includedirs { "maratis/3rdparty/freetype/include/" } 
+   includedirs { "3rdparty/freetype/include/" } 
 end
 
 links { "MCore", "MEngine", "MGui", "glee", "tinyxml", "npk", "OpenAL32" }

@@ -45,9 +45,11 @@ bool copy(const char* source, const char* target)
   fclose(src);
   fclose(dest);
 
+#ifndef WIN32
   // preserve permissions
   chmod(destination, stats.st_mode);
-  
+#endif
+
   return true;
 }
 
@@ -74,6 +76,7 @@ bool copydir(const char* source, const char* target, const char* type = 0)
     else if(type == 0 || strstr(src, type) == src + strlen(src) - strlen(type))
       copy(src, dest);
   }
+  return true;
 }
 
 int os_mkdir(lua_State* L)
@@ -109,7 +112,7 @@ int os_cp_of_type(lua_State* L)
   return 0;
 }
 
-void _rmdir(const char* path)
+void rmdir_internal(const char* path)
 {
     DIR* dir = opendir(path);
     dirent* ent = NULL;
@@ -125,7 +128,7 @@ int os_rm(lua_State* L)
 {
     const char* path = lua_tostring(L, -1);
     if(isDirectory(path))
-	_rmdir(path);
+	rmdir_internal(path);
     else
 	remove(path);
     return 0;

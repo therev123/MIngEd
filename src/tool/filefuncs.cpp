@@ -31,7 +31,7 @@ int file_embed(lua_State* L)
     const char* dest = lua_tostring(L, -2);
     const char* name = lua_tostring(L, -1);
 
-    FILE* fp = fopen(path, "rb+");
+    FILE* fp = fopen(path, "rb");
     if(fp == NULL)
 	return 0;
 

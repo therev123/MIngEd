@@ -38,6 +38,10 @@
 #include <set>
 std::set<MIPluginLoadHook*> s_Hooks;
 
+#ifdef WIN32
+#define snprintf sprintf_s
+#endif
+
 #ifndef MPLUGIN_DYNAMIC
 #include <map>
 typedef struct _plugin
@@ -120,7 +124,7 @@ void MPlugin::load(const char * filename)
 	{
 #    ifdef WIN32
 	  getGlobalFilename(file, dirs[i], (string(filename) + ".dll").c_str());
-#    elseif __APPLE__
+#    elif __APPLE__
 	  getGlobalFilename(file, dirs[i], (string(filename) + ".dylib").c_str());
 #    else // just assume a linux based os
 	  getGlobalFilename(file, dirs[i], (string(filename) + ".so").c_str());
@@ -133,8 +137,8 @@ void MPlugin::load(const char * filename)
 #    ifdef WIN32
     
     m_library = LoadLibrary(file);
-    if(! m_library);
-    return;
+    if(! m_library)
+        return;
     
     FunctionPtr function = reinterpret_cast<FunctionPtr>(GetProcAddress(m_library, "StartPlugin"));
     if(! function)

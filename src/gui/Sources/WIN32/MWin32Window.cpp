@@ -114,6 +114,29 @@ const char * MWindow::getCurrentDirectory(void)
 	return currentDirectory;
 }
 
+#ifdef WIN32
+# define snprintf sprintf_s
+#endif
+
+const char* MWindow::getUserDirectory(void)
+{
+    TCHAR szPath[MAX_PATH];
+    if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, 0, szPath)))
+    {
+        static char dir[0xff];
+        snprintf(dir, 0xff, "%s\\.Maratis\\", szPath);
+        return dir;
+    }
+    return getSystemDirectory();
+}
+
+const char* MWindow::getSystemDirectory(void)
+{
+  static char dir[0xff];
+  snprintf(dir, 0xff, "%s/", getenv("MSDKDIR"));
+  return dir;
+}
+
 void MWindow::setTitle(const char * title)
 {
 	SetWindowText(m_hWnd, title);

@@ -10,6 +10,7 @@
 	#include <direct.h>
 	#define mkdir _mkdir
 	#define rmdir _rmdir
+    #define snprintf sprintf_s
 #else
 	#define mkdir(file) mkdir(file, 0777)
         #include <unistd.h>

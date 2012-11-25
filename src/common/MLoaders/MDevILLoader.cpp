@@ -239,7 +239,7 @@ bool M_loadImage(const char * filename, void * data)
 }
 bool M_saveImage(const char * filename, void * data)
 {
-    M_saveImage(filename, data, 100, true);
+    return M_saveImage(filename, data, 100, true);
 }
 
 bool M_saveImage(const char * filename, void * data, unsigned int quality, bool flip)

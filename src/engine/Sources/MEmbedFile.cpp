@@ -59,6 +59,7 @@ int MEmbedFile::close()
 {
     M_PROFILE_SCOPE(MEmbedFile::close);
     m_Open = false;
+    return 0;
 }
 
 size_t MEmbedFile::read(void* dest, size_t size, size_t count)
@@ -66,6 +67,7 @@ size_t MEmbedFile::read(void* dest, size_t size, size_t count)
     M_PROFILE_SCOPE(MEmbedFile::read);
     memcpy(dest, m_Ptr, size * count);
     m_Ptr += size * count;
+    return count;
 }
 
 int	MEmbedFile::seek(long offset, int whence)
@@ -77,6 +79,8 @@ int	MEmbedFile::seek(long offset, int whence)
 	m_Ptr = m_File + m_Size;
     
     m_Ptr += offset;
+
+    return 0;
 }
 
 long MEmbedFile::tell()

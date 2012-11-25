@@ -12,9 +12,9 @@ public:
     void	open(const char* path, const char* mode);
     int	close();
     size_t	read(void* dest, size_t size, size_t count);
-    size_t	write(const void* str, size_t size, size_t count) {}
-    int	print(const char* format, ...) {}
-    int	print(const char* format, va_list args) {}
+    size_t	write(const void* str, size_t size, size_t count) { return 0; }
+    int	print(const char* format, ...) { return 0; }
+    int	print(const char* format, va_list args) { return 0; }
     int	seek(long offset, int whence);
     long	tell();
     void	rewind();

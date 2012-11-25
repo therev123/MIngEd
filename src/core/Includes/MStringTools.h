@@ -42,40 +42,40 @@ M_CORE_EXPORT char * readTextFile(const char * filename);
 
 // some kind of semi-reasonable default?
 template<typename T>
-std::string M_CORE_EXPORT ConvertToString(T val)
+std::string ConvertToString(T val)
 { std::stringstream ss; ss << val; return ss.str(); }
 
 template<typename T>
-T M_CORE_EXPORT ConvertFromString(std::string val)
+T ConvertFromString(std::string val)
 {
     T rtn; val >> rtn; return rtn;
 }
 
 // basic type specialisation
 // c-string
-template<> inline std::string M_CORE_EXPORT ConvertToString<const char*>(const char* val)
+template<> inline std::string ConvertToString<const char*>(const char* val)
 { return std::string(val); }
 
-template<> inline const char* M_CORE_EXPORT ConvertFromString<const char*>(std::string val)
+template<> inline const char* ConvertFromString<const char*>(std::string val)
 { return val.c_str(); }
 
 // std::string
-template<> inline std::string M_CORE_EXPORT ConvertToString<std::string>(std::string val)
+template<> inline std::string ConvertToString<std::string>(std::string val)
 { return val; }
 
-template<> inline std::string M_CORE_EXPORT ConvertFromString<std::string>(std::string val)
+template<> inline std::string ConvertFromString<std::string>(std::string val)
 { return val; }
 
 // int
-template<> inline int M_CORE_EXPORT ConvertFromString<int>(std::string val)
+template<> inline int ConvertFromString<int>(std::string val)
 { return atoi(val.c_str()); }
 
 // float
-template<> inline float M_CORE_EXPORT ConvertFromString<float>(std::string val)
-{ return atof(val.c_str()); }
+template<> inline float ConvertFromString<float>(std::string val)
+{ return (float)atof(val.c_str()); }
 
 // bool
-template<> inline bool M_CORE_EXPORT ConvertFromString<bool>(std::string val)
+template<> inline bool ConvertFromString<bool>(std::string val)
 { return atoi(val.c_str()) != 0; }
 
 #endif
